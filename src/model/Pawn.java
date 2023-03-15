@@ -15,17 +15,19 @@ public class Pawn extends GameElement {
 
     public Pawn(int number, int color, GameStageModel gameStageModel) {
         super(gameStageModel);
-        /*
-        TO FULFILL:
-            - register a new type of element for the pawns
-            - initialize attributes
-         */
+        // registering element types defined especially for this game
+        ElementTypes.register("pawn",50);
+        type = ElementTypes.getType("pawn");
+        this.number = number;
+        this.color = color;
     }
 
     public int getNumber() {
         return number;
     }
+
     public int getColor() {
         return color;
     }
+
 }

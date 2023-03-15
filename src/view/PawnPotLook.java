@@ -1,7 +1,9 @@
 package view;
 
+import boardifier.model.GameElement;
 import boardifier.model.GridElement;
 import boardifier.view.GridLook;
+import model.HoleBoard;
 
 public class PawnPotLook extends GridLook {
 

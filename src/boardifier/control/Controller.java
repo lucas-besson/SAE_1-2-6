@@ -47,7 +47,7 @@ public abstract class Controller {
             stopStage();
         }
         model.reset();
-        System.out.println("START STAGE "+stageName);
+        //System.out.println("START STAGE "+stageName);
         // create the model of the stage by using the StageFactory
         GameStageModel gameStageModel = StageFactory.createStageModel(stageName, model);
         // create the elements of the stage by getting the default factory of this stage and giving it to createElements()
@@ -87,13 +87,14 @@ public abstract class Controller {
      * winner and that proposes to start a new game or to quit.
      */
     public void endGame() {
-        //System.out.println("END THE GAME");
+        System.out.println("END THE GAME");
         if (model.getIdWinner() != -1) {
             System.out.println(model.getPlayers().get(model.getIdWinner()).getName() + " wins");
         }
         else {
             System.out.println("Draw game");
         }
+
     }
 
     public void update() {
