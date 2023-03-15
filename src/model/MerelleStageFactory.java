@@ -4,11 +4,11 @@ import boardifier.model.GameStageModel;
 import boardifier.model.StageElementsFactory;
 
 public class HoleStageFactory extends StageElementsFactory {
-    private HoleStageModel stageModel;
+    private MerelleStageModel stageModel;
 
     public HoleStageFactory(GameStageModel gameStageModel) {
         super(gameStageModel);
-        stageModel = (HoleStageModel) gameStageModel;
+        stageModel = (MerelleStageModel) gameStageModel;
     }
 
     @Override

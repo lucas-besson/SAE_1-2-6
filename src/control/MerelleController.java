@@ -11,18 +11,18 @@ import boardifier.model.action.GameAction;
 import boardifier.model.action.MoveAction;
 import boardifier.model.animation.AnimationTypes;
 import boardifier.view.View;
-import model.HoleStageModel;
+import model.MerelleStageModel;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class HoleController extends Controller {
+public class MerelleController extends Controller {
 
     BufferedReader consoleIn;
     boolean firstPlayer;
 
-    public HoleController(Model model, View view) {
+    public MerelleController(Model model, View view) {
         super(model, view);
         firstPlayer = true;
     }
@@ -54,7 +54,7 @@ public class HoleController extends Controller {
         Player p = model.getCurrentPlayer();
         if (p.getType() == Player.COMPUTER) {
             System.out.println("COMPUTER PLAYS");
-            HoleDecider decider = new HoleDecider(model,this);
+            MerelleDecider decider = new MerelleDecider(model,this);
             ActionPlayer play = new ActionPlayer(model, this, decider, null);
             play.start();
         }
@@ -76,7 +76,7 @@ public class HoleController extends Controller {
         }
     }
     private boolean analyseAndPlay(String line) {
-        HoleStageModel gameStage = (HoleStageModel) model.getGameStage();
+        MerelleStageModel gameStage = (MerelleStageModel) model.getGameStage();
         // get the pawn value from the first char
         int pawnIndex = (int) (line.charAt(0) - '1');
         if ((pawnIndex<0)||(pawnIndex>3)) return false;
