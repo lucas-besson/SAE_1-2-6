@@ -1,8 +1,3 @@
-import boardifier.model.GameException;
-import boardifier.view.View;
-import control.HoleController;
-
-import boardifier.control.StageFactory;
 import boardifier.model.Model;
 
 public class HoleConsole {

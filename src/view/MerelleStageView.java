@@ -4,8 +4,8 @@ import boardifier.model.GameStageModel;
 import boardifier.view.GameStageView;
 import model.MerelleStageModel;
 
-public class HoleStageView extends GameStageView {
-    public HoleStageView(String name, GameStageModel gameStageModel) {
+public class MerelleStageView extends GameStageView {
+    public MerelleStageView(String name, GameStageModel gameStageModel) {
         super(name, gameStageModel);
     }
 

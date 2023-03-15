@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.awt.*;
 
-public class HoleBoard extends GridElement {
-    public HoleBoard(int x, int y, GameStageModel gameStageModel) {
+public class MerelleBoard extends GridElement {
+    public MerelleBoard(int x, int y, GameStageModel gameStageModel) {
         // call the super-constructor to create a 3x3 grid, named "holeboard", and in x,y in space
         super("holeboard", x, y, 3 , 3, gameStageModel);
         resetReachableCells(false);

@@ -2,32 +2,32 @@ package model;
 
 import boardifier.model.*;
 
-public class HoleStageModel extends GameStageModel {
+public class MerelleStageModel extends GameStageModel {
 
-    private HoleBoard board;
-    private HolePawnPot blackPot;
-    private HolePawnPot redPot;
+    private MerelleBoard board;
+    private MerellePawnPot blackPot;
+    private MerellePawnPot redPot;
     private Pawn[] blackPawns;
     private Pawn[] redPawns;
     private int blackPawnsToPlay;
     private int redPawnsToPlay;
 
-    public HoleStageModel(String name, Model model) {
+    public MerelleStageModel(String name, Model model) {
         super(name, model);
         blackPawnsToPlay = 4;
         redPawnsToPlay = 4;
         setupCallbacks();
     }
 
-    public HoleBoard getBoard() {
+    public MerelleBoard getBoard() {
         return board;
     }
 
-    public HolePawnPot getBlackPot() {
+    public MerellePawnPot getBlackPot() {
         return blackPot;
     }
 
-    public HolePawnPot getRedPot() {
+    public MerellePawnPot getRedPot() {
         return redPot;
     }
 
@@ -114,6 +114,6 @@ public class HoleStageModel extends GameStageModel {
 
     @Override
     public StageElementsFactory getDefaultElementFactory() {
-        return new HoleStageFactory(this);
+        return new MerelleStageFactory(this);
     }
 }

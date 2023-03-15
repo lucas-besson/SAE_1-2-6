@@ -3,10 +3,10 @@ package model;
 import boardifier.model.GameStageModel;
 import boardifier.model.StageElementsFactory;
 
-public class HoleStageFactory extends StageElementsFactory {
+public class MerelleStageFactory extends StageElementsFactory {
     private MerelleStageModel stageModel;
 
-    public HoleStageFactory(GameStageModel gameStageModel) {
+    public MerelleStageFactory(GameStageModel gameStageModel) {
         super(gameStageModel);
         stageModel = (MerelleStageModel) gameStageModel;
     }
