@@ -2,8 +2,7 @@ package view;
 
 import boardifier.model.GameStageModel;
 import boardifier.view.GameStageView;
-import boardifier.view.GridLook;
-import model.HoleStageModel;
+import model.MerelleStageModel;
 
 public class HoleStageView extends GameStageView {
     public HoleStageView(String name, GameStageModel gameStageModel) {
@@ -12,7 +11,7 @@ public class HoleStageView extends GameStageView {
 
     @Override
     public void createLooks() {
-        HoleStageModel model = (HoleStageModel)gameStageModel;
+        MerelleStageModel model = (MerelleStageModel)gameStageModel;
 
         /*
         TO FULFILL:
