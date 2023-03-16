@@ -35,7 +35,7 @@ public class HoleStageFactory extends StageElementsFactory {
         stageModel.setRedPawns(redPawns);
 
         // assign pawns to their pot : they will be put at the center
-        for (int i=0;i<9;i++) {
+        for (int i=0;i<redPot.PAWNS_IN_POT;i++) {
             blackPot.putElement(blackPawns[i], i,0);
             redPot.putElement(redPawns[i], i,0);
         }
