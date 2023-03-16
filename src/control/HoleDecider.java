@@ -42,7 +42,7 @@ public class HoleDecider extends Decider {
             pot = stage.getRedPot();
         }
 
-        for(int i=0;i<4;i++) {
+        for(int i=0;i<9;i++) {
             Pawn p = (Pawn)pot.getElement(i,0);
             // if there is a pawn in i.
             if (p != null) {

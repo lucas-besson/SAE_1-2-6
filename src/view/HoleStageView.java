@@ -14,11 +14,11 @@ public class HoleStageView extends GameStageView {
     public void createLooks() {
         HoleStageModel model = (HoleStageModel)gameStageModel;
 
-        addLook(new GridLook(4, 2, model.getBoard(), -1, true));
+        addLook(new GridLook(5, 2, model.getBoard(), -1, true));
         addLook(new PawnPotLook(4,2, model.getBlackPot()));
         addLook(new PawnPotLook(4, 2, model.getRedPot()));
 
-        for(int i=0;i<4;i++) {
+        for(int i=0;i<9;i++) {
             addLook(new PawnLook(model.getBlackPawns()[i]));
             addLook(new PawnLook(model.getRedPawns()[i]));
         }

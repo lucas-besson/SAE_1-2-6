@@ -14,8 +14,8 @@ public class HoleStageModel extends GameStageModel {
 
     public HoleStageModel(String name, Model model) {
         super(name, model);
-        blackPawnsToPlay = 4;
-        redPawnsToPlay = 4;
+        blackPawnsToPlay = 9;
+        redPawnsToPlay = 9;
         setupCallbacks();
     }
 
@@ -97,7 +97,7 @@ public class HoleStageModel extends GameStageModel {
         // get the 4 adjacent cells (if they exist) starting by the upper one
         row = (i / 3) - 1;
         col = i % 3;
-        for (int j = 0; j < 4; j++) {
+        for (int j = 0; j < 9; j++) {
             // skip invalid cells
             if ((row >= 0) && (row <= 2) && (col >= 0) && (col <= 2)) {
                 p = (Pawn) (board.getElement(row, col));
