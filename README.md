@@ -2,7 +2,7 @@
 
 ## Participants :
   - [Nathan BOSCHI](https://github.com/nathanboschi25)
-  - Robin MHALM
-  - Lucas BESSON
-  - Mathys NOURRY
-  - Tom SIOUAN
+  - [Robin MHALM](https://github.com/ShimoCMoi)
+  - [Lucas BESSON](https://github.com/lucas-besson)
+  - [Mathys NOURRY](https://github.com/mathysn)
+  - [Tom SIOUAN](https://github.com/tomsnx)
