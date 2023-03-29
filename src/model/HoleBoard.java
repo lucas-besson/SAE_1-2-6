@@ -9,11 +9,12 @@ import java.awt.*;
 
 public class HoleBoard extends GridElement {
     public HoleBoard(int x, int y, GameStageModel gameStageModel) {
-        // call the super-constructor to create a 3x3 grid, named "holeboard", and in x,y in space
-        super("holeboard", x, y, 7 , 7, gameStageModel);
+        // call the super-constructor to create a 7x7 grid, named "merelleboard", and in x,y in space
+        super("merelleboard", x, y, 7 , 7, gameStageModel);
         resetReachableCells(false);
     }
 
+    //FIXME
     public void setValidCells(int number) {
         resetReachableCells(false);
         List<Point> valid = computeValidCells(number);

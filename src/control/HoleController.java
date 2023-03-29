@@ -11,6 +11,7 @@ import boardifier.model.action.GameAction;
 import boardifier.model.action.MoveAction;
 import boardifier.model.animation.AnimationTypes;
 import boardifier.view.View;
+import model.HolePawnPot;
 import model.HoleStageModel;
 
 import java.io.BufferedReader;
@@ -79,13 +80,18 @@ public class HoleController extends Controller {
         HoleStageModel gameStage = (HoleStageModel) model.getGameStage();
         // get the pawn value from the first char
         int pawnIndex = (int) (line.charAt(0) - '1');
-        if ((pawnIndex<0)||(pawnIndex>3)) return false;
+        if ((pawnIndex<0)||(pawnIndex>HolePawnPot.PAWNS_IN_POT)) return false;
+
         // get the ccords in the board
         int col = (int) (line.charAt(1) - 'A');
         int row = (int) (line.charAt(2) - '1');
-        // check coords validity
+
+        // FIXME : check coords validity
+        // Faire une liste en paramettre de HoleBoard avec toute les combinaison de co possible, sachant que tout les case ne sont pas utilisé
         if ((row<0)||(row>2)) return false;
         if ((col<0)||(col>2)) return false;
+
+
         // check if the pawn is still in its pot
         GridElement pot = null;
         if (model.getIdPlayer() == 0) {
@@ -96,7 +102,9 @@ public class HoleController extends Controller {
         }
         if (pot.isEmptyAt(pawnIndex,0)) return false;
         GameElement pawn = pot.getElement(pawnIndex,0);
-        // compute valid cells for the chosen pawn
+
+
+        // FIXME : compute valid cells for the chosen pawn
         gameStage.getBoard().setValidCells(pawnIndex+1);
         if (!gameStage.getBoard().canReachCell(row,col)) return false;
 
