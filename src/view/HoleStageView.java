@@ -2,7 +2,6 @@ package view;
 
 import boardifier.model.GameStageModel;
 import boardifier.view.GameStageView;
-import boardifier.view.GridLook;
 import model.HolePawnPot;
 import model.HoleStageModel;
 
@@ -15,7 +14,7 @@ public class HoleStageView extends GameStageView {
     public void createLooks() {
         HoleStageModel model = (HoleStageModel)gameStageModel;
 
-        addLook(new GridLook(5, 2, model.getBoard(), -1, true));
+        addLook(new MerelleGridLook(5, 2, model.getBoard(), -1, true));
         addLook(new PawnPotLook(4,2, model.getBlackPot()));
         addLook(new PawnPotLook(4, 2, model.getRedPot()));
 
