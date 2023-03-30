@@ -14,7 +14,8 @@ public class MerelleGridLook extends GridLook {
         GridElement gridElement = (GridElement) element;
         int nbRows = gridElement.getNbRows();
         int nbCols = gridElement.getNbCols();
-        // start by drawing the border of each cell, which will be change after FIXME: Changer le look pour avoir la grid caractéristique de la merelle + utiliser cette GridLook partout
+        // start by drawing the border of each cell, which will be change after 
+        //FIXME: Changer le look pour avoir la grid caractéristique de la merelle + utiliser cette GridLook partout
         for(int i=0;i<nbRows;i++) {
             for(int j=0;j<nbCols;j++) {
                 //top-left corner

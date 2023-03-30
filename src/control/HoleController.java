@@ -11,8 +11,10 @@ import boardifier.model.action.GameAction;
 import boardifier.model.action.MoveAction;
 import boardifier.model.animation.AnimationTypes;
 import boardifier.view.View;
+import model.HoleBoard;
 import model.HolePawnPot;
 import model.HoleStageModel;
+import view.MerelleGridLook;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -86,10 +88,9 @@ public class HoleController extends Controller {
         int col = (int) (line.charAt(1) - 'A');
         int row = (int) (line.charAt(2) - '1');
 
-        // FIXME : check coords validity
+
         // Faire une liste en paramettre de HoleBoard avec toute les combinaison de co possible, sachant que tout les case ne sont pas utilisé
-        if ((row<0)||(row>2)) return false;
-        if ((col<0)||(col>2)) return false;
+        if (!HoleBoard.isActiveCell(col, row)) return false;
 
 
         // check if the pawn is still in its pot
