@@ -42,7 +42,7 @@ public class MerelleDecider extends Decider {
             pot = stage.getRedPot();
         }
 
-        for(int i=0;i<9;i++) {
+        for(int i=0;i<MerellePawnPot.PAWNS_IN_POT;i++) {
             Pawn p = (Pawn)pot.getElement(i,0);
             // if there is a pawn in i.
             if (p != null) {

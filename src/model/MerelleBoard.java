@@ -13,9 +13,11 @@ public class MerelleBoard extends GridElement {
         {1,1},{1,5},{5,1},{5,5},{1,3},{3,1},{3,5},{5,3},
         {2,2},{2,4},{4,2},{4,4},{3,2},{2,3},{3,4},{4,3}
     };
+    private final static int GRIDNBROWS = 7;
+    private final static int GRIDNBCOLS = 7;
     public MerelleBoard(int x, int y, GameStageModel gameStageModel) {
-        // call the super-constructor to create a 7x7 grid, named "merelleboard", and in x,y in space
-        super("merelleboard", x, y, 7 , 7, gameStageModel);
+        // call the super-constructor to create a GRIDNBROWS x GRIDNBCOLS grid, named "merelleboard", and in x,y in space
+        super("merelleboard", x, y, GRIDNBROWS , GRIDNBCOLS, gameStageModel);
         resetReachableCells(false);
     }
 
