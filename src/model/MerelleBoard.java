@@ -8,7 +8,7 @@ import java.util.List;
 import java.awt.*;
 
 public class MerelleBoard extends GridElement {
-    protected static int[][] activCell = {
+    protected static int[][] ACTIVCELL = {
         {0,0},{0,6},{6,0},{6,6},{0,3},{3,0},{3,6},{6,3},
         {1,1},{1,5},{5,1},{5,5},{1,3},{3,1},{3,5},{5,3},
         {2,2},{2,4},{4,2},{4,4},{3,2},{2,3},{3,4},{4,3}
@@ -45,6 +45,7 @@ public class MerelleBoard extends GridElement {
             return lst;
         }
         // else, take each empty cell and check if it is valid
+        // FIXME : C'est ici que la logique / rêgle du jeu actuellement celle du Hole
         for(int i=0;i<3;i++) {
             for(int j=0;j<3;j++) {
                 if (isEmptyAt(i,j)) {
@@ -124,7 +125,7 @@ public class MerelleBoard extends GridElement {
     }
 
     public static boolean isActiveCell(int x, int y) {
-        for (int[] i : MerelleBoard.activCell) {
+        for (int[] i : MerelleBoard.ACTIVCELL) {
             if (x == i[0] && y == i[1]){
                 return true;
             }
