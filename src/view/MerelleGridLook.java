@@ -17,7 +17,7 @@ public class MerelleGridLook extends GridLook {
         // start by drawing the border of each cell, which will be change after 
         // FIXME: Changer le look pour avoir la grid caractéristique de la merelle + utiliser cette GridLook partout
         // TODO : LUCAS
-        // use the activeCell static variable of HoleBoard to draw the lines/corner/border of the right cells
+        // use the activeCell static variable of MerelleBoard to draw the lines/corner/border of the right cells
         // do the oposite to link unused cells
         for(int i=0;i<nbRows;i++) {
             for(int j=0;j<nbCols;j++) {

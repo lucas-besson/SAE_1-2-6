@@ -2,9 +2,9 @@ import boardifier.model.GameException;
 import boardifier.view.View;
 import boardifier.control.StageFactory;
 import boardifier.model.Model;
-import control.HoleController;
+import control.MerelleController;
 
-public class HoleConsole {
+public class MerelleConsole {
 
     public static void main(String[] args) {
 
@@ -15,7 +15,7 @@ public class HoleConsole {
                 if ((mode <0) || (mode>2)) mode = 0;
             }
             catch(NumberFormatException e) {
-                mode = 0;
+                    mode = 0;
             }
         }
         Model model = new Model();
@@ -32,10 +32,10 @@ public class HoleConsole {
             model.addComputerPlayer("computer2");
         }
 
-        StageFactory.registerModelAndView("hole", "model.HoleStageModel", "view.HoleStageView");
-        View holeView = new View(model);
-        HoleController control = new HoleController(model,holeView);
-        control.setFirstStageName("hole");
+        StageFactory.registerModelAndView("merelle", "model.MerelleStageModel", "view.MerelleStageView");
+        View merelleView = new View(model);
+        MerelleController control = new MerelleController(model,merelleView);
+        control.setFirstStageName("merelle");
         try {
             control.startGame();
             control.stageLoop();

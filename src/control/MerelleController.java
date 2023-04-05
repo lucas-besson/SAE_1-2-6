@@ -9,23 +9,21 @@ import boardifier.model.Player;
 import boardifier.model.action.ActionList;
 import boardifier.model.action.GameAction;
 import boardifier.model.action.MoveAction;
-import boardifier.model.animation.AnimationTypes;
 import boardifier.view.View;
-import model.HoleBoard;
-import model.HolePawnPot;
-import model.HoleStageModel;
-import view.MerelleGridLook;
+import model.MerelleBoard;
+import model.MerellePawnPot;
+import model.MerelleStageModel;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class HoleController extends Controller {
+public class MerelleController extends Controller {
 
     BufferedReader consoleIn;
     boolean firstPlayer;
 
-    public HoleController(Model model, View view) {
+    public MerelleController(Model model, View view) {
         super(model, view);
         firstPlayer = true;
     }
@@ -57,7 +55,7 @@ public class HoleController extends Controller {
         Player p = model.getCurrentPlayer();
         if (p.getType() == Player.COMPUTER) {
             System.out.println("COMPUTER PLAYS");
-            HoleDecider decider = new HoleDecider(model,this);
+            MerelleDecider decider = new MerelleDecider(model,this);
             ActionPlayer play = new ActionPlayer(model, this, decider, null);
             play.start();
         }
@@ -79,18 +77,18 @@ public class HoleController extends Controller {
         }
     }
     private boolean analyseAndPlay(String line) {
-        HoleStageModel gameStage = (HoleStageModel) model.getGameStage();
+        MerelleStageModel gameStage = (MerelleStageModel) model.getGameStage();
         // get the pawn value from the first char
         int pawnIndex = (int) (line.charAt(0) - '1');
-        if ((pawnIndex<0)||(pawnIndex>HolePawnPot.PAWNS_IN_POT)) return false;
+        if ((pawnIndex<0)||(pawnIndex> MerellePawnPot.PAWNS_IN_POT)) return false;
 
         // get the ccords in the board
         int col = (int) (line.charAt(1) - 'A');
         int row = (int) (line.charAt(2) - '1');
 
 
-        // Faire une liste en paramettre de HoleBoard avec toute les combinaison de co possible, sachant que tout les case ne sont pas utilisé
-        if (!HoleBoard.isActiveCell(col, row)) return false;
+        // Faire une liste en paramettre de MerelleBoard avec toute les combinaison de co possible, sachant que tout les case ne sont pas utilisé
+        if (!MerelleBoard.isActiveCell(col, row)) return false;
 
 
         // check if the pawn is still in its pot
@@ -110,7 +108,7 @@ public class HoleController extends Controller {
         if (!gameStage.getBoard().canReachCell(row,col)) return false;
 
         ActionList actions = new ActionList(true);
-        GameAction move = new MoveAction(model, pawn, "holeboard", row, col);
+        GameAction move = new MoveAction(model, pawn, "merelleboard", row, col);
         // add the action to the action list.
         actions.addSingleAction(move);
         ActionPlayer play = new ActionPlayer(model, this, actions);

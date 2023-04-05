@@ -2,24 +2,23 @@ package model;
 
 import boardifier.model.GameStageModel;
 import boardifier.model.StageElementsFactory;
-import boardifier.model.TextElement;
 
-public class HoleStageFactory extends StageElementsFactory {
-    private HoleStageModel stageModel;
+public class MerelleStageFactory extends StageElementsFactory {
+    private MerelleStageModel stageModel;
 
-    public HoleStageFactory(GameStageModel gameStageModel) {
+    public MerelleStageFactory(GameStageModel gameStageModel) {
         super(gameStageModel);
-        stageModel = (HoleStageModel) gameStageModel;
+        stageModel = (MerelleStageModel) gameStageModel;
     }
 
     @Override
     public void setup() {
         // create the board
-        stageModel.setBoard(new HoleBoard(0, 0, stageModel));
+        stageModel.setBoard(new MerelleBoard(0, 0, stageModel));
         //create the pots
-        HolePawnPot blackPot = new HolePawnPot(50,0, stageModel);
+        MerellePawnPot blackPot = new MerellePawnPot(50,0, stageModel);
         stageModel.setBlackPot(blackPot);
-        HolePawnPot redPot = new HolePawnPot(60,0, stageModel);
+        MerellePawnPot redPot = new MerellePawnPot(60,0, stageModel);
         stageModel.setRedPot(redPot);
 
         // create the pawns

@@ -2,43 +2,43 @@ package model;
 
 import boardifier.model.*;
 
-public class HoleStageModel extends GameStageModel {
+public class MerelleStageModel extends GameStageModel {
 
-    private HoleBoard board;
-    private HolePawnPot blackPot;
-    private HolePawnPot redPot;
+    private MerelleBoard board;
+    private MerellePawnPot blackPot;
+    private MerellePawnPot redPot;
     private Pawn[] blackPawns;
     private Pawn[] redPawns;
     private int blackPawnsToPlay;
     private int redPawnsToPlay;
 
-    public HoleStageModel(String name, Model model) {
+    public MerelleStageModel(String name, Model model) {
         super(name, model);
         blackPawnsToPlay = 9;
         redPawnsToPlay = 9;
         setupCallbacks();
     }
 
-    public HoleBoard getBoard() {
+    public MerelleBoard getBoard() {
         return board;
     }
-    public void setBoard(HoleBoard board) {
+    public void setBoard(MerelleBoard board) {
         this.board = board;
         addGrid(board);
     }
 
-    public HolePawnPot getBlackPot() {
+    public MerellePawnPot getBlackPot() {
         return blackPot;
     }
-    public void setBlackPot(HolePawnPot blackPot) {
+    public void setBlackPot(MerellePawnPot blackPot) {
         this.blackPot = blackPot;
         addGrid(blackPot);
     }
 
-    public HolePawnPot getRedPot() {
+    public MerellePawnPot getRedPot() {
         return redPot;
     }
-    public void setRedPot(HolePawnPot redPot) {
+    public void setRedPot(MerellePawnPot redPot) {
         this.redPot = redPot;
         addGrid(redPot);
     }
@@ -143,6 +143,6 @@ public class HoleStageModel extends GameStageModel {
 
     @Override
     public StageElementsFactory getDefaultElementFactory() {
-        return new HoleStageFactory(this);
+        return new MerelleStageFactory(this);
     }
 }

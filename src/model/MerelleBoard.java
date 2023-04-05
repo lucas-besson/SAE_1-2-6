@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.awt.*;
 
-public class HoleBoard extends GridElement {
+public class MerelleBoard extends GridElement {
     protected static int[][] activCell = {
         {0,0},{0,6},{6,0},{6,6},{0,3},{3,0},{3,6},{6,3},
         {1,1},{1,5},{5,1},{5,5},{1,3},{3,1},{3,5},{5,3},
         {2,2},{2,4},{4,2},{4,4},{3,2},{2,3},{3,4},{4,3}
     };
-    public HoleBoard(int x, int y, GameStageModel gameStageModel) {
+    public MerelleBoard(int x, int y, GameStageModel gameStageModel) {
         // call the super-constructor to create a 7x7 grid, named "merelleboard", and in x,y in space
         super("merelleboard", x, y, 7 , 7, gameStageModel);
         resetReachableCells(false);
@@ -124,7 +124,7 @@ public class HoleBoard extends GridElement {
     }
 
     public static boolean isActiveCell(int x, int y) {
-        for (int[] i : HoleBoard.activCell) {
+        for (int[] i : MerelleBoard.activCell) {
             if (x == i[0] && y == i[1]){
                 return true;
             }
