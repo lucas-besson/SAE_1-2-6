@@ -13,6 +13,15 @@ public class MerelleBoard extends GridElement {
         {1,1},{1,5},{5,1},{5,5},{1,3},{3,1},{3,5},{5,3},
         {2,2},{2,4},{4,2},{4,4},{3,2},{2,3},{3,4},{4,3}
     };
+    public static boolean isActiveCell(int x, int y) {
+        for (int[] i : MerelleBoard.ACTIVCELL) {
+            if (x == i[0] && y == i[1]){
+                return true;
+            }
+        }
+        return false;
+    }
+    
     private final static int GRIDNBROWS = 7;
     private final static int GRIDNBCOLS = 7;
     public MerelleBoard(int x, int y, GameStageModel gameStageModel) {
@@ -124,15 +133,6 @@ public class MerelleBoard extends GridElement {
             }
         }
         return lst;
-    }
-
-    public static boolean isActiveCell(int x, int y) {
-        for (int[] i : MerelleBoard.ACTIVCELL) {
-            if (x == i[0] && y == i[1]){
-                return true;
-            }
-        }
-        return false;
     }
 
 }
