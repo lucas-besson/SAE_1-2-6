@@ -74,12 +74,13 @@ public class MerelleStageModel extends GameStageModel {
             else {
                 redPawnsToPlay--;
             }
+            // FIXME : ne dois pas s'arrêter losrque les pot sont vide | Ajouter / utiliser un compteur de pieces sur les joueurs pour les vérif ? (si il y en a un à 2 pièces == fin)
             if ((blackPawnsToPlay == 0) && (redPawnsToPlay == 0)) {
                 computePartyResult();
             }
         });
     }
-
+    // FIXME : plus simple, on pourrait même suppr la méthode : le perdant = selui qui à plus que 2 pièces en mains
     private void computePartyResult() {
         int idWinner = -1;
         // get the empty cell, which should be in 2D at [0,0], [0,2], [1,1], [2,0] or [2,2]

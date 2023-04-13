@@ -90,23 +90,34 @@ public class MerelleController extends Controller {
         // Faire une liste en paramettre de MerelleBoard avec toute les combinaison de co possible, sachant que tout les case ne sont pas utilisé
         if (!MerelleBoard.isActiveCell(col, row)) return false;
 
-
-        // check if the pawn is still in its pot
+        int color = model.getIdPlayer();
+        // look for the right pot
         GridElement pot = null;
-        if (model.getIdPlayer() == 0) {
+        if (color == 0) {
             pot = gameStage.getBlackPot();
         }
         else {
             pot = gameStage.getRedPot();
         }
-        if (pot.isEmptyAt(pawnIndex,0)) return false;
-        GameElement pawn = pot.getElement(pawnIndex,0);
+
+        GameElement pawn = null;
+        // Check if the pot is empty
+        if (!pot.isEmpty()){
+            // if not -> first part of the game : the player have to empty the pot
+            if (pot.isEmptyAt(pawnIndex,0)) return false;
+            pawn = pot.getElement(pawnIndex,0);
+        } 
+        else {
+            // if -> second part of the game : the player play with the pawns in the board
+            pawn = gameStage.getBoard().getPawn(pawnIndex,color);
+        }
 
 
         // FIXME : compute valid cells for the chosen pawn
         gameStage.getBoard().setValidCells(pawnIndex+1);
         if (!gameStage.getBoard().canReachCell(row,col)) return false;
 
+        // TODO : vérifier que l'action dans la deuxième partie du jeu supprime le pions de la board et le déplace
         ActionList actions = new ActionList(true);
         GameAction move = new MoveAction(model, pawn, "merelleboard", row, col);
         // add the action to the action list.

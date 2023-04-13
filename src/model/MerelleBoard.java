@@ -1,5 +1,6 @@
 package model;
 
+import boardifier.model.GameElement;
 import boardifier.model.GameStageModel;
 import boardifier.model.GridElement;
 
@@ -29,7 +30,20 @@ public class MerelleBoard extends GridElement {
         super("merelleboard", x, y, GRIDNBROWS , GRIDNBCOLS, gameStageModel);
         resetReachableCells(false);
     }
-
+    // Method for the second part of the game : get the pawn of number `number` from the player of the color `color`
+    public GameElement getPawn(int number, int color){
+        for (List<GameElement>[] gss : grid){
+            for (List<GameElement> gs: gss) {
+                for (GameElement g : gs) {
+                    Pawn pawn = (Pawn) g;
+                    if (pawn.getNumber() == number && pawn.getColor() == color) {
+                        return pawn;
+                    }
+                }
+            }
+        }
+        return null;
+    }
     //FIXME
     public void setValidCells(int number) {
         resetReachableCells(false);
