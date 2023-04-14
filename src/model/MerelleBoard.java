@@ -3,6 +3,7 @@ package model;
 import boardifier.model.GameElement;
 import boardifier.model.GameStageModel;
 import boardifier.model.GridElement;
+import view.PawnPotLook;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,108 +46,129 @@ public class MerelleBoard extends GridElement {
         return null;
     }
     //FIXME
-    public void setValidCells(int number) {
+    public void setValidCells(Pawn pawn, int gameStage) {
         resetReachableCells(false);
-        List<Point> valid = computeValidCells(number);
+        List<Point> valid = computeValidCells(pawn,gameStage);
         if (valid != null) {
             for(Point p : valid) {
                 reachableCells[p.y][p.x] = true;
             }
         }
     }
-    public List<Point> computeValidCells(int number) {
+    public List<Point> computeValidCells(Pawn pawn, int gameStage) {
         List<Point> lst = new ArrayList<>();
         Pawn p = null;
-        // if the grid is empty, is it the first turn and thus, all cells are valid
-        if (isEmpty()) {
-            // i are rows
-            for(int i=0;i<3;i++) {
-                // j are cols
-                for (int j = 0; j < 3; j++) {
-                    // cols is in x direction and rows are in y direction, so create a point in (j,i)
-                    lst.add(new Point(j,i));
+
+        // First stage of the game : all empty cells are valid
+        if (gameStage == 1) {
+            for (int i = 0; i < GRIDNBROWS; i++) {
+                for (int j = 0; j < GRIDNBCOLS; j++) {
+                    // FIXME : n'arrive pas à faire la comparaison ? à quoi ressemble la grid quand elle est vide ? que retourne réelement getElement ?
+                    if ((Pawn) getElements(i, j) == null) {
+                        lst.add(new Point(j,i));
+                    }
                 }
             }
             return lst;
         }
-        // else, take each empty cell and check if it is valid
-        // FIXME : C'est ici que la logique / rêgle du jeu actuellement celle du Hole
-        for(int i=0;i<3;i++) {
-            for(int j=0;j<3;j++) {
-                if (isEmptyAt(i,j)) {
-                    // check adjacence in row-1
-                    if (i-1 >= 0) {
-                        if (j-1>=0) {
-                            p = (Pawn)getElement(i-1,j-1);
-
-                            // check if same parity
-                            if ((p != null) && ( p.getNumber()%2 == number%2)) {
-                                lst.add(new Point(j,i));
-                                continue; // go to the next point
-                            }
-                        }
-                        p = (Pawn)getElement(i-1,j);
-                        // check if different parity
-                        if ((p != null) && ( p.getNumber()%2 != number%2)) {
-                            lst.add(new Point(j,i));
-                            continue; // go to the next point
-                        }
-                        if (j+1<=2) {
-                            p = (Pawn)getElement(i-1,j+1);
-                            // check if same parity
-                            if ((p != null) && ( p.getNumber()%2 == number%2)) {
-                                lst.add(new Point(j,i));
-                                continue; // go to the next point
-                            }
-                        }
-                    }
-                    // check adjacence in row+1
-                    if (i+1 <= 2) {
-                        if (j-1>=0) {
-                            p = (Pawn)getElement(i+1,j-1);
-                            // check if same parity
-                            if ((p != null) && ( p.getNumber()%2 == number%2)) {
-                                lst.add(new Point(j,i));
-                                continue; // go to the next point
-                            }
-                        }
-                        p = (Pawn)getElement(i+1,j);
-                        // check if different parity
-                        if ((p != null) && ( p.getNumber()%2 != number%2)) {
-                            lst.add(new Point(j,i));
-                            continue; // go to the next point
-                        }
-                        if (j+1<=2) {
-                            p = (Pawn)getElement(i+1,j+1);
-                            // check if same parity
-                            if ((p != null) && ( p.getNumber()%2 == number%2)) {
-                                lst.add(new Point(j,i));
-                                continue; // go to the next point
-                            }
-                        }
-                    }
-                    // check adjacence in row
-                    if (j-1>=0) {
-                        p = (Pawn)getElement(i,j-1);
-                        // check if different parity
-                        if ((p != null) && ( p.getNumber()%2 != number%2)) {
-                            lst.add(new Point(j,i));
-                            continue; // go to the next point
-                        }
-                    }
-                    if (j+1<=2) {
-                        p = (Pawn)getElement(i,j+1);
-                        // check if different parity
-                        if ((p != null) && ( p.getNumber()%2 != number%2)) {
-                            lst.add(new Point(j,i));
-                            continue; // go to the next point
-                        }
-
-                    }
-                }
-            }
+        // Second stage of the game : the cells have to be empty and within 1 cells around the initial pawn position
+        else {
+            return lst;
         }
-        return lst;
+        
+
+
+
+
+        // // if the grid is empty, is it the first turn and thus, all cells are valid
+        // if (isEmpty()) {
+        //     // i are rows
+        //     for(int i = 0; i < GRIDNBROWS; i++) {
+        //         // j are cols
+        //         for (int j = 0; j < GRIDNBCOLS; j++) {
+        //             // cols is in x direction and rows are in y direction, so create a point in (j,i)
+        //             lst.add(new Point(j,i));
+        //         }
+        //     }
+        //     return lst;
+        // }
+        // // else, take each empty cell and check if it is valid
+        // // FIXME : C'est ici que la logique / rêgle du jeu actuellement celle du Hole
+        // for(int i=0;i<3;i++) {
+        //     for(int j=0;j<3;j++) {
+        //         if (isEmptyAt(i,j)) {
+        //             // check adjacence in row-1
+        //             if (i-1 >= 0) {
+        //                 if (j-1>=0) {
+        //                     p = (Pawn)getElement(i-1,j-1);
+
+        //                     // check if same parity
+        //                     if ((p != null) && ( p.getNumber()%2 == number%2)) {
+        //                         lst.add(new Point(j,i));
+        //                         continue; // go to the next point
+        //                     }
+        //                 }
+        //                 p = (Pawn)getElement(i-1,j);
+        //                 // check if different parity
+        //                 if ((p != null) && ( p.getNumber()%2 != number%2)) {
+        //                     lst.add(new Point(j,i));
+        //                     continue; // go to the next point
+        //                 }
+        //                 if (j+1<=2) {
+        //                     p = (Pawn)getElement(i-1,j+1);
+        //                     // check if same parity
+        //                     if ((p != null) && ( p.getNumber()%2 == number%2)) {
+        //                         lst.add(new Point(j,i));
+        //                         continue; // go to the next point
+        //                     }
+        //                 }
+        //             }
+        //             // check adjacence in row+1
+        //             if (i+1 <= 2) {
+        //                 if (j-1>=0) {
+        //                     p = (Pawn)getElement(i+1,j-1);
+        //                     // check if same parity
+        //                     if ((p != null) && ( p.getNumber()%2 == number%2)) {
+        //                         lst.add(new Point(j,i));
+        //                         continue; // go to the next point
+        //                     }
+        //                 }
+        //                 p = (Pawn)getElement(i+1,j);
+        //                 // check if different parity
+        //                 if ((p != null) && ( p.getNumber()%2 != number%2)) {
+        //                     lst.add(new Point(j,i));
+        //                     continue; // go to the next point
+        //                 }
+        //                 if (j+1<=2) {
+        //                     p = (Pawn)getElement(i+1,j+1);
+        //                     // check if same parity
+        //                     if ((p != null) && ( p.getNumber()%2 == number%2)) {
+        //                         lst.add(new Point(j,i));
+        //                         continue; // go to the next point
+        //                     }
+        //                 }
+        //             }
+        //             // check adjacence in row
+        //             if (j-1>=0) {
+        //                 p = (Pawn)getElement(i,j-1);
+        //                 // check if different parity
+        //                 if ((p != null) && ( p.getNumber()%2 != number%2)) {
+        //                     lst.add(new Point(j,i));
+        //                     continue; // go to the next point
+        //                 }
+        //             }
+        //             if (j+1<=2) {
+        //                 p = (Pawn)getElement(i,j+1);
+        //                 // check if different parity
+        //                 if ((p != null) && ( p.getNumber()%2 != number%2)) {
+        //                     lst.add(new Point(j,i));
+        //                     continue; // go to the next point
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+        // return lst;
     }
 
 }

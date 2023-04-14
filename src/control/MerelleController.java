@@ -13,6 +13,7 @@ import boardifier.view.View;
 import model.MerelleBoard;
 import model.MerellePawnPot;
 import model.MerelleStageModel;
+import model.Pawn;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -83,7 +84,7 @@ public class MerelleController extends Controller {
         if ((pawnIndex<0)||(pawnIndex> MerellePawnPot.PAWNS_IN_POT)) return false;
 
         // get the ccords in the board
-        int col = (int) (line.charAt(1) - 'A');
+        int col = (int) (Character.toUpperCase(line.charAt(1)) - 'A');
         int row = (int) (line.charAt(2) - '1');
 
 
@@ -100,21 +101,23 @@ public class MerelleController extends Controller {
             pot = gameStage.getRedPot();
         }
 
-        GameElement pawn = null;
+        Pawn pawn = null;
         // Check if the pot is empty
         if (!pot.isEmpty()){
             // if not -> first part of the game : the player have to empty the pot
             if (pot.isEmptyAt(pawnIndex,0)) return false;
-            pawn = pot.getElement(pawnIndex,0);
+            pawn = (Pawn) pot.getElement(pawnIndex,0);
+            
+            gameStage.getBoard().setValidCells(pawn,1);
         } 
         else {
             // if -> second part of the game : the player play with the pawns in the board
-            pawn = gameStage.getBoard().getPawn(pawnIndex,color);
+            pawn = (Pawn) gameStage.getBoard().getPawn(pawnIndex,color);
+            gameStage.getBoard().setValidCells(pawn,2);
         }
 
 
         // FIXME : compute valid cells for the chosen pawn
-        gameStage.getBoard().setValidCells(pawnIndex+1);
         if (!gameStage.getBoard().canReachCell(row,col)) return false;
 
         // TODO : vérifier que l'action dans la deuxième partie du jeu supprime le pions de la board et le déplace
@@ -122,8 +125,9 @@ public class MerelleController extends Controller {
         GameAction move = new MoveAction(model, pawn, "merelleboard", row, col);
         // add the action to the action list.
         actions.addSingleAction(move);
-        ActionPlayer play = new ActionPlayer(model, this, actions);
-        play.start();
+        // FIXME
+        // ActionPlayer play = new ActionPlayer(model, this, actions);
+        // play.start();
         return true;
     }
 }

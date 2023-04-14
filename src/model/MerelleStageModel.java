@@ -14,8 +14,8 @@ public class MerelleStageModel extends GameStageModel {
 
     public MerelleStageModel(String name, Model model) {
         super(name, model);
-        blackPawnsToPlay = 9;
-        redPawnsToPlay = 9;
+        blackPawnsToPlay = MerellePawnPot.PAWNS_IN_POT;
+        redPawnsToPlay = MerellePawnPot.PAWNS_IN_POT;
         setupCallbacks();
     }
 

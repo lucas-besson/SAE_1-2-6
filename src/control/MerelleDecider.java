@@ -47,7 +47,8 @@ public class MerelleDecider extends Decider {
             // if there is a pawn in i.
             if (p != null) {
                 // get the valid cells
-                List<Point> valid = board.computeValidCells(p.getNumber());
+                // FIXME
+                List<Point> valid = board.computeValidCells(p,1);
                 if (valid.size() != 0) {
                     // choose at random one of the valid cells
                     int id = loto.nextInt(valid.size());
