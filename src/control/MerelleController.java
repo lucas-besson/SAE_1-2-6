@@ -103,17 +103,17 @@ public class MerelleController extends Controller {
 
         Pawn pawn = null;
         // Check if the pot is empty
-        if (!pot.isEmpty()){
+        if (gameStage.getStage() == 1){
             // if not -> first part of the game : the player have to empty the pot
             if (pot.isEmptyAt(pawnIndex,0)) return false;
             pawn = (Pawn) pot.getElement(pawnIndex,0);
             
-            gameStage.getBoard().setValidCells(pawn,1);
+            gameStage.getBoard().setValidCells(pawn,gameStage.getStage());
         } 
         else {
             // if -> second part of the game : the player play with the pawns in the board
-            pawn = (Pawn) gameStage.getBoard().getPawn(pawnIndex,color);
-            gameStage.getBoard().setValidCells(pawn,2);
+            pawn = (Pawn) gameStage.getBoard().getPawn(pawnIndex,color); //FIXME : MerelleBoard.getPawn
+            gameStage.getBoard().setValidCells(pawn,gameStage.getStage());
         }
 
 
@@ -125,9 +125,8 @@ public class MerelleController extends Controller {
         GameAction move = new MoveAction(model, pawn, "merelleboard", row, col);
         // add the action to the action list.
         actions.addSingleAction(move);
-        // FIXME
-        // ActionPlayer play = new ActionPlayer(model, this, actions);
-        // play.start();
+        ActionPlayer play = new ActionPlayer(model, this, actions);
+        play.start();
         return true;
     }
 }

@@ -63,6 +63,11 @@ public class MerelleStageModel extends GameStageModel {
         }
     }
 
+    public int getStage(){
+        if (blackPot.isEmpty() && redPot.isEmpty()) return 2;
+        else return 1;
+    }
+
     private void setupCallbacks() {
         onPutInGrid( (element, gridDest, rowDest, colDest) -> {
             // just check when pawns are put in 3x3 board
@@ -75,9 +80,9 @@ public class MerelleStageModel extends GameStageModel {
                 redPawnsToPlay--;
             }
             // FIXME : ne dois pas s'arrêter losrque les pot sont vide | Ajouter / utiliser un compteur de pieces sur les joueurs pour les vérif ? (si il y en a un à 2 pièces == fin)
-            if ((blackPawnsToPlay == 0) && (redPawnsToPlay == 0)) {
-                computePartyResult();
-            }
+            // if ((blackPawnsToPlay == 0) && (redPawnsToPlay == 0)) {
+            //     computePartyResult();
+            // }
         });
     }
     // FIXME : plus simple, on pourrait même suppr la méthode : le perdant = selui qui à plus que 2 pièces en mains

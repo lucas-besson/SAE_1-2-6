@@ -9,6 +9,7 @@ import boardifier.model.action.GameAction;
 import boardifier.model.action.MoveAction;
 import model.MerelleBoard;
 import model.MerellePawnPot;
+import model.MerelleStageFactory;
 import model.MerelleStageModel;
 import model.Pawn;
 
@@ -47,8 +48,7 @@ public class MerelleDecider extends Decider {
             // if there is a pawn in i.
             if (p != null) {
                 // get the valid cells
-                // FIXME
-                List<Point> valid = board.computeValidCells(p,1);
+                List<Point> valid = board.computeValidCells(p,stage.getStage());
                 if (valid.size() != 0) {
                     // choose at random one of the valid cells
                     int id = loto.nextInt(valid.size());

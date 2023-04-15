@@ -38,7 +38,7 @@ public class MerelleBoard extends GridElement {
                 for (GameElement g : gs) {
                     Pawn pawn = (Pawn) g;
                     if (pawn.getNumber() == number && pawn.getColor() == color) {
-                        return pawn;
+                        return pawn; // FIXME ne retourne pas le bon object : null | comment marche grid
                     }
                 }
             }
@@ -63,8 +63,8 @@ public class MerelleBoard extends GridElement {
         if (gameStage == 1) {
             for (int i = 0; i < GRIDNBROWS; i++) {
                 for (int j = 0; j < GRIDNBCOLS; j++) {
-                    // FIXME : n'arrive pas à faire la comparaison ? à quoi ressemble la grid quand elle est vide ? que retourne réelement getElement ?
-                    if ((Pawn) getElements(i, j) == null) {
+                    // Why does the getElement(i,j) {grid[i][j]} return a List<GameElement> ???
+                    if (getElements(i, j).size() == 0) {
                         lst.add(new Point(j,i));
                     }
                 }
@@ -73,6 +73,8 @@ public class MerelleBoard extends GridElement {
         }
         // Second stage of the game : the cells have to be empty and within 1 cells around the initial pawn position
         else {
+            System.out.println(pawn.getX() + " " + pawn.getY() );
+
             return lst;
         }
         
