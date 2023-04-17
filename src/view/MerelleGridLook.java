@@ -144,10 +144,11 @@ public class MerelleGridLook extends GridLook {
             shape[(5+1)*cellHeight][(1+1)*cellWidth] = "\u2518";
             // draw coordinates
 
-
+        // Creation of the lines between the boxes :
+            // Definition of the line color :
             String color = ConsoleColor.RED;
 
-            // Vertical -------------------------------------------------------
+            // Vertical :
             shape[(6*(cellHeight)+ cellHeight/2)][4*cellWidth] = "\u251C";
             for (int j = 1; j < cellWidth*2; j++) {
                 shape[6*cellHeight+ cellHeight/2][4*cellWidth+j] = color +"\u2500" + ConsoleColor.RESET;
@@ -172,7 +173,9 @@ public class MerelleGridLook extends GridLook {
                 shape[5*cellHeight+ cellHeight/2][4*cellWidth+j] = color + "\u2500" + ConsoleColor.RESET;
             }
             shape[(5*(cellHeight)+ cellHeight/2)][5*cellWidth] = "\u2524";
+
             // Symmetry --------------------------------------------------------
+
             shape[(1*(cellHeight)+ cellHeight/2)][2*cellWidth] = "\u251C";
             for (int j = 1; j < cellWidth; j++) {
                 shape[1*cellHeight+ cellHeight/2][2*cellWidth+j] = color+"\u2500"+ ConsoleColor.RESET;
@@ -196,8 +199,9 @@ public class MerelleGridLook extends GridLook {
                 shape[cellHeight/2][cellWidth+j] = color + "\u2500" + ConsoleColor.RESET;
             }
             shape[cellHeight/2][3*cellWidth] = "\u2524";
-            // ----------------------------------------------------------------
-            // Horizontal -----------------------------------------------------
+
+
+            // Horizontal :
 
             shape[cellHeight][cellWidth/2] = "\u252C";
             for (int j = 1; j < cellWidth; j++) {
@@ -224,6 +228,7 @@ public class MerelleGridLook extends GridLook {
             shape[5*cellHeight][(cellWidth)+ cellWidth/2]  = "\u2534";
 
             // Symmetry --------------------------------------------------------
+
             shape[cellHeight][6*(cellWidth)+cellWidth/2] = "\u252C";
             for (int j = 1; j < cellWidth; j++) {
                 shape[cellHeight+j][6*(cellWidth)+cellWidth/2] = color + "\u2502" + ConsoleColor.RESET;
@@ -247,9 +252,10 @@ public class MerelleGridLook extends GridLook {
                 shape[4*cellHeight+j][5*(cellWidth)+cellWidth/2] = color + "\u2502" + ConsoleColor.RESET;
             }
             shape[5*cellHeight][5*(cellWidth)+ cellWidth/2]  = "\u2534";
-            // ----------------------------------------------------------------
 
+        //End of the creation of the lines between the boxes
 
+            // Adding the cross to the center of the tray
             shape[(3*(cellHeight)+ cellHeight/2)][3*(cellWidth)+ cellWidth/2] = ConsoleColor.BLUE + "\u2573" + ConsoleColor.RESET;
 
         }
