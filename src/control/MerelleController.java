@@ -112,15 +112,17 @@ public class MerelleController extends Controller {
         } 
         else {
             // if -> second part of the game : the player play with the pawns in the board
-            pawn = (Pawn) gameStage.getBoard().getPawn(pawnIndex,color); //FIXME : MerelleBoard.getPawn
+            pawn = (Pawn) gameStage.getBoard().getPawn(pawnIndex+1,color); //FIXME : MerelleBoard.getPawn
             gameStage.getBoard().setValidCells(pawn,gameStage.getStage());
+
+            // TODO : s'assurer que l'action du déplacement retire bien le pions de la case précedente
         }
 
 
-        // FIXME : compute valid cells for the chosen pawn
+        
         if (!gameStage.getBoard().canReachCell(row,col)) return false;
 
-        // TODO : vérifier que l'action dans la deuxième partie du jeu supprime le pions de la board et le déplace
+        
         ActionList actions = new ActionList(true);
         GameAction move = new MoveAction(model, pawn, "merelleboard", row, col);
         // add the action to the action list.

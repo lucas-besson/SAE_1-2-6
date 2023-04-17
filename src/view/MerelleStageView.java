@@ -15,7 +15,7 @@ public class MerelleStageView extends GameStageView {
         MerelleStageModel model = (MerelleStageModel)gameStageModel;
 
         addLook(new MerelleGridLook(5, 2, model.getBoard(), -1, true));
-        addLook(new PawnPotLook(4,2, model.getBlackPot()));
+        addLook(new PawnPotLook(4, 2, model.getBlackPot()));
         addLook(new PawnPotLook(4, 2, model.getRedPot()));
 
         for(int i = 0; i< MerellePawnPot.PAWNS_IN_POT; i++) {
