@@ -30,4 +30,14 @@ public class Pawn extends GameElement {
         return color;
     }
 
+    public int getCol(){
+        // Each cells are 5 units wide, the x being stored at the center
+        // Return the pawn column starting from 1 
+        return (int)(x+2.5)/5;
+    }
+    public int getRow(){
+        // Each cells are 2 units tall, the y being stored at the center
+        // Return the pawn row starting from 1 
+        return (int)(y+1)/2;
+    }
 }
