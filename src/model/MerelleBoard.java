@@ -43,6 +43,16 @@ public class MerelleBoard extends GridElement {
                 }
             }
         }
+        // for (List<GameElement>[] gss : grid){
+        //     for (List<GameElement> gs: gss) {
+        //         for (GameElement g : gs) {
+        //             Pawn pawn = (Pawn) g;
+        //             if (pawn.getNumber() == number && pawn.getColor() == color) {
+        //                 return pawn; // FIXME ne retourne pas le bon object : null | comment marche grid
+        //             }
+        //         }
+        //     }
+        // }
         return null;
         
     }
