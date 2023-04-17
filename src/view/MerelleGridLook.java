@@ -249,6 +249,9 @@ public class MerelleGridLook extends GridLook {
             shape[5*cellHeight][5*(cellWidth)+ cellWidth/2]  = "\u2534";
             // ----------------------------------------------------------------
 
+
+            shape[(3*(cellHeight)+ cellHeight/2)][3*(cellWidth)+ cellWidth/2] = ConsoleColor.BLUE + "\u2573" + ConsoleColor.RESET;
+
         }
         if (showCoords) {
             for (int i = 0; i < nbRows; i++) {
