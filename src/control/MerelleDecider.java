@@ -9,11 +9,9 @@ import boardifier.model.action.GameAction;
 import boardifier.model.action.MoveAction;
 import model.MerelleBoard;
 import model.MerellePawnPot;
-import model.MerelleStageFactory;
 import model.MerelleStageModel;
 import model.Pawn;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -24,17 +22,15 @@ public class MerelleDecider extends Decider {
     private MerelleStageModel stage;
     private MerelleBoard board;
     private MerellePawnPot AIpot;
+
+    ActionList actions = new ActionList(true);
+
     private Pawn pawnToMove;
-	private int rowDest;
-	private int colDest;
+    private int rowDest;
 
     Random rand = new Random();
+    private int colDest;
 
-
-//	List<List<Integer>> closedMills = new ArrayList<List<Integer>>(); // tous les moulins (Liste d'un ensemble de 3 <x, y>)
-//	List<List<Integer>> checkedMills = new ArrayList<List<Integer>>(); // tous les moulins déja utilisés (Liste d'un ensemble de 3 <x, y>)
-//	int counterForm2 = 0;
-//    TODO : Comment on check les moulins et ceux qui ont déja été pris en compte
 
     private static final Random loto = new Random(Calendar.getInstance().getTimeInMillis());
 
@@ -45,7 +41,7 @@ public class MerelleDecider extends Decider {
     @Override
     public ActionList decide() {
         // do a cast get a variable of the real type to get access to the attributes of MerelleStageModel
-        stage = (MerelleStageModel)model.getGameStage();
+        stage = (MerelleStageModel) model.getGameStage();
         board = stage.getBoard(); // get the board
 
         if (model.getIdPlayer() == Pawn.PAWN_BLACK)
@@ -57,30 +53,93 @@ public class MerelleDecider extends Decider {
         int rowDest = 0; // the dest. row in board
         int colDest = 0; // the dest. col in board
 
+        if (stage.getStage() == MerelleGameStatus.PLACEMENT) {
+            placePawn();
+        }
 
-//        VERSION DE HOLEDECIDER
-//        for(int i=0;i<MerellePawnPot.PAWNS_IN_POT;i++) {
-//            Pawn p = (Pawn)pot.getElement(i,0);
-//            // if there is a pawn in i.
-//            if (p != null) {
-//                // get the valid cells
-//                List<Point> valid = board.computeValidCells(p,stage.getStage());
-//                if (valid.size() != 0) {
-//                    // choose at random one of the valid cells
-//                    int id = loto.nextInt(valid.size());
-//                    pawn = p;
-//                    rowDest = valid.get(id).y;
-//                    colDest = valid.get(id).x;
-//                    break; // stop the loop
-//                }
-//            }
-//        }
+        if (stage.getStage() == MerelleGameStatus.MOVEMENT) {
+            movePawn();
+        }
 
-        // create action list. After the last action, it is next player's turn.
-        ActionList actions = new ActionList(true);
-        // create the move action, without animation => the pawn will be put at the center of dest cell
-        GameAction move = new MoveAction(model, pawn, "merelleboard", rowDest, colDest);
-        actions.addSingleAction(move);
         return actions;
+    }
+
+    /**
+     * Dans la phase de placement des pions, analyse et place un pion du pot
+     */
+    private void placePawn() {
+
+    }
+
+    /**
+     * Dans la phase de déplacements des pions, analyse et déplace un pion du jeu
+     */
+    private void movePawn() {
+    }
+
+
+    /**
+     * Analyse les moulins qui sont prêts à etre validés (dont il reste qu'un pion pour valider le moulin)
+     * @param couleurJoueur Couleur du joueur a analyser les moulins
+     * @return Liste des cases à remplir pour faire un moulin
+     */
+    private List<int[]> getUncompletedMillsForPlayer(int couleurJoueur) {
+        List<int[]> emptyCellsForMill = new ArrayList<>();
+        for (int i = 0; i < MerelleBoard.ACTIVCELL.length; i++) {
+            int x = MerelleBoard.ACTIVCELL[i][0];
+            int y = MerelleBoard.ACTIVCELL[i][1];
+            if (board.getFirstElement(x, y) == null) {
+                if (hasMill(x, y, board, MerelleBoard.mills)) {
+                    emptyCellsForMill.add(new int[]{x, y});
+                }
+            }
+        }
+        return emptyCellsForMill;
+    }
+
+    /**
+     * Vérifie si en plaçant le pion en (x, y) on crée un moulin
+     * @param x position x du pion à verifier
+     * @param y position y du pion à verifier
+     * @param board etat actuel du plateau
+     * @param mills liste des moulins possibles
+     * @return vrai si avec cette combinaison (x, y) un moulin sera créé
+     */
+    private boolean hasMill(int x, int y, MerelleBoard board, int[][][] mills) {
+        int playerId = model.getIdPlayer();
+        for (int[][] mill : mills) {
+            if (contains(mill, new int[]{x, y})) {
+                int count = 1;
+                for (int[] position : mill) {
+                    int pawnX = position[0];
+                    int pawnY = position[1];
+                    Pawn pawn = (Pawn) board.getFirstElement(pawnX, pawnY);
+                    if (pawn == null || pawn.getColor() != playerId) {
+                        break;
+                    }
+                    count++;
+                }
+                if (count == 3) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * Vérifie que les coordonnées données sont contenues dans la combinaison de coordonnées (moulin) fourni
+     * @param mill moulin à vérifier
+     * @param position position à vérifier
+     * @return vrai si la position est contenue dans le moulin
+     */
+    private boolean contains(int[][] mill, int[] position) {
+        for (int[] p : mill) {
+            if (p[0] == position[0] && p[1] == position[1]) {
+                return true;
+            }
+        }
+        return false;
     }
 }
