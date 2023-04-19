@@ -3,6 +3,7 @@ package model;
 import boardifier.model.GameElement;
 import boardifier.model.GameStageModel;
 import boardifier.model.GridElement;
+import control.MerelleGameStatus;
 import view.PawnPotLook;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class MerelleBoard extends GridElement {
         {5,1},{5,3},{5,5},
         {6,0},{6,3},{6,6}
     };
+
     public static final int[][][] mills = {
             // Vertical mills
             {{0,0},{0,3},{0,6}},
@@ -41,7 +43,7 @@ public class MerelleBoard extends GridElement {
             {{2,4},{3,4},{4,4}},
             {{1,5},{3,5},{5,5}},
             {{0,6},{3,6},{6,6}}
-        }; ;
+        };
 
     public static boolean isActiveCell(int x, int y) {
         for (int[] i : MerelleBoard.ACTIVCELL) {
@@ -89,7 +91,7 @@ public class MerelleBoard extends GridElement {
         Pawn p = null;
 
         // First stage of the game : all empty cells are valid
-        if (gameStage == 1) {
+        if (gameStage == MerelleGameStatus.PLACEMENT) {
             for (int i = 0; i < GRIDNBROWS; i++) {
                 for (int j = 0; j < GRIDNBCOLS; j++) {
                     // Why does the getElement(i,j) {grid[i][j]} return a List<GameElement> ???
