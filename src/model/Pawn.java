@@ -10,6 +10,7 @@ public class Pawn extends GameElement {
 
     private int number;
     private int color;
+    private boolean isInAMill;
     public static int PAWN_BLACK = 0;
     public static int PAWN_RED = 1;
 
@@ -20,6 +21,7 @@ public class Pawn extends GameElement {
         type = ElementTypes.getType("pawn");
         this.number = number;
         this.color = color;
+        this.isInAMill = false;
     }
 
     public int getNumber() {
@@ -28,6 +30,14 @@ public class Pawn extends GameElement {
 
     public int getColor() {
         return color;
+    }
+
+    public boolean isInAMill() {
+        return isInAMill;
+    }
+
+    public void setInAMill(boolean inAMill) {
+        isInAMill = inAMill;
     }
 
     public int getCol(){

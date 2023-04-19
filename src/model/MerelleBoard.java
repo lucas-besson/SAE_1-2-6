@@ -6,14 +6,21 @@ import boardifier.model.GridElement;
 import view.PawnPotLook;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.awt.*;
 
 public class MerelleBoard extends GridElement {
     protected static int[][] ACTIVCELL = {
-        {0,0},{0,6},{6,0},{6,6},{0,3},{3,0},{3,6},{6,3},
-        {1,1},{1,5},{5,1},{5,5},{1,3},{3,1},{3,5},{5,3},
-        {2,2},{2,4},{4,2},{4,4},{3,2},{2,3},{3,4},{4,3}
+        {0,0},{0,3},{0,6},
+        {1,1},{1,3},{1,5},
+        {2,2},{2,3},{2,4},
+        {3,0},{3,1},{3,2},{3,4},{3,5},{3,6},
+        {4,2},{4,3},{4,4},
+        {5,1},{5,3},{5,5},
+        {6,0},{6,3},{6,6}
     };
     public static boolean isActiveCell(int x, int y) {
         for (int[] i : MerelleBoard.ACTIVCELL) {
@@ -43,16 +50,6 @@ public class MerelleBoard extends GridElement {
                 }
             }
         }
-        // for (List<GameElement>[] gss : grid){
-        //     for (List<GameElement> gs: gss) {
-        //         for (GameElement g : gs) {
-        //             Pawn pawn = (Pawn) g;
-        //             if (pawn.getNumber() == number && pawn.getColor() == color) {
-        //                 return pawn; // FIXME ne retourne pas le bon object : null | comment marche grid
-        //             }
-        //         }
-        //     }
-        // }
         return null;
         
     }
@@ -87,51 +84,81 @@ public class MerelleBoard extends GridElement {
             int x = pawn.getCol() - 1;
             int y = pawn.getRow() - 1;
 
-            int jumpX = 0;
-            int jumpY = 0;
+            int [][][] jumpTable = {
+                {{3,3},{},{},{3,1},{},{},{3,3}},
+                {{},{2,2},{},{2,1},{},{2,2},{}},
+                {{},{},{1,1},{1,1},{1,1},{},{}},
+                {{1,3},{1,2},{1,1},{},{1,1},{1,2},{1,3}},
+                {{},{},{1,1},{1,1},{1,1},{},{}},
+                {{},{2,2},{},{2,1},{},{2,2},{}},
+                {{3,3},{},{},{3,1},{},{},{3,3}}
+            };
+
+            int jumpX = jumpTable[y][x][0];
+            int jumpY = jumpTable[y][x][1];
             
-            if ((x == 0 || x == 6) && (y == 0 || y == 6)) {
-                jumpX = 3;
-                jumpY = 3;
-            }
-            else if ((x == 1 || x == 5) && (y == 1 || y == 5)) {
-                jumpX = 2;
-                jumpY = 2;
-            }
-            else if ((x == 0 || x == 6 ) && y == 3){
-                jumpX = 1;
-                jumpY = 3;
-            }
-            else if ((y == 0 || y == 6 ) && x == 3){
-                jumpX = 3;
-                jumpY = 1;
-            }
-            else if ((x == 1 || x == 5) && y == 3) {
-                jumpX = 1;
-                jumpY = 2;
-            }
-            else if ((y == 1 || y == 5) && x == 3) {
-                jumpX = 2;
-                jumpY = 1;
-            }
-            else {
-                jumpX = 1;
-                jumpY = 1;
-            }
+            int[][] offsetTable = {
+                {-jumpX, 0},
+                {jumpX, 0},
+                {0,-jumpY},
+                {0,jumpY}
+            };
             
             // Look arround the pawn
-            for (int offsetY = 0-jumpY; offsetY <= 2*jumpY; offsetY += jumpY){
-                for (int offsetX = 0-jumpX; offsetX <= 2*jumpX; offsetX += jumpX){
-                    if ((offsetY==0 && offsetX==0) || x+offsetX < 0 || y+offsetY < 0 || x+offsetX >= GRIDNBCOLS || y+offsetY >= GRIDNBROWS) continue; // Do nothing if the cell is the initial one or unreachable
-                    
-                    List<GameElement> elements = getElements(y + offsetY, x + offsetX);
-                    // if the cell is empty 
-                    if (elements.size() == 0) {
-                        lst.add(new Point(x+offsetX,y+offsetY));
-                    }
+            for (int[] offfsetCoords : offsetTable){
+                int newX = x + offfsetCoords[0];
+                int newY = y + offfsetCoords[1];
+
+                if (newX < 0 || newY < 0 || newX >= GRIDNBCOLS || newY >= GRIDNBROWS) {
+                    continue; // Do nothing if the cell is unreachable
+                }
+
+                List<GameElement> elements = getElements(newY, newX);
+                if (elements.size() == 0) {
+                    lst.add(new Point(newX, newY));
                 }
             }
             return lst;
         }
+    }
+
+    public boolean millsChecker(int color){
+        int[][][] mills = {
+            // Vertical mills
+            {{0,0},{0,3},{0,6}},
+            {{1,1},{1,3},{1,5}},
+            {{2,2},{2,3},{2,4}},
+            {{3,0},{3,1},{3,2}},
+            {{3,4},{3,5},{3,6}},
+            {{4,2},{4,3},{4,4}},
+            {{5,1},{5,3},{5,5}},
+            {{6,0},{6,3},{6,6}},
+            // Horizontal mills
+            {{0,0},{3,0},{6,0}},
+            {{1,1},{3,1},{5,1}},
+            {{2,2},{3,2},{4,2}},
+            {{0,3},{1,3},{2,3}},
+            {{4,3},{5,3},{6,3}},
+            {{2,4},{3,4},{4,4}},
+            {{1,5},{3,5},{5,5}},
+            {{0,6},{3,6},{6,6}}
+        }; 
+        
+        // Historique
+        // faire une variable sur les pawn isInAMill qui est a true si il est dans un moullin, comme ça si on parcour deux fois le moullin sans qu'il ait été changer, on l'ignore. Cela implique alors de changer la variable a chaque fois que un pawn du moullin est déplacer et casse le moullin déjà utiliser.
+        
+        // TODO : Studie how the move function, so we can implement the isInAMill variables cahnge of the pawn that is beeing moved
+
+        int newPawnInMill;
+        for (int[][] mill : mills) {
+            newPawnInMill = 0;
+            for (int[] coord : mill) {
+                Pawn pawn = (Pawn) getFirstElement(coord[0], coord[1]);
+                if (pawn.getColor() != color) break;
+                if (!pawn.isInAMill()) newPawnInMill++;
+            }
+            if (newPawnInMill==3) return true;
+        }
+        return false;
     }
 }
