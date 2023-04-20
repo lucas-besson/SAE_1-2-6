@@ -3,6 +3,7 @@ package model;
 import boardifier.model.GameElement;
 import boardifier.model.GameStageModel;
 import boardifier.model.GridElement;
+import boardifier.model.Model;
 import control.MerelleGameStatus;
 
 import java.util.ArrayList;
@@ -57,6 +58,17 @@ public class MerelleBoard extends GridElement {
         super("merelleboard", x, y, GRIDNBROWS , GRIDNBCOLS, gameStageModel);
         resetReachableCells(false);
     }
+
+    /**
+     * Constructeur par copie de la board donnée en paramètre
+     * @param board board à copier
+     */
+    public MerelleBoard(MerelleBoard board, MerelleStageModel stage) {
+        // call the super-constructor to create a GRIDNBROWS x GRIDNBCOLS grid, named "merelleboard", and in x,y in space
+        super(board.getName(), (int)board.getX(), (int)board.getY(), board.getNbRows() , board.getNbCols(), stage);
+        resetReachableCells(false);
+    }
+
     // Method for the second part of the game : get the pawn of number `number` from the player of the color `color`
     public GameElement getPawn(int number, int color){
         for (int i = 0; i < GRIDNBROWS; i++) {
