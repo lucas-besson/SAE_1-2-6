@@ -4,13 +4,9 @@ import boardifier.model.GameElement;
 import boardifier.model.GameStageModel;
 import boardifier.model.GridElement;
 import control.MerelleGameStatus;
-import view.PawnPotLook;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.awt.*;
 
 public class MerelleBoard extends GridElement {
@@ -88,8 +84,7 @@ public class MerelleBoard extends GridElement {
     }
     public List<Point> computeValidCells(Pawn pawn, int gameStage) {
         List<Point> lst = new ArrayList<>();
-        Pawn p = null;
-
+        
         // First stage of the game : all empty cells are valid
         if (gameStage == MerelleGameStatus.PLACEMENT) {
             for (int i = 0; i < GRIDNBROWS; i++) {
@@ -106,7 +101,7 @@ public class MerelleBoard extends GridElement {
         else {
             int x = pawn.getCol() - 1;
             int y = pawn.getRow() - 1;
-
+            
             int [][][] jumpTable = {
                 {{3,3},{},{},{3,1},{},{},{3,3}},
                 {{},{2,2},{},{2,1},{},{2,2},{}},
@@ -131,11 +126,11 @@ public class MerelleBoard extends GridElement {
             for (int[] offfsetCoords : offsetTable){
                 int newX = x + offfsetCoords[0];
                 int newY = y + offfsetCoords[1];
-
+                
                 if (newX < 0 || newY < 0 || newX >= GRIDNBCOLS || newY >= GRIDNBROWS) {
                     continue; // Do nothing if the cell is unreachable
                 }
-
+                
                 List<GameElement> elements = getElements(newY, newX);
                 if (elements.size() == 0) {
                     lst.add(new Point(newX, newY));
@@ -145,23 +140,59 @@ public class MerelleBoard extends GridElement {
         }
     }
 
+    public int availableMoove(int color, int gameStage){
+        int availableMoove = 0;
+        if (gameStage==1) return -1;
+        for (int i = 0; i < GRIDNBROWS; i++) {
+            for (int j = 0; j < GRIDNBCOLS; j++) {
+                Pawn pawn = (Pawn) getFirstElement(i, j);
+                if (pawn == null || pawn.getColor() != color) continue;
+                availableMoove += computeValidCells(pawn,gameStage).size();
+            }
+        }
+        return availableMoove;
+    }
+    
     public boolean millsChecker(int color){
         
         // Historique
         // faire une variable sur les pawn isInAMill qui est a true si il est dans un moullin, comme ça si on parcour deux fois le moullin sans qu'il ait été changer, on l'ignore. Cela implique alors de changer la variable a chaque fois que un pawn du moullin est déplacer et casse le moullin déjà utiliser.
         
         // TODO : Studie how the move function, so we can implement the isInAMill variables cahnge of the pawn that is beeing moved
-
+        // FIXME : Les moullins former dans la première partie du jeu ne doivent pas permettre d'enlever de pions. Donc les moulins g'nérer dans la première fase ne doivent pas être détecter comme "à jouer".
+        
         int newPawnInMill;
         for (int[][] mill : mills) {
             newPawnInMill = 0;
             for (int[] coord : mill) {
                 Pawn pawn = (Pawn) getFirstElement(coord[0], coord[1]);
-                if (pawn.getColor() != color) break;
+                if (pawn == null || pawn.getColor() != color) break;
                 if (!pawn.isInAMill()) newPawnInMill++;
             }
             if (newPawnInMill==3) return true;
         }
         return false;
+    }
+    
+    public void setValidMillCells(int color) {
+        resetReachableCells(false);
+        List<Point> valid = computeValidMillCells(color);
+        if (valid != null) {
+            for(Point p : valid) {
+                reachableCells[p.y][p.x] = true;
+            }
+        }
+    }
+    private List<Point> computeValidMillCells(int color) {
+        List<Point> lst = new ArrayList<>();
+        for (int i = 0; i < GRIDNBROWS; i++) {
+            for (int j = 0; j < GRIDNBCOLS; j++) {
+                Pawn pawn = (Pawn) getFirstElement(i,j);
+                if (pawn != null && pawn.getColor() != color) {
+                    lst.add(new Point(j,i));
+                }
+            }
+        }
+        return lst;
     }
 }
