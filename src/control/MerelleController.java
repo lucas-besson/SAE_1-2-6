@@ -133,7 +133,7 @@ public class MerelleController extends Controller {
 
         // Collect the pawn from the correct place depending on the game stage
         Pawn pawn = null;
-        if (gameStage.getStage() == 1) {
+        if (gameStage.getStage() == MerelleGameStatus.PLACEMENT) {
             // first part of the game : the player have to empty the pot
             if (pot.isEmptyAt(pawnIndex, 0)) return false;
             pawn = (Pawn) pot.getElement(pawnIndex, 0);
