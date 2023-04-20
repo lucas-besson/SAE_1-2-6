@@ -4,13 +4,9 @@ import boardifier.model.GameElement;
 import boardifier.model.GameStageModel;
 import boardifier.model.GridElement;
 import control.MerelleGameStatus;
-import view.PawnPotLook;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.awt.*;
 
 public class MerelleBoard extends GridElement {
@@ -88,7 +84,6 @@ public class MerelleBoard extends GridElement {
     }
     public List<Point> computeValidCells(Pawn pawn, int gameStage) {
         List<Point> lst = new ArrayList<>();
-        Pawn p = null;
         
         // First stage of the game : all empty cells are valid
         if (gameStage == MerelleGameStatus.PLACEMENT) {
@@ -144,6 +139,19 @@ public class MerelleBoard extends GridElement {
             return lst;
         }
     }
+
+    public int availableMoove(int color, int gameStage){
+        int availableMoove = 0;
+        if (gameStage==1) return -1;
+        for (int i = 0; i < GRIDNBROWS; i++) {
+            for (int j = 0; j < GRIDNBCOLS; j++) {
+                Pawn pawn = (Pawn) getFirstElement(i, j);
+                if (pawn == null || pawn.getColor() != color) continue;
+                availableMoove += computeValidCells(pawn,gameStage).size();
+            }
+        }
+        return availableMoove;
+    }
     
     public boolean millsChecker(int color){
         
@@ -177,7 +185,6 @@ public class MerelleBoard extends GridElement {
     }
     private List<Point> computeValidMillCells(int color) {
         List<Point> lst = new ArrayList<>();
-        Pawn p = null;
         for (int i = 0; i < GRIDNBROWS; i++) {
             for (int j = 0; j < GRIDNBCOLS; j++) {
                 Pawn pawn = (Pawn) getFirstElement(i,j);

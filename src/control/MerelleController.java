@@ -54,6 +54,14 @@ public class MerelleController extends Controller {
         }
         // get the new player
         Player p = model.getCurrentPlayer();
+        
+        // If the actual player doesn't have any available moove, the game end
+        if (((MerelleStageModel)model.getGameStage()).getBoard().availableMoove(model.getIdPlayer(), ((MerelleStageModel) model.getGameStage()).getStage())==0){
+            model.setIdWinner(((model.getIdPlayer()==1)?0:1));
+            endGame();
+            return;
+        }
+
         if (p.getType() == Player.COMPUTER) {
             System.out.println("COMPUTER PLAYS");
             MerelleDecider decider = new MerelleDecider(model,this);
@@ -76,7 +84,7 @@ public class MerelleController extends Controller {
                 catch(IOException e) {}
             }
             // If the last move have created a new mill
-            if (((MerelleStageModel) model.getGameStage()).getStage() == 2 && ((MerelleStageModel)model.getGameStage()).getBoard().millsChecker(model.getIdPlayer())) {
+            if (((MerelleStageModel)model.getGameStage()).getBoard().millsChecker(model.getIdPlayer())) {
                 // TODO : Update avec un afichage du board
                 System.out.println("You have just formed a mill, and must take an opposing pawn.");
                 ok = false;
