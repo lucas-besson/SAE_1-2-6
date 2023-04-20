@@ -84,6 +84,9 @@ public class MerelleStageModel extends GameStageModel {
             //     computePartyResult();
             // }
         });
+        onRemoveFromGrid((element, gridDest, rowDest, colDest)->{
+            // board.emptyCell(rowDest,colDest);
+        });
     }
     // FIXME : plus simple, on pourrait même suppr la méthode : le perdant = selui qui à plus que 2 pièces en mains
     private void computePartyResult() {

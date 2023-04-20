@@ -207,4 +207,9 @@ public class MerelleBoard extends GridElement {
         }
         return lst;
     }
+
+    public void emptyCell(int row, int col){
+        grid[col-1][row-1].clear();
+        return;
+    }
 }
