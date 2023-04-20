@@ -72,7 +72,7 @@ public class MerelleDecider extends Decider {
 //               SI getUncompletedMillsForPlayer(IA) > 0 : Finir un moulin pour l'IA
 //               SINON SI getUncompletedMillsForPlayer(AutreJoueur) > 0 : Empecher l'autre joueur de joueur
 //               SINON :  Placer un pion au hasard sur une case libre
-//        MoveAction move = new MoveAction(model, )
+//        MoveAction move = new MoveAction(model, anyPawn, board.getGrid(), rowDest, colDest);
 //        actions.addSingleAction(move);
     }
 
@@ -80,6 +80,11 @@ public class MerelleDecider extends Decider {
      * Dans la phase de déplacements des pions, analyse et déplace un pion du jeu
      */
     private void movePawn() {
+
+    }
+
+    private void removePawn(){
+
     }
 
 
