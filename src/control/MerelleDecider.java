@@ -68,7 +68,12 @@ public class MerelleDecider extends Decider {
      * Dans la phase de placement des pions, analyse et place un pion du pot
      */
     private void placePawn() {
-
+//        TODO : Placer un pion du pot vers le jeux selon les règles suivantes
+//               SI getUncompletedMillsForPlayer(IA) > 0 : Finir un moulin pour l'IA
+//               SINON SI getUncompletedMillsForPlayer(AutreJoueur) > 0 : Empecher l'autre joueur de joueur
+//               SINON :  Placer un pion au hasard sur une case libre
+//        MoveAction move = new MoveAction(model, )
+//        actions.addSingleAction(move);
     }
 
     /**
