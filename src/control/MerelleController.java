@@ -36,15 +36,14 @@ public class MerelleController extends Controller {
      */
     public void stageLoop() {
         consoleIn = new BufferedReader(new InputStreamReader(System.in));
-        update();
         while (!model.isEndStage()) {
-            nextPlayer();
             update();
+            nextPlayer();
         }
         stopStage();
         endGame();
     }
-
+    
     public void nextPlayer() {
         // for the first player, the id of the player is already set, so do not compute it
         if (!firstPlayer) {
@@ -56,9 +55,10 @@ public class MerelleController extends Controller {
         Player p = model.getCurrentPlayer();
 
         // If the actual player doesn't have any available moove, the game end
-        if (((MerelleStageModel) model.getGameStage()).getBoard().availableMoove(model.getIdPlayer(), ((MerelleStageModel) model.getGameStage()).getStatus()) == 0) {
+        MerelleStageModel merelleModel = (MerelleStageModel) model.getGameStage();
+        if (merelleModel.getBoard().availableMoves(model.getIdPlayer(), merelleModel.getStatus()) == 0) {
             model.setIdWinner(((model.getIdPlayer() == 1) ? 0 : 1));
-            endGame();
+            model.stopStage();
             return;
         }
 
@@ -87,9 +87,9 @@ public class MerelleController extends Controller {
                 }
             }
             // If the last move have created a new mill
-            if (((MerelleStageModel) model.getGameStage()).getBoard().millsChecker(model.getIdPlayer())) {
-                // TODO : Update avec un afichage du board
-                System.out.println("You have just formed a mill, and must take an opposing pawn.");
+            if (merelleModel.getBoard().millsChecker(model.getIdPlayer())) {
+                update();
+                System.out.println(p.getName() + ", you have just formed a mill, and must take an opposing pawn.");
                 ok = false;
                 while (!ok) {
                     System.out.print(p.getName() + " > ");
@@ -114,6 +114,7 @@ public class MerelleController extends Controller {
 
     private boolean analyseAndPlay(String line) {
         MerelleStageModel gameStage = (MerelleStageModel) model.getGameStage();
+
         // get the pawn value from the first char
         int pawnIndex = (int) (line.charAt(0) - '1');
         if ((pawnIndex < 0) || (pawnIndex > MerellePawnPot.PAWNS_IN_POT)) return false;
@@ -122,25 +123,25 @@ public class MerelleController extends Controller {
         int col = (int) (Character.toUpperCase(line.charAt(1)) - 'A');
         int row = (int) (line.charAt(2) - '1');
 
-        // Check if the coordinates are playable
+        // check if the coordinates are playable
         if (!MerelleBoard.isActiveCell(col, row)) return false;
 
-        // look for the right pot
         int color = model.getIdPlayer();
-        GridElement pot = null;
-        if (color == 0) {
-            pot = gameStage.getBlackPot();
-        } else {
-            pot = gameStage.getRedPot();
-        }
-
-        // Collect the pawn from the correct place depending on the game stage
+        
+        // collect the pawn from the correct place depending on the game stage
         Pawn pawn = null;
+        // first part of the game : the player have to empty the pot
         if (gameStage.getStatus() == MerelleGameStatus.PLACING) {
-            // first part of the game : the player have to empty the pot
+
+            // look for the right pot
+            GridElement pot = null;
+            if (color == 0) pot = gameStage.getBlackPot();
+            else pot = gameStage.getRedPot();
+            
             if (pot.isEmptyAt(pawnIndex, 0)) return false;
             pawn = (Pawn) pot.getElement(pawnIndex, 0);
             gameStage.getBoard().setValidCells(pawn, gameStage.getStatus());
+
         } else {
             // second part of the game : the player play with the pawns in the board
             pawn = (Pawn) gameStage.getBoard().getPawn(pawnIndex + 1, color);
@@ -148,13 +149,12 @@ public class MerelleController extends Controller {
             gameStage.getBoard().setValidCells(pawn, gameStage.getStatus());
         }
 
-        // See if the move is possible
+        // see if the move is possible
         if (!gameStage.getBoard().canReachCell(row, col)) return false;
 
-
+        // the action is possible and will be processed
         ActionList actions = new ActionList(true);
         GameAction move = new MoveAction(model, pawn, "merelleboard", row, col);
-        // add the action to the action list.
         actions.addSingleAction(move);
         ActionPlayer play = new ActionPlayer(model, this, actions);
         play.start();
@@ -179,14 +179,12 @@ public class MerelleController extends Controller {
         gameStage.getBoard().setValidMillCells(color);
         if (!gameStage.getBoard().canReachCell(pawn.getRow() - 1, pawn.getCol() - 1)) return false;
 
+        // the action is possible and will be processed
         ActionList actions = new ActionList(true);
         GameAction delete = new RemoveAction(model, pawn);
-        // add the action to the action list.
         actions.addSingleAction(delete);
         ActionPlayer play = new ActionPlayer(model, this, actions);
         play.start();
-
-        // FIXME : update not working after the pawn has been deleted
 
         return true;
     }

@@ -158,7 +158,7 @@ public class MerelleDecider extends Decider {
         List<Point> emptyCellsForMill = new ArrayList<>();
 
         for (Point caseVide : board.computeValidCells(null, 1)) {
-            if (hasMill(caseVide.x, caseVide.y, board, MerelleBoard.mills, couleurJoueur))
+            if (hasMill(caseVide.x, caseVide.y, board, MerelleBoard.MILLS, couleurJoueur))
                 emptyCellsForMill.add(caseVide);
         }
         return emptyCellsForMill;

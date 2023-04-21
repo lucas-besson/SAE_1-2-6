@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MerelleBoard extends GridElement {
-    public static final int[][] ACTIVCELL = {
+    /** 2D table of all active cells */
+    public static final int[][] ACTIVECELLS = {
             {0, 0}, {0, 3}, {0, 6},
             {1, 1}, {1, 3}, {1, 5},
             {2, 2}, {2, 3}, {2, 4},
@@ -19,7 +20,8 @@ public class MerelleBoard extends GridElement {
             {6, 0}, {6, 3}, {6, 6}
     };
 
-    public static final int[][][] mills = {
+    /** 3D table of all possible mills */
+    public static final int[][][] MILLS = {
             // Vertical mills
             {{0,0},{0,3},{0,6}},
             {{1,1},{1,3},{1,5}},
@@ -39,6 +41,9 @@ public class MerelleBoard extends GridElement {
             {{1,5},{3,5},{5,5}},
             {{0,6},{3,6},{6,6}}
     };
+    /**
+     * Number of rows and columns in the grid
+     */
     private static final int GRIDNBROWS = 7;
     private static final int GRIDNBCOLS = 7;
     public MerelleBoard(int x, int y, GameStageModel gameStageModel) {
@@ -58,8 +63,14 @@ public class MerelleBoard extends GridElement {
         resetReachableCells(false);
     }
 
+    /**
+     * Method to check if the given coordinates are reachable
+     * @param x
+     * @param y
+     * @return true if the cell is active, false otherwise
+     */
     public static boolean isActiveCell(int x, int y) {
-        for (int[] cell : MerelleBoard.ACTIVCELL) {
+        for (int[] cell : MerelleBoard.ACTIVECELLS) {
             if (x == cell[0] && y == cell[1]) {
                 return true;
             }
@@ -67,9 +78,14 @@ public class MerelleBoard extends GridElement {
         return false;
     }
 
-    // Method for the second part of the game : get the pawn of number `number` from the player of the color `color`
+    /**
+     * Method that return the pawn of the given number from a given player 
+     * @param number number that represent the pawn
+     * @param color color of the player
+     * @return
+     */
     public GameElement getPawn(int number, int color){
-        for (int[] cell : ACTIVCELL){
+        for (int[] cell : ACTIVECELLS){
             if (!isEmptyAt(cell[1],cell[0])){
                 Pawn pawn = (Pawn) getElement(cell[1],cell[0]);
                 if (pawn.getColor() == color && pawn.getNumber() == number) {
@@ -80,22 +96,21 @@ public class MerelleBoard extends GridElement {
         return null;
     }
 
-    //FIXME
-    public void setValidCells(Pawn pawn, int gameStage) {
+    public void setValidCells(Pawn pawn, int gameStatus) {
         resetReachableCells(false);
-        List<Point> valid = computeValidCells(pawn,gameStage);
+        List<Point> valid = computeValidCells(pawn,gameStatus);
         if (valid != null) {
             for(Point p : valid) {
                 reachableCells[p.y][p.x] = true;
             }
         }
     }
-    public List<Point> computeValidCells(Pawn pawn, int gameStage) {
+    public List<Point> computeValidCells(Pawn pawn, int gameStatus) {
         List<Point> lst = new ArrayList<>();
         
         // First stage of the game : all empty cells are valid
-        if (gameStage == MerelleGameStatus.PLACING) {
-            for (int[] cell : ACTIVCELL){
+        if (gameStatus == MerelleGameStatus.PLACING) {
+            for (int[] cell : ACTIVECELLS){
                 if (getElements(cell[1],cell[0]).size() == 0) {
                     lst.add(new Point(cell[0],cell[1]));
                 }
@@ -132,9 +147,7 @@ public class MerelleBoard extends GridElement {
                 int newX = x + offfsetCoords[0];
                 int newY = y + offfsetCoords[1];
                 
-                if (newX < 0 || newY < 0 || newX >= GRIDNBCOLS || newY >= GRIDNBROWS) {
-                    continue; // Do nothing if the cell is unreachable
-                }
+                if (!isActiveCell(newX, newY)) continue; // Do nothing if the cell is unreachable
                 
                 List<GameElement> elements = getElements(newY, newX);
                 if (elements.size() == 0) {
@@ -145,40 +158,62 @@ public class MerelleBoard extends GridElement {
         }
     }
 
-    public int availableMoove(int color, int gameStage){
+    /**
+     * @param color color of the player
+     * @param gameStatus the number of available moves for a given player
+     * @return 
+     */
+    public int availableMoves(int color, int gameStatus){
         int availableMoove = 0;
-        if (gameStage == MerelleGameStatus.PLACING) {
+        if (gameStatus == MerelleGameStatus.PLACING) {
             return computeValidCells(null,MerelleGameStatus.PLACING).size();
         }
-        for (int[] cell : ACTIVCELL){
+        for (int[] cell : ACTIVECELLS){
             Pawn pawn = (Pawn) getFirstElement(cell[1],cell[0]);
                 if (pawn == null || pawn.getColor() != color) continue;
-                availableMoove += computeValidCells(pawn,gameStage).size();
+                availableMoove += computeValidCells(pawn,gameStatus).size();
         }
         return availableMoove;
     }
     
+    /**
+     * @param color color of the player
+     * @return true if a new mill has been formed for a given player
+     */
     public boolean millsChecker(int color){
-        
-        // Historique
-        // faire une variable sur les pawn isInAMill qui est a true si il est dans un moullin, comme ça si on parcour deux fois le moullin sans qu'il ait été changer, on l'ignore. Cela implique alors de changer la variable a chaque fois que un pawn du moullin est déplacer et casse le moullin déjà utiliser.
-        
-        // TODO : Studie how the move function, so we can implement the isInAMill variables cahnge of the pawn that is beeing moved
-        // FIXME : Les moullins former dans la première partie du jeu ne doivent pas permettre d'enlever de pions. Donc les moulins g'nérer dans la première fase ne doivent pas être détecter comme "à jouer".
-        
-        int newPawnInMill;
-        for (int[][] mill : mills) {
-            newPawnInMill = 0;
+
+        int pawnInMill,newPawnInMill;
+        for (int[][] mill : MILLS) {
+            newPawnInMill = 0; pawnInMill = 0;
             for (int[] coord : mill) {
                 Pawn pawn = (Pawn) getFirstElement(coord[0], coord[1]);
                 if (pawn == null || pawn.getColor() != color) break;
-                if (!pawn.isInAMill()) newPawnInMill++;
+                else pawnInMill++;
+                if (!pawn.isInAMill()) newPawnInMill++; //FIXME : historique ne permet pas de reformer un mill après qu'il à été fait, mauvaise réinnitialisation de isInAMill
             }
-            if (newPawnInMill==3) return true;
+            if (pawnInMill == 3 && newPawnInMill > 0) {
+                millUpdate(mill);
+                return true;
+            }
         }
         return false;
     }
+
+    /**
+     * Set all the pawn isInAMill variables to true for all the pawn that is in the given mill mill.
+     * @param mill table int[][] of the coordinates of the new mill.
+     */
+    private void millUpdate(int[][] mill){
+        for (int[] coord : mill) {
+            Pawn pawn = (Pawn) getFirstElement(coord[0], coord[1]);
+            if (pawn != null) pawn.setInAMill(true);
+        }
+    }
     
+    /**
+     * Method that update the reachableCells variable for the cell that can be access for the player when he have to remove a pawn after a mill.
+     * @param color color of the player
+     */
     public void setValidMillCells(int color) {
         resetReachableCells(false);
         List<Point> valid = computeValidMillCells(color);
@@ -190,17 +225,12 @@ public class MerelleBoard extends GridElement {
     }
     private List<Point> computeValidMillCells(int color) {
         List<Point> lst = new ArrayList<>();
-        for (int[] cell : ACTIVCELL){
+        for (int[] cell : ACTIVECELLS){
             Pawn pawn = (Pawn) getFirstElement(cell[1],cell[0]);
                 if (pawn != null && pawn.getColor() != color) {
                     lst.add(new Point(cell[0],cell[1]));
                 }
         }
         return lst;
-    }
-
-    public void emptyCell(int row, int col){
-        grid[col-1][row-1].clear();
-        return;
     }
 }
