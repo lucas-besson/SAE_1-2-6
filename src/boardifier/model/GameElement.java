@@ -388,7 +388,7 @@ public abstract class GameElement {
     /**
      * Update the element.
      * This method will be called at each frame. It can be used to update the location of the element,
-     * its state, or any other attribute that is defined in its class.
+     * its state, or any other attribute that is defined in its class.*
      */
     public void update() {
     }
@@ -424,4 +424,6 @@ public abstract class GameElement {
     public Model getModel() {
         return gameStageModel.getModel();
     }
+
+    public boolean isInStage() { return gameStageModel.isElementInStage(this); }
 }

@@ -86,8 +86,12 @@ public abstract class GameStageModel {
     public List<GameElement> getElements() { return elements; }
 
     public void addElement(GameElement element) {
-
         elements.add(element);
+    }
+
+    public boolean isElementInStage(GameElement element) {
+        if (elements.contains(element)) return true;
+        return false;
     }
 
     public List<GridElement> getGrids() {
