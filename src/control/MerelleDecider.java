@@ -23,6 +23,9 @@ public class MerelleDecider extends Decider {
     ActionList actions = new ActionList(true);
     private Pawn pawnToMove;
     private Point destPoint;
+
+    private boolean needToRemovePawn;
+
     Random rand = new Random();
     private static final Random loto = new Random(Calendar.getInstance().getTimeInMillis());
 
@@ -43,6 +46,7 @@ public class MerelleDecider extends Decider {
             AIpot = stage.getRedPot();
 
         GameElement pawnToMove = null; // the pawn that is moved
+        needToRemovePawn = false;
 
         if (stage.getStatus() == MerelleGameStatus.PLACING) {
             placePawn();
@@ -66,12 +70,14 @@ public class MerelleDecider extends Decider {
         List<Point> millsToComplete = getUncompletedMillsForPlayer(model.getIdPlayer(), board);
         // Si l'IA peut complèter un moulin, elle le complète
         if (!millsToComplete.isEmpty()) {
-            destPoint = new Point(millsToComplete.get(0).x, millsToComplete.get(0).y);
+            int selectedPoint = rand.nextInt(millsToComplete.size());
+            destPoint = new Point(millsToComplete.get(selectedPoint).x, millsToComplete.get(selectedPoint).y);
         } else {
             millsToComplete = getUncompletedMillsForPlayer(model.getIdPlayer() == 1 ? 0 : 1, board);
             // Si l'IA ne peut pas completer de moulin alors on vérifie si l'autre joueur peut : on le bloque
             if (!millsToComplete.isEmpty()) {
-                destPoint = new Point(millsToComplete.get(0).x, millsToComplete.get(0).y);
+                int selectedPoint = rand.nextInt(millsToComplete.size());
+                destPoint = new Point(millsToComplete.get(selectedPoint).x, millsToComplete.get(selectedPoint).y);
             } else {
                 // Sinon on remplit une case aléatoirement
                 List<Point> casesVides = board.computeValidCells(null, 1);
