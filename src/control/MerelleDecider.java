@@ -9,8 +9,10 @@ import boardifier.model.action.MoveAction;
 import model.*;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
-import java.util.*;
+import java.util.Random;
 
 public class MerelleDecider extends Decider {
 
@@ -44,10 +46,12 @@ public class MerelleDecider extends Decider {
 
         if (stage.getStatus() == MerelleGameStatus.PLACING) {
             placePawn();
+            return actions;
         }
 
         if (stage.getStatus() == MerelleGameStatus.MOVING) {
             movePawn();
+            return actions;
         }
         return null;
     }
@@ -70,10 +74,7 @@ public class MerelleDecider extends Decider {
                 destPoint = new Point(millsToComplete.get(0).x, millsToComplete.get(0).y);
             } else {
                 // Sinon on remplit une case aléatoirement
-                // FIXME casesVides ne retourne pas les cases vides mais toutes les cases de la grille
                 List<Point> casesVides = board.computeValidCells(null, 1);
-                System.out.println(Arrays.toString(casesVides.toArray()));
-
                 destPoint = casesVides.get(rand.nextInt(casesVides.size()));
             }
         }
@@ -101,6 +102,7 @@ public class MerelleDecider extends Decider {
      * Dans la phase de déplacements des pions, analyse et déplace un pion du jeu
      */
     private void movePawn() {
+        System.exit(100);
 //        // INPROGRESS pour chaque pions du joueur actuel (IA), créer tous les déplacement possibles et utiliser minimax() pour etudier les scores futurs
 //        int playerColor = model.getIdPlayer();
 //        int bestScore = Integer.MIN_VALUE;
@@ -147,15 +149,11 @@ public class MerelleDecider extends Decider {
      * @return Liste des cases à remplir pour faire un moulin
      */
     private List<Point> getUncompletedMillsForPlayer(int couleurJoueur, MerelleBoard board) {
-        List<Point> emptyCellsForMill = new ArrayList<Point>();
-        for (int i = 0; i < MerelleBoard.ACTIVCELL.length; i++) {
-            int x = MerelleBoard.ACTIVCELL[i][0];
-            int y = MerelleBoard.ACTIVCELL[i][1];
-            if (board.getFirstElement(x, y) == null) {
-                if (hasMill(x, y, board, MerelleBoard.mills)) {
-                    emptyCellsForMill.add(new Point(x, y));
-                }
-            }
+        List<Point> emptyCellsForMill = new ArrayList<>();
+
+        for (Point caseVide : board.computeValidCells(null, 1)) {
+            if (hasMill(caseVide.x, caseVide.y, board, MerelleBoard.mills, couleurJoueur))
+                emptyCellsForMill.add(caseVide);
         }
         return emptyCellsForMill;
     }
@@ -163,23 +161,25 @@ public class MerelleDecider extends Decider {
     /**
      * Vérifie si en plaçant le pion en (x, y) on crée un moulin
      *
-     * @param x     position x du pion à verifier
-     * @param y     position y du pion à verifier
-     * @param board etat actuel du plateau
-     * @param mills liste des moulins possibles
+     * @param x        position x du pion à verifier
+     * @param y        position y du pion à verifier
+     * @param board    etat actuel du plateau
+     * @param mills    liste des moulins possibles
+     * @param playerId
      * @return vrai si avec cette combinaison (x, y) un moulin sera créé
      */
-    private boolean hasMill(int x, int y, MerelleBoard board, int[][][] mills) {
-        int playerId = model.getIdPlayer();
+    private boolean hasMill(int x, int y, MerelleBoard board, int[][][] mills, int playerId) {
         for (int[][] mill : mills) {
             if (contains(mill, new int[]{x, y})) {
                 int count = 1;
                 for (int[] position : mill) {
-                    int pawnX = position[0];
-                    int pawnY = position[1];
+                    int pawnY = position[0];
+                    int pawnX = position[1];
                     Pawn pawn = (Pawn) board.getFirstElement(pawnX, pawnY);
-                    if (pawn == null || pawn.getColor() != playerId) {
+                    if (pawn == null)
                         break;
+                    if (pawn.getColor() == playerId) {
+                        return false;
                     }
                     count++;
                 }
