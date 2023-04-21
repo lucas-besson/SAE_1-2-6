@@ -53,11 +53,11 @@ public class MerelleDecider extends Decider {
         int rowDest = 0; // the dest. row in board
         int colDest = 0; // the dest. col in board
 
-        if (stage.getStage() == MerelleGameStatus.PLACEMENT) {
+        if (stage.getStatus() == MerelleGameStatus.PLACING) {
             placePawn();
         }
 
-        if (stage.getStage() == MerelleGameStatus.MOVEMENT) {
+        if (stage.getStatus() == MerelleGameStatus.MOVING) {
             movePawn();
         }
 

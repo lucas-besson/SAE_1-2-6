@@ -55,7 +55,7 @@ public class MerelleController extends Controller {
         Player p = model.getCurrentPlayer();
 
         // If the actual player doesn't have any available moove, the game end
-        if (((MerelleStageModel) model.getGameStage()).getBoard().availableMoove(model.getIdPlayer(), ((MerelleStageModel) model.getGameStage()).getStage()) == 0) {
+        if (((MerelleStageModel) model.getGameStage()).getBoard().availableMoove(model.getIdPlayer(), ((MerelleStageModel) model.getGameStage()).getStatus()) == 0) {
             model.setIdWinner(((model.getIdPlayer() == 1) ? 0 : 1));
             endGame();
             return;
@@ -135,16 +135,16 @@ public class MerelleController extends Controller {
 
         // Collect the pawn from the correct place depending on the game stage
         Pawn pawn = null;
-        if (gameStage.getStage() == 1) {
+        if (gameStage.getStatus() == MerelleGameStatus.PLACING) {
             // first part of the game : the player have to empty the pot
             if (pot.isEmptyAt(pawnIndex, 0)) return false;
             pawn = (Pawn) pot.getElement(pawnIndex, 0);
-            gameStage.getBoard().setValidCells(pawn, gameStage.getStage());
+            gameStage.getBoard().setValidCells(pawn, gameStage.getStatus());
         } else {
             // second part of the game : the player play with the pawns in the board
             pawn = (Pawn) gameStage.getBoard().getPawn(pawnIndex + 1, color);
             if (pawn == null) return false;
-            gameStage.getBoard().setValidCells(pawn, gameStage.getStage());
+            gameStage.getBoard().setValidCells(pawn, gameStage.getStatus());
         }
 
         // See if the move is possible

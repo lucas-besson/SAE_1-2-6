@@ -1,6 +1,7 @@
 package model;
 
 import boardifier.model.*;
+import control.MerelleGameStatus;
 
 public class MerelleStageModel extends GameStageModel {
 
@@ -63,9 +64,9 @@ public class MerelleStageModel extends GameStageModel {
         }
     }
 
-    public int getStage(){
-        if (blackPot.isEmpty() && redPot.isEmpty()) return 2;
-        else return 1;
+    public int getStatus(){
+        if (blackPot.isEmpty() && redPot.isEmpty()) return MerelleGameStatus.MOVING;
+        else return MerelleGameStatus.PLACING;
     }
 
     private void setupCallbacks() {

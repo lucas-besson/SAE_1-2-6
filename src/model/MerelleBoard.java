@@ -71,19 +71,17 @@ public class MerelleBoard extends GridElement {
 
     // Method for the second part of the game : get the pawn of number `number` from the player of the color `color`
     public GameElement getPawn(int number, int color){
-        for (int i = 0; i < GRIDNBROWS; i++) {
-            for (int j = 0; j < GRIDNBCOLS; j++) {
-                if (!isEmptyAt(i,j)){
-                    Pawn pawn = (Pawn) getElement(i,j);
-                    if (pawn.getNumber() == number && pawn.getColor() == color) {
-                        return pawn;
-                    }
+        for (int[] cell : ACTIVCELL){
+            if (!isEmptyAt(cell[1],cell[0])){
+                Pawn pawn = (Pawn) getElement(cell[1],cell[0]);
+                if (pawn.getColor() == color && pawn.getNumber() == number) {
+                    return pawn;
                 }
             }
         }
         return null;
-        
     }
+
     //FIXME
     public void setValidCells(Pawn pawn, int gameStage) {
         resetReachableCells(false);
@@ -98,17 +96,15 @@ public class MerelleBoard extends GridElement {
         List<Point> lst = new ArrayList<>();
         
         // First stage of the game : all empty cells are valid
-        if (gameStage == MerelleGameStatus.PLACEMENT) {
-            for (int i = 0; i < GRIDNBROWS; i++) {
-                for (int j = 0; j < GRIDNBCOLS; j++) {
-                    // Why does the getElement(i,j) {grid[i][j]} return a List<GameElement> ???
-                    if (getElements(i, j).size() == 0) {
-                        lst.add(new Point(j,i));
-                    }
+        if (gameStage == MerelleGameStatus.PLACING) {
+            for (int[] cell : ACTIVCELL){
+                if (getElements(cell[1],cell[0]).size() == 0) {
+                    lst.add(new Point(cell[0],cell[1]));
                 }
             }
             return lst;
         }
+
         // Second stage of the game : the cells have to be empty and within 1 cells around the initial pawn position
         else {
             int x = pawn.getCol() - 1;
@@ -128,9 +124,8 @@ public class MerelleBoard extends GridElement {
             int jumpY = jumpTable[y][x][1];
             
             int[][] offsetTable = {
-                {-jumpX, 0},
-                {jumpX, 0},
-                {0,-jumpY},
+                {0,-jumpY}, 
+                {-jumpX, 0},{jumpX, 0},
                 {0,jumpY}
             };
             
@@ -154,13 +149,13 @@ public class MerelleBoard extends GridElement {
 
     public int availableMoove(int color, int gameStage){
         int availableMoove = 0;
-        if (gameStage==1) return -1;
-        for (int i = 0; i < GRIDNBROWS; i++) {
-            for (int j = 0; j < GRIDNBCOLS; j++) {
-                Pawn pawn = (Pawn) getFirstElement(i, j);
+        if (gameStage == MerelleGameStatus.PLACING) {
+            return computeValidCells(null,MerelleGameStatus.PLACING).size();
+        }
+        for (int[] cell : ACTIVCELL){
+            Pawn pawn = (Pawn) getFirstElement(cell[1],cell[0]);
                 if (pawn == null || pawn.getColor() != color) continue;
                 availableMoove += computeValidCells(pawn,gameStage).size();
-            }
         }
         return availableMoove;
     }
@@ -197,13 +192,11 @@ public class MerelleBoard extends GridElement {
     }
     private List<Point> computeValidMillCells(int color) {
         List<Point> lst = new ArrayList<>();
-        for (int i = 0; i < GRIDNBROWS; i++) {
-            for (int j = 0; j < GRIDNBCOLS; j++) {
-                Pawn pawn = (Pawn) getFirstElement(i,j);
+        for (int[] cell : ACTIVCELL){
+            Pawn pawn = (Pawn) getFirstElement(cell[1],cell[0]);
                 if (pawn != null && pawn.getColor() != color) {
-                    lst.add(new Point(j,i));
+                    lst.add(new Point(cell[0],cell[1]));
                 }
-            }
         }
         return lst;
     }
