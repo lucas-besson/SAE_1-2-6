@@ -5,17 +5,12 @@ import boardifier.control.Decider;
 import boardifier.model.GameElement;
 import boardifier.model.Model;
 import boardifier.model.action.ActionList;
-import boardifier.model.action.GameAction;
 import boardifier.model.action.MoveAction;
-import model.MerelleBoard;
-import model.MerellePawnPot;
-import model.MerelleStageModel;
-import model.Pawn;
+import model.*;
 
-import java.util.ArrayList;
-import java.util.Calendar;
+import java.awt.*;
 import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class MerelleDecider extends Decider {
 
@@ -24,14 +19,9 @@ public class MerelleDecider extends Decider {
     private MerellePawnPot AIpot;
 
     ActionList actions = new ActionList(true);
-
     private Pawn pawnToMove;
-    private int rowDest;
-
+    private Point destPoint;
     Random rand = new Random();
-    private int colDest;
-
-
     private static final Random loto = new Random(Calendar.getInstance().getTimeInMillis());
 
     public MerelleDecider(Model model, Controller control) {
@@ -44,37 +34,72 @@ public class MerelleDecider extends Decider {
         stage = (MerelleStageModel) model.getGameStage();
         board = stage.getBoard(); // get the board
 
+        // Prends le bon pot de pions
         if (model.getIdPlayer() == Pawn.PAWN_BLACK)
             AIpot = stage.getBlackPot();
         else
             AIpot = stage.getRedPot();
 
-        GameElement pawn = null; // the pawn that is moved
-        int rowDest = 0; // the dest. row in board
-        int colDest = 0; // the dest. col in board
+        GameElement pawnToMove = null; // the pawn that is moved
 
         if (stage.getStage() == MerelleGameStatus.PLACEMENT) {
-            placePawn();
+            placePawn(); // Si c'est la phase de placement, choisit le pion à poser et place sur la grille
+            MoveAction placement = (MoveAction) actions.getActions().get(0).get(0);
+            System.out.println("AI places a pawn - Col:" + placement.getColDest() + " | Row:" + placement.getRowDest());
+            return actions;
         }
 
         if (stage.getStage() == MerelleGameStatus.MOVEMENT) {
-            movePawn();
+            movePawn(); // Si c'est la phase de déplacement, choisit le pion à déplacer et le déplace. Si un moulin est créé, supprime un pion adversaire.
+            return actions;
         }
-
-        return actions;
+        return null;
     }
 
     /**
      * Dans la phase de placement des pions, analyse et place un pion du pot
+     * -- Si l'IA peut completer un moulin, elle le complète.
+     * -- Sinon si l'autre joueur peut completer un moulin, elle le bloque
+     * -- Sinon elle choisit une case et pose le pion.
      */
     private void placePawn() {
-//        TODO : Placer un pion du pot vers le jeux selon les règles suivantes
-//               SI getUncompletedMillsForPlayer(IA) > 0 : Finir un moulin pour l'IA
-//               SINON SI getUncompletedMillsForPlayer(AutreJoueur) > 0 : Empecher l'autre joueur de joueur
-//               SINON :  Placer un pion au hasard sur une case libre
-//        MoveAction move = new MoveAction(model, anyPawn, board.getGrid(), rowDest, colDest);
-//        actions.addSingleAction(move);
+        List<Point> millsToComplete = getUncompletedMillsForPlayer(model.getIdPlayer(), board);
+        // Si l'IA peut complèter un moulin, elle le complète
+        if (!millsToComplete.isEmpty()) {
+            destPoint = new Point(millsToComplete.get(0).x, millsToComplete.get(0).y);
+        } else {
+            millsToComplete = getUncompletedMillsForPlayer(model.getIdPlayer() == 1 ? 0 : 1, board);
+            // Si l'IA ne peut pas completer de moulin alors on vérifie si l'autre joueur peut : on le bloque
+            if (!millsToComplete.isEmpty()) {
+                destPoint = new Point(millsToComplete.get(0).x, millsToComplete.get(0).y);
+            } else {
+                // Sinon on remplit une case aléatoirement
+                // FIXME casesVides ne retourne pas les cases vides mais toutes les cases de la grille
+                List<Point> casesVides = board.computeValidCells(null, 1);
+                System.out.println(Arrays.toString(casesVides.toArray()));
+
+                destPoint = casesVides.get(rand.nextInt(casesVides.size()));
+            }
+        }
+
+        pawnToMove = selectNextInPot();
+        MoveAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x);
+        actions.addSingleAction(move);
     }
+
+
+    /**
+     * Selectionne le pion suivant dans le pot de pions
+     *
+     * @return Pion suivant
+     */
+    private Pawn selectNextInPot() {
+        int i = 0;
+        while (i < MerellePawnPot.PAWNS_IN_POT && AIpot.getElement(i, 0) == null)
+            i++;
+        return (Pawn) AIpot.getElement(i, 0);
+    }
+
 
     /**
      * Dans la phase de déplacements des pions, analyse et déplace un pion du jeu
@@ -83,24 +108,26 @@ public class MerelleDecider extends Decider {
 
     }
 
-    private void removePawn(){
+    private void removePawn() {
 
     }
 
 
     /**
      * Analyse les moulins qui sont prêts à etre validés (dont il reste qu'un pion pour valider le moulin)
+     *
      * @param couleurJoueur Couleur du joueur a analyser les moulins
+     * @param board
      * @return Liste des cases à remplir pour faire un moulin
      */
-    private List<int[]> getUncompletedMillsForPlayer(int couleurJoueur) {
-        List<int[]> emptyCellsForMill = new ArrayList<>();
+    private List<Point> getUncompletedMillsForPlayer(int couleurJoueur, MerelleBoard board) {
+        List<Point> emptyCellsForMill = new ArrayList<Point>();
         for (int i = 0; i < MerelleBoard.ACTIVCELL.length; i++) {
             int x = MerelleBoard.ACTIVCELL[i][0];
             int y = MerelleBoard.ACTIVCELL[i][1];
             if (board.getFirstElement(x, y) == null) {
                 if (hasMill(x, y, board, MerelleBoard.mills)) {
-                    emptyCellsForMill.add(new int[]{x, y});
+                    emptyCellsForMill.add(new Point(x, y));
                 }
             }
         }
@@ -109,8 +136,9 @@ public class MerelleDecider extends Decider {
 
     /**
      * Vérifie si en plaçant le pion en (x, y) on crée un moulin
-     * @param x position x du pion à verifier
-     * @param y position y du pion à verifier
+     *
+     * @param x     position x du pion à verifier
+     * @param y     position y du pion à verifier
      * @param board etat actuel du plateau
      * @param mills liste des moulins possibles
      * @return vrai si avec cette combinaison (x, y) un moulin sera créé
@@ -140,7 +168,8 @@ public class MerelleDecider extends Decider {
 
     /**
      * Vérifie que les coordonnées données sont contenues dans la combinaison de coordonnées (moulin) fourni
-     * @param mill moulin à vérifier
+     *
+     * @param mill     moulin à vérifier
      * @param position position à vérifier
      * @return vrai si la position est contenue dans le moulin
      */

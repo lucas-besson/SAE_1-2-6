@@ -1,4 +1,4 @@
-package control;
+package model;
 
 public abstract class MerelleGameStatus {
     public static final int PLACEMENT = 1;

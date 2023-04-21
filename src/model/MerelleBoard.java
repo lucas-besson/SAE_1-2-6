@@ -3,22 +3,20 @@ package model;
 import boardifier.model.GameElement;
 import boardifier.model.GameStageModel;
 import boardifier.model.GridElement;
-import boardifier.model.Model;
-import control.MerelleGameStatus;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.*;
 
 public class MerelleBoard extends GridElement {
-    public final static int[][] ACTIVCELL = {
-        {0,0},{0,3},{0,6},
-        {1,1},{1,3},{1,5},
-        {2,2},{2,3},{2,4},
-        {3,0},{3,1},{3,2},{3,4},{3,5},{3,6},
-        {4,2},{4,3},{4,4},
-        {5,1},{5,3},{5,5},
-        {6,0},{6,3},{6,6}
+    public static final int[][] ACTIVCELL = {
+            {0, 0}, {0, 3}, {0, 6},
+            {1, 1}, {1, 3}, {1, 5},
+            {2, 2}, {2, 3}, {2, 4},
+            {3, 0}, {3, 1}, {3, 2}, {3, 4}, {3, 5}, {3, 6},
+            {4, 2}, {4, 3}, {4, 4},
+            {5, 1}, {5, 3}, {5, 5},
+            {6, 0}, {6, 3}, {6, 6}
     };
 
     public static final int[][][] mills = {
@@ -40,33 +38,33 @@ public class MerelleBoard extends GridElement {
             {{2,4},{3,4},{4,4}},
             {{1,5},{3,5},{5,5}},
             {{0,6},{3,6},{6,6}}
-        };
-
-    public static boolean isActiveCell(int x, int y) {
-        for (int[] i : MerelleBoard.ACTIVCELL) {
-            if (x == i[0] && y == i[1]){
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    private final static int GRIDNBROWS = 7;
-    private final static int GRIDNBCOLS = 7;
+    };
+    private static final int GRIDNBROWS = 7;
+    private static final int GRIDNBCOLS = 7;
     public MerelleBoard(int x, int y, GameStageModel gameStageModel) {
         // call the super-constructor to create a GRIDNBROWS x GRIDNBCOLS grid, named "merelleboard", and in x,y in space
-        super("merelleboard", x, y, GRIDNBROWS , GRIDNBCOLS, gameStageModel);
+        super("merelleboard", x, y, GRIDNBROWS, GRIDNBCOLS, gameStageModel);
         resetReachableCells(false);
     }
 
     /**
      * Constructeur par copie de la board donnée en paramètre
+     *
      * @param board board à copier
      */
     public MerelleBoard(MerelleBoard board, MerelleStageModel stage) {
         // call the super-constructor to create a GRIDNBROWS x GRIDNBCOLS grid, named "merelleboard", and in x,y in space
         super(board.getName(), (int)board.getX(), (int)board.getY(), board.getNbRows() , board.getNbCols(), stage);
         resetReachableCells(false);
+    }
+
+    public static boolean isActiveCell(int x, int y) {
+        for (int[] i : MerelleBoard.ACTIVCELL) {
+            if (x == i[0] && y == i[1]) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Method for the second part of the game : get the pawn of number `number` from the player of the color `color`
