@@ -1,6 +1,7 @@
 package view;
 
 import boardifier.model.GridElement;
+import boardifier.view.ConsoleColor;
 import boardifier.view.GridLook;
 import model.MerelleBoard;
 
@@ -142,6 +143,121 @@ public class MerelleGridLook extends GridLook {
             shape[(1+1)*cellHeight][(5+1)*cellWidth] = "\u2518";
             shape[(5+1)*cellHeight][(1+1)*cellWidth] = "\u2518";
             // draw coordinates
+
+        // Creation of the lines between the boxes :
+            // Definition of the line color :
+            String color = ConsoleColor.RED;
+
+            // Vertical :
+            shape[(6*(cellHeight)+ cellHeight/2)][4*cellWidth] = "\u251C";
+            for (int j = 1; j < cellWidth*2; j++) {
+                shape[6*cellHeight+ cellHeight/2][4*cellWidth+j] = color +"\u2500" + ConsoleColor.RESET;
+            }
+            shape[(6*(cellHeight)+ cellHeight/2)][6*cellWidth] = "\u2524";
+
+
+            shape[(6*(cellHeight)+ cellHeight/2)][cellWidth] = "\u251C";
+            for (int j = 1; j < cellWidth*2; j++) {
+                shape[6*cellHeight+ cellHeight/2][cellWidth+j] = color + "\u2500" + ConsoleColor.RESET;
+            }
+            shape[(6*(cellHeight)+ cellHeight/2)][3*cellWidth] = "\u2524";
+
+            shape[(5*(cellHeight)+ cellHeight/2)][2*cellWidth] = "\u251C";
+            for (int j = 1; j < cellWidth; j++) {
+                shape[5*cellHeight+ cellHeight/2][2*cellWidth+j] = color + "\u2500" + ConsoleColor.RESET;
+            }
+            shape[(5*(cellHeight)+ cellHeight/2)][3*cellWidth] = "\u2524";
+
+            shape[(5*(cellHeight)+ cellHeight/2)][4*cellWidth] = "\u251C";
+            for (int j = 1; j < cellWidth; j++) {
+                shape[5*cellHeight+ cellHeight/2][4*cellWidth+j] = color + "\u2500" + ConsoleColor.RESET;
+            }
+            shape[(5*(cellHeight)+ cellHeight/2)][5*cellWidth] = "\u2524";
+
+            // Symmetry --------------------------------------------------------
+
+            shape[(1*(cellHeight)+ cellHeight/2)][2*cellWidth] = "\u251C";
+            for (int j = 1; j < cellWidth; j++) {
+                shape[1*cellHeight+ cellHeight/2][2*cellWidth+j] = color+"\u2500"+ ConsoleColor.RESET;
+            }
+            shape[(1*(cellHeight)+ cellHeight/2)][3*cellWidth] = "\u2524";
+
+            shape[(1*(cellHeight)+ cellHeight/2)][4*cellWidth] = "\u251C";
+            for (int j = 1; j < cellWidth; j++) {
+                shape[1*cellHeight+ cellHeight/2][4*cellWidth+j] = color+ "\u2500" + ConsoleColor.RESET;
+            }
+            shape[(1*(cellHeight)+ cellHeight/2)][5*cellWidth] = "\u2524";
+
+            shape[cellHeight/2][4*cellWidth] = "\u251C";
+            for (int j = 1; j < cellWidth*2; j++) {
+                shape[cellHeight/2][4*cellWidth+j] = color + "\u2500" + ConsoleColor.RESET;
+            }
+            shape[cellHeight/2][6*cellWidth] = "\u2524";
+
+            shape[cellHeight/2][cellWidth] = "\u251C";
+            for (int j = 1; j < cellWidth*2; j++) {
+                shape[cellHeight/2][cellWidth+j] = color + "\u2500" + ConsoleColor.RESET;
+            }
+            shape[cellHeight/2][3*cellWidth] = "\u2524";
+
+
+            // Horizontal :
+
+            shape[cellHeight][cellWidth/2] = "\u252C";
+            for (int j = 1; j < cellWidth; j++) {
+                shape[cellHeight+j][cellWidth/2] = color + "\u2502" + ConsoleColor.RESET;
+            }
+            shape[3*cellHeight][cellWidth/2] = "\u2534";
+
+            shape[4*cellHeight][cellWidth/2] = "\u252C";
+            for (int j = 1; j < cellWidth; j++) {
+                shape[4*cellHeight+j][cellWidth/2] = color + "\u2502" + ConsoleColor.RESET;
+            }
+            shape[6*cellHeight][cellWidth/2] = "\u2534";
+
+            shape[2*cellHeight][cellWidth+ cellWidth/2] = "\u252C";
+            for (int j = 1; j < cellWidth/2; j++) {
+                shape[2*cellHeight+j][cellWidth+cellWidth/2] = color + "\u2502" +ConsoleColor.RESET;
+            }
+            shape[3*cellHeight][(cellWidth)+ cellWidth/2]  = "\u2534";
+
+            shape[4*cellHeight][cellWidth+ cellWidth/2] = "\u252C";
+            for (int j = 1; j < cellWidth/2; j++) {
+                shape[4*cellHeight+j][cellWidth+cellWidth/2] = color + "\u2502" + ConsoleColor.RESET;
+            }
+            shape[5*cellHeight][(cellWidth)+ cellWidth/2]  = "\u2534";
+
+            // Symmetry --------------------------------------------------------
+
+            shape[cellHeight][6*(cellWidth)+cellWidth/2] = "\u252C";
+            for (int j = 1; j < cellWidth; j++) {
+                shape[cellHeight+j][6*(cellWidth)+cellWidth/2] = color + "\u2502" + ConsoleColor.RESET;
+            }
+            shape[3*cellHeight][6*(cellWidth)+cellWidth/2] = "\u2534";
+
+            shape[4*cellHeight][6*(cellWidth) + cellWidth/2] = "\u252C";
+            for (int j = 1; j < cellWidth; j++) {
+                shape[4*cellHeight+j][6*(cellWidth)+cellWidth/2] = color + "\u2502" + ConsoleColor.RESET;
+            }
+            shape[6*cellHeight][6*(cellWidth)+cellWidth/2] = "\u2534";
+
+            shape[2*cellHeight][5*(cellWidth)+ cellWidth/2] = "\u252C";
+            for (int j = 1; j < cellWidth/2; j++) {
+                shape[2*cellHeight+j][5*(cellWidth)+cellWidth/2] = color + "\u2502" + ConsoleColor.RESET;
+            }
+            shape[3*cellHeight][5*(cellWidth)+cellWidth/2]  = "\u2534";
+
+            shape[4*cellHeight][5*(cellWidth)+ cellWidth/2] = "\u252C";
+            for (int j = 1; j < cellWidth/2; j++) {
+                shape[4*cellHeight+j][5*(cellWidth)+cellWidth/2] = color + "\u2502" + ConsoleColor.RESET;
+            }
+            shape[5*cellHeight][5*(cellWidth)+ cellWidth/2]  = "\u2534";
+
+        //End of the creation of the lines between the boxes
+
+            // Adding the cross to the center of the tray
+            shape[(3*(cellHeight)+ cellHeight/2)][3*(cellWidth)+ cellWidth/2] = ConsoleColor.BLUE + "\u2573" + ConsoleColor.RESET;
+
         }
         if (showCoords) {
             for (int i = 0; i < nbRows; i++) {
