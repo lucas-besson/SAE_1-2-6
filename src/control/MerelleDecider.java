@@ -101,6 +101,36 @@ public class MerelleDecider extends Decider {
      * Dans la phase de déplacements des pions, analyse et déplace un pion du jeu
      */
     private void movePawn() {
+        // INPROGRESS pour chaque pions du joueur actuel (IA), créer tous les déplacement possibles et utiliser minimax() pour etudier les scores futurs
+        int playerColor = model.getIdPlayer();
+        int bestScore = Integer.MIN_VALUE;
+        MoveAction bestMove;
+
+        for (Pawn pawn : getPlayerPawnList(playerColor)) {
+            for (Point positionsToMove : board.computeValidCells(pawn, MerelleGameStatus.MOVING)) {
+                // TODO Faire le mouvement
+                int score = minimax(board);
+                // TODO Annuler le mouvement
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestMove = move; // TODO Assigner le meilleur mouvememnt
+                }
+            }
+        }
+    }
+
+    private List<Pawn> getPlayerPawnList(int playerColor) {
+        List<Pawn> playerPawnList = new ArrayList<>();
+        for (int i = 0; i < MerellePawnPot.PAWNS_IN_POT; i++) {
+            Pawn pawn = (Pawn) board.getPawn(i, playerColor);
+            if (pawn != null) {
+                playerPawnList.add(pawn);
+            }
+        }
+        return playerPawnList;
+    }
+
+    private int minimax(MerelleBoard board) {
 
     }
 
