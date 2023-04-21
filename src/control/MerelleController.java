@@ -11,6 +11,7 @@ import boardifier.model.action.MoveAction;
 import boardifier.model.action.RemoveAction;
 import boardifier.view.View;
 import model.MerelleBoard;
+import model.MerelleGameStatus;
 import model.MerellePawnPot;
 import model.MerelleStageModel;
 import model.Pawn;

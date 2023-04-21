@@ -1,7 +1,6 @@
 package model;
 
 import boardifier.model.*;
-import control.MerelleGameStatus;
 
 public class MerelleStageModel extends GameStageModel {
 
