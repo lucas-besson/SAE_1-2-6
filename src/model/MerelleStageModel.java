@@ -14,8 +14,8 @@ public class MerelleStageModel extends GameStageModel {
 
     public MerelleStageModel(String name, Model model) {
         super(name, model);
-        blackPawnsToPlay = 9;
-        redPawnsToPlay = 9;
+        blackPawnsToPlay = MerellePawnPot.PAWNS_IN_POT;
+        redPawnsToPlay = MerellePawnPot.PAWNS_IN_POT;
         setupCallbacks();
     }
 
@@ -63,9 +63,16 @@ public class MerelleStageModel extends GameStageModel {
         }
     }
 
+    public int getStatus(){
+        if (blackPot.isEmpty() && redPot.isEmpty()) return MerelleGameStatus.MOVING;
+        else return MerelleGameStatus.PLACING;
+    }
+
     private void setupCallbacks() {
-        onPutInGrid( (element, gridDest, rowDest, colDest) -> {
-            // just check when pawns are put in 3x3 board
+        onMoveInGrid((element, gridDest, rowDest, colDest)->{
+            ((Pawn) element).setInAMill(false); // FIXME : ne marche pas ?
+        });
+        onRemoveFromGrid((element, gridDest, rowDest, colDest)->{
             if (gridDest != board) return;
             Pawn p = (Pawn) element;
             if (p.getColor() == 0) {
@@ -74,73 +81,17 @@ public class MerelleStageModel extends GameStageModel {
             else {
                 redPawnsToPlay--;
             }
-            // FIXME : ne dois pas s'arrêter losrque les pot sont vide | Ajouter / utiliser un compteur de pieces sur les joueurs pour les vérif ? (si il y en a un à 2 pièces == fin)
-            if ((blackPawnsToPlay == 0) && (redPawnsToPlay == 0)) {
-                computePartyResult();
+            if (blackPawnsToPlay == 2) {
+                model.setIdWinner(1);
+                model.stopStage();
             }
+            else if (redPawnsToPlay == 2){
+                model.setIdWinner(0);
+                model.stopStage();
+            };
         });
     }
-    // FIXME : plus simple, on pourrait même suppr la méthode : le perdant = selui qui à plus que 2 pièces en mains
-    private void computePartyResult() {
-        int idWinner = -1;
-        // get the empty cell, which should be in 2D at [0,0], [0,2], [1,1], [2,0] or [2,2]
-        // i.e. or in 1D at index 0, 2, 4, 6 or 8
-        int i = 0;
-        int nbBlack = 0;
-        int nbRed = 0;
-        int countBlack = 0;
-        int countRed = 0;
-        Pawn p = null;
-        int row, col;
-        for (i = 0; i < 9; i+=2) {
-            if (board.isEmptyAt(i / 3, i % 3)) break;
-        }
-        // get the 4 adjacent cells (if they exist) starting by the upper one
-        row = (i / 3) - 1;
-        col = i % 3;
-        for (int j = 0; j < 9; j++) {
-            // skip invalid cells
-            if ((row >= 0) && (row <= 2) && (col >= 0) && (col <= 2)) {
-                p = (Pawn) (board.getElement(row, col));
-                if (p.getColor() == Pawn.PAWN_BLACK) {
-                    nbBlack++;
-                    countBlack += p.getNumber();
-                } else {
-                    nbRed++;
-                    countRed += p.getNumber();
-                }
-            }
-            // change row & col to set them at the correct value for the next iteration
-            if ((j==0) || (j==2)) {
-                row++;
-                col--;
-            }
-            else if (j==1) {
-                col += 2;
-            }
-        }
 
-        System.out.println("nb black: "+nbBlack+", nb red: "+nbRed+", count black: "+countBlack+", count red: "+countRed);
-        // decide whose winning
-        if (nbBlack < nbRed) {
-            idWinner = 0;
-        }
-        else if (nbBlack > nbRed) {
-            idWinner = 1;
-        }
-        else {
-            if (countBlack < countRed) {
-                idWinner = 0;
-            }
-            else if (countBlack > countRed) {
-                idWinner = 1;
-            }
-        }
-        // set the winner
-        model.setIdWinner(idWinner);
-        // stop de the game
-        model.stopStage();
-    }
 
     @Override
     public StageElementsFactory getDefaultElementFactory() {

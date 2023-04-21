@@ -3,13 +3,12 @@ package model;
 import boardifier.model.ElementTypes;
 import boardifier.model.GameElement;
 import boardifier.model.GameStageModel;
-import boardifier.model.animation.AnimationStep;
-import boardifier.view.GridGeometry;
 
 public class Pawn extends GameElement {
 
     private int number;
     private int color;
+    private boolean isInAMill;
     public static int PAWN_BLACK = 0;
     public static int PAWN_RED = 1;
 
@@ -20,6 +19,7 @@ public class Pawn extends GameElement {
         type = ElementTypes.getType("pawn");
         this.number = number;
         this.color = color;
+        this.isInAMill = false;
     }
 
     public int getNumber() {
@@ -30,4 +30,22 @@ public class Pawn extends GameElement {
         return color;
     }
 
+    public boolean isInAMill() {
+        return isInAMill;
+    }
+
+    public void setInAMill(boolean inAMill) {
+        isInAMill = inAMill;
+    }
+
+    public int getCol(){
+        // Each cells are 5 units wide, the x being stored at the center
+        // Return the pawn column starting from 1 
+        return (int)(x+2.5)/5;
+    }
+    public int getRow(){
+        // Each cells are 2 units tall, the y being stored at the center
+        // Return the pawn row starting from 1 
+        return (int)(y+1)/2;
+    }
 }
