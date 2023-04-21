@@ -1,5 +1,7 @@
 package boardifier.view;
 
+import boardifier.model.GameElement;
+
 import java.util.List;
 
 public class RootPane {
@@ -20,8 +22,8 @@ public class RootPane {
     }
 
     public void clearViewPort() {
-        for(int i = 0; i < height; i++) {
-            for(int j = 0; j < width; j++) {
+        for(int i=0;i<height;i++) {
+            for(int j=0;j<width;j++) {
                 viewPort[i][j] = " ";
             }
         }
@@ -33,11 +35,15 @@ public class RootPane {
         int h = 0;
         List<ElementLook> looks = gameStageView.getLooks();
         for (ElementLook look : looks) {
-            if ((look.width+look.getElement().getX()) > w) {
-                w = (int)(look.width + look.getElement().getX());
-            }
-            if ((look.height+look.getElement().getY()) > h) {
-                h = (int)(look.height + look.getElement().getY());
+            GameElement element = look.getElement();
+            // just take elements in the stage that are visible
+            if (element.isInStage() && element.isVisible()) {
+                if ((look.width + element.getX()) > w) {
+                    w = (int) (look.width + element.getX());
+                }
+                if ((look.height + element.getY()) > h) {
+                    h = (int) (look.height + element.getY());
+                }
             }
         }
         if ((w != width) || (h != height)) {
@@ -48,17 +54,23 @@ public class RootPane {
         }
         // now put looks on the pane
         for  (ElementLook look : looks) {
-            for(int i = 0; i < look.height; i++) {
-                for(int j = 0; j < look.width; j++) {
-                    viewPort[(int)(look.getElement().getY()+i)][(int)(look.getElement().getX()+j)] = look.getShapePoint(j,i);
+            GameElement element = look.getElement();
+            // just take elements in the stage that are: visible and in the scene
+            if (element.isInStage() && element.isVisible()) {
+                for (int i = 0; i < look.height; i++) {
+                    for (int j = 0; j < look.width; j++) {
+                        if ((element.getY() + i >= 0) && (element.getX() + j >= 0)) {
+                            viewPort[(int) (element.getY() + i)][(int) (element.getX() + j)] = look.getShapePoint(j, i);
+                        }
+                    }
                 }
             }
         }
     }
 
     public void print() {
-        for(int i = 0; i < height; i++) {
-            for(int j = 0; j < width; j++) {
+        for(int i=0;i<height;i++) {
+            for(int j=0;j<width;j++) {
                 System.out.print(viewPort[i][j]);
             }
             System.out.println();
