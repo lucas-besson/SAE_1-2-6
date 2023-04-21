@@ -3,8 +3,6 @@ package model;
 import boardifier.model.ElementTypes;
 import boardifier.model.GameElement;
 import boardifier.model.GameStageModel;
-import boardifier.model.animation.AnimationStep;
-import boardifier.view.GridGeometry;
 
 public class Pawn extends GameElement {
 
