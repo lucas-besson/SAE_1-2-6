@@ -81,17 +81,27 @@ public class MerelleStageModel extends GameStageModel {
             else {
                 redPawnsToPlay--;
             }
-            if (blackPawnsToPlay == 2) {
-                model.setIdWinner(1);
-                model.stopStage();
-            }
-            else if (redPawnsToPlay == 2){
-                model.setIdWinner(0);
-                model.stopStage();
-            };
         });
     }
+ 
+    public boolean isEndStage() {
+        MerelleStageModel merelleModel = (MerelleStageModel) model.getGameStage();
 
+        // if the folowing player doesn't have any move available, the game end and the actual player win
+        if (merelleModel.getBoard().availableMoves(((model.getIdPlayer() == 1) ? 0 : 1), merelleModel.getStatus()) == 0) {
+            model.setIdWinner(model.getIdPlayer());
+            model.stopStage();
+        }
+        if (blackPawnsToPlay == 2) {
+            model.setIdWinner(1);
+            model.stopStage();
+        }
+        else if (redPawnsToPlay == 2){
+            model.setIdWinner(0);
+            model.stopStage();
+        };
+        return ((Model)model).isEndStage();
+    }
 
     @Override
     public StageElementsFactory getDefaultElementFactory() {

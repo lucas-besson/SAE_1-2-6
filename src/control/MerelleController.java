@@ -36,9 +36,10 @@ public class MerelleController extends Controller {
      */
     public void stageLoop() {
         consoleIn = new BufferedReader(new InputStreamReader(System.in));
-        while (!model.isEndStage()) {
-            update();
+        update();
+        while (!((MerelleStageModel) model.getGameStage()).isEndStage()) {
             nextPlayer();
+            update();
         }
         stopStage();
         endGame();
@@ -54,13 +55,7 @@ public class MerelleController extends Controller {
         // get the new player
         Player p = model.getCurrentPlayer();
 
-        // If the actual player doesn't have any available moove, the game end
         MerelleStageModel merelleModel = (MerelleStageModel) model.getGameStage();
-        if (merelleModel.getBoard().availableMoves(model.getIdPlayer(), merelleModel.getStatus()) == 0) {
-            model.setIdWinner(((model.getIdPlayer() == 1) ? 0 : 1));
-            model.stopStage();
-            return;
-        }
 
         if (p.getType() == Player.COMPUTER) {
             System.out.println("COMPUTER PLAYS");
