@@ -1,4 +1,5 @@
 import boardifier.model.GameElement;
+import boardifier.model.GameStageModel;
 import model.MerelleBoard;
 import model.Pawn;
 import org.junit.jupiter.api.Assertions;
@@ -17,41 +18,43 @@ public class MerelleBoardUnitTest {
 
     @Test
     public void testgetPawnABF() {
-        MerelleBoard board = Mockito.mock(MerelleBoard.class);
-        Mockito.when(board.isEmptyAt(Mockito.anyInt(), Mockito.anyInt())).thenReturn(false);
+        GameStageModel gameStage = Mockito.mock(GameStageModel.class);
+        MerelleBoard board = new MerelleBoard(1,2,gameStage);
         Assertions.assertNull(board.getPawn(Mockito.anyInt(), Mockito.anyInt()));
     }
 
     @Test
     public void testgetPawnABCF() {
-        MerelleBoard board = Mockito.mock(MerelleBoard.class);
+        GameStageModel gameStage = Mockito.mock(GameStageModel.class);
+        MerelleBoard board = new MerelleBoard(1,2,gameStage);
         Pawn pawn = Mockito.mock(Pawn.class);
-        Mockito.when(board.isEmptyAt(Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
-        Mockito.when(board.getElement(Mockito.anyInt(), Mockito.anyInt())).thenReturn((GameElement)pawn);
-        Mockito.when(pawn.getColor()).thenReturn(2);
-        Assertions.assertNull(board.getPawn(1, 1));
+        board.putElement(pawn,0,0);
+        Mockito.when(pawn.getColor()).thenReturn(1);
+        Mockito.when(pawn.getNumber()).thenReturn(1);
+        Assertions.assertNull(board.getPawn(3, 3));
     }
 
     @Test
     public void testgetPawnABCDF() {
-        MerelleBoard board = Mockito.mock(MerelleBoard.class);
+        GameStageModel gameStage = Mockito.mock(GameStageModel.class);
+        MerelleBoard board = new MerelleBoard(1,2,gameStage);
         Pawn pawn = Mockito.mock(Pawn.class);
-        Mockito.when(board.isEmptyAt(Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
-        Mockito.when(board.getElement(Mockito.anyInt(), Mockito.anyInt())).thenReturn((GameElement)pawn);
-        Mockito.when(pawn.getColor()).thenReturn(2);
-        Mockito.when(pawn.getNumber()).thenReturn(2);
-        Assertions.assertNull(board.getPawn(2, 1));
+        board.putElement(pawn,0,0);
+        Mockito.when(pawn.getColor()).thenReturn(1);
+        Mockito.when(pawn.getNumber()).thenReturn(1);
+        Assertions.assertNull(board.getPawn(3, 1));
     }
+
 
     @Test
     public void testgetPawnABCDE() {
-        MerelleBoard board = Mockito.mock(MerelleBoard.class);
+        GameStageModel gameStage = Mockito.mock(GameStageModel.class);
+        MerelleBoard board = new MerelleBoard(1,2,gameStage);
         Pawn pawn = Mockito.mock(Pawn.class);
-        Mockito.when(board.isEmptyAt(Mockito.anyInt(), Mockito.anyInt())).thenReturn(true);
-        Mockito.when(board.getElement(Mockito.anyInt(), Mockito.anyInt())).thenReturn((GameElement)pawn);
-        Mockito.when(pawn.getColor()).thenReturn(2);
-        Mockito.when(pawn.getNumber()).thenReturn(2);
-        Assertions.assertEquals((board.getPawn(2, 2)),pawn);
+        board.putElement(pawn,0,0);
+        Mockito.when(pawn.getColor()).thenReturn(3);
+        Mockito.when(pawn.getNumber()).thenReturn(3);
+        Assertions.assertEquals((board.getPawn(3, 3)),pawn);
     }
 
 }
