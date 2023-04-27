@@ -9,10 +9,8 @@ import boardifier.model.action.MoveAction;
 import model.*;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class MerelleDecider extends Decider {
 
@@ -28,16 +26,17 @@ public class MerelleDecider extends Decider {
 
     Random rand = new Random();
     private static final Random loto = new Random(Calendar.getInstance().getTimeInMillis());
+    private int[][] grid;
 
     public MerelleDecider(Model model, Controller control) {
         super(model, control);
+        stage = (MerelleStageModel) model.getGameStage();
+        board = stage.getBoard();// get the board
     }
 
     @Override
     public ActionList decide() {
         // do a cast get a variable of the real type to get access to the attributes of MerelleStageModel
-        stage = (MerelleStageModel) model.getGameStage();
-        board = stage.getBoard(); // get the board
 
         // Prends le bon pot de pions
         if (model.getIdPlayer() == Pawn.PAWN_BLACK)
@@ -108,38 +107,94 @@ public class MerelleDecider extends Decider {
      * Dans la phase de déplacements des pions, analyse et déplace un pion du jeu
      */
     private void movePawn() {
-        System.exit(100);
-//        // INPROGRESS pour chaque pions du joueur actuel (IA), créer tous les déplacement possibles et utiliser minimax() pour etudier les scores futurs
-//        int playerColor = model.getIdPlayer();
-//        int bestScore = Integer.MIN_VALUE;
-//        MoveAction bestMove;
-//
-//        for (Pawn pawn : getPlayerPawnList(playerColor)) {
-//            for (Point positionsToMove : board.computeValidCells(pawn, MerelleGameStatus.MOVING)) {
-//                // TODO Faire le mouvement
-//                int score = minimax(board);
-//                // TODO Annuler le mouvement
-//                if (score > bestScore) {
-//                    bestScore = score;
-//                    bestMove = move; // TODO Assigner le meilleur mouvememnt
-//                }
-//            }
-//        }
+//        System.exit(100);
+        // INPROGRESS pour chaque pions du joueur actuel (IA), créer tous les déplacement possibles et utiliser minimax() pour etudier les scores futurs
+        int playerColor = model.getIdPlayer();
+        int bestScore = Integer.MIN_VALUE;
+        MoveAction bestMove = null;
+
+        grid = new int[MerelleBoard.GRIDNBCOLS][MerelleBoard.GRIDNBROWS];
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (stage.getGrid("merelleboard").getElements(i, j).isEmpty())
+                    grid[j][i] = 0;
+                else {
+                    grid[j][i] = ((Pawn) stage.getGrid("merelleboard").getElements(i, j).get(0)).getColor();
+                }
+            }
+        }
+
+        for (Point point : getPlayerPawnList(playerColor, grid)) {
+            for (Point positionsToMove : computeValidCells(point)) {
+                // Faire la copie de la grid
+                int[][] gridCopy = Arrays.copyOf(grid, grid.length);
+
+                // Make the move
+                gridCopy[positionsToMove.x][positionsToMove.y] = gridCopy[point.x][point.y];
+                MoveAction move = new MoveAction(model, board.getElement(point.x, point.y), "merelleboard", positionsToMove.x, positionsToMove.y);
+
+                int score = minimax(gridCopy);
+
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestMove = move;
+                }
+            }
+        }
+
+        actions.addSingleAction(bestMove);
     }
 
-    private List<Pawn> getPlayerPawnList(int playerColor) {
-        List<Pawn> playerPawnList = new ArrayList<>();
-        for (int i = 0; i < MerellePawnPot.PAWNS_IN_POT; i++) {
-            Pawn pawn = (Pawn) board.getPawn(i, playerColor);
-            if (pawn != null) {
-                playerPawnList.add(pawn);
+    private List<Point> computeValidCells(Point point) {
+        ArrayList<Point> lst = new ArrayList<>();
+        int[][][] jumpTable = {
+                {{3, 3}, {}, {}, {3, 1}, {}, {}, {3, 3}},
+                {{}, {2, 2}, {}, {2, 1}, {}, {2, 2}, {}},
+                {{}, {}, {1, 1}, {1, 1}, {1, 1}, {}, {}},
+                {{1, 3}, {1, 2}, {1, 1}, {1, 1}, {1, 2}, {1, 3}},
+                {{}, {}, {1, 1}, {1, 1}, {1, 1}, {}, {}},
+                {{}, {2, 2}, {}, {2, 1}, {}, {2, 2}, {}},
+                {{3, 3}, {}, {}, {3, 1}, {}, {}, {3, 3}}
+        };
+
+        // FIXME Index 0 out of bounds for length 0 in jumpTable
+        int jumpX = jumpTable[point.y][point.x][0];
+        int jumpY = jumpTable[point.y][point.x][1];
+
+        int[][] offsetTable = {
+                {0, -jumpY},
+                {-jumpX, 0}, {jumpX, 0},
+                {0, jumpY}
+        };
+
+        for (int[] offsetCoords : offsetTable) {
+            int newX = point.x + offsetCoords[0];
+            int newY = point.y + offsetCoords[1];
+
+            if (!MerelleBoard.isActiveCell(newX, newY))
+                continue; // Do nothing if the cell is unreachable
+
+            if (grid[newX][newY] == 0) {
+                lst.add(new Point(newX, newY));
+            }
+        }
+        return lst;
+    }
+
+
+    private List<Point> getPlayerPawnList(int playerColor, int[][] grid) {
+        List<Point> playerPawnList = new ArrayList<>();
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j] == playerColor)
+                    playerPawnList.add(new Point(i, j));
             }
         }
         return playerPawnList;
     }
 
-    private int minimax(MerelleBoard board) {
-        return 0;
+    private int minimax(int[][] grid) {
+        return 1;
     }
 
     private void removePawn() {

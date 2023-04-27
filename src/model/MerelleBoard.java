@@ -34,18 +34,19 @@ public class MerelleBoard extends GridElement {
             // Horizontal mills
             {{0,0},{3,0},{6,0}},
             {{1,1},{3,1},{5,1}},
-            {{2,2},{3,2},{4,2}},
-            {{0,3},{1,3},{2,3}},
-            {{4,3},{5,3},{6,3}},
-            {{2,4},{3,4},{4,4}},
-            {{1,5},{3,5},{5,5}},
-            {{0,6},{3,6},{6,6}}
+            {{2, 2}, {3, 2}, {4, 2}},
+            {{0, 3}, {1, 3}, {2, 3}},
+            {{4, 3}, {5, 3}, {6, 3}},
+            {{2, 4}, {3, 4}, {4, 4}},
+            {{1, 5}, {3, 5}, {5, 5}},
+            {{0, 6}, {3, 6}, {6, 6}}
     };
     /**
      * Number of rows and columns in the grid
      */
-    private static final int GRIDNBROWS = 7;
-    private static final int GRIDNBCOLS = 7;
+    public static final int GRIDNBROWS = 7;
+    public static final int GRIDNBCOLS = 7;
+
     public MerelleBoard(int x, int y, GameStageModel gameStageModel) {
         // call the super-constructor to create a GRIDNBROWS x GRIDNBCOLS grid, named "merelleboard", and in x,y in space
         super("merelleboard", x, y, GRIDNBROWS, GRIDNBCOLS, gameStageModel);
