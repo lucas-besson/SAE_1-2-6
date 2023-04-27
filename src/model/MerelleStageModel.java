@@ -70,7 +70,7 @@ public class MerelleStageModel extends GameStageModel {
 
     private void setupCallbacks() {
         onMoveInGrid((element, gridDest, rowDest, colDest)->{
-            ((Pawn) element).setInAMill(false); // FIXME : ne marche pas ?
+            ((Pawn) element).setInAMill(false);
         });
         onRemoveFromGrid((element, gridDest, rowDest, colDest)->{
             if (gridDest != board) return;

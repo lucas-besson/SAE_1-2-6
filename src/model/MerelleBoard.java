@@ -189,7 +189,7 @@ public class MerelleBoard extends GridElement {
                 Pawn pawn = (Pawn) getFirstElement(coord[0], coord[1]);
                 if (pawn == null || pawn.getColor() != color) break;
                 else pawnInMill++;
-                if (!pawn.isInAMill()) newPawnInMill++; //FIXME : historique ne permet pas de reformer un mill après qu'il à été fait, mauvaise réinnitialisation de isInAMill
+                if (!pawn.isInAMill()) newPawnInMill++;
             }
             if (pawnInMill == 3 && newPawnInMill > 0) {
                 millUpdate(mill);
