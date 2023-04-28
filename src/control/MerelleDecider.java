@@ -117,7 +117,7 @@ public class MerelleDecider extends Decider {
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
                 if (stage.getGrid("merelleboard").getElements(i, j).isEmpty())
-                    grid[j][i] = 0;
+                    grid[j][i] = 2;
                 else {
                     grid[j][i] = ((Pawn) stage.getGrid("merelleboard").getElements(i, j).get(0)).getColor();
                 }
@@ -130,8 +130,11 @@ public class MerelleDecider extends Decider {
                 int[][] gridCopy = Arrays.copyOf(grid, grid.length);
 
                 // Make the move
-                gridCopy[positionsToMove.x][positionsToMove.y] = gridCopy[point.x][point.y];
-                MoveAction move = new MoveAction(model, board.getElement(point.x, point.y), "merelleboard", positionsToMove.x, positionsToMove.y);
+                gridCopy[positionsToMove.y][positionsToMove.x] = gridCopy[point.y][point.x];
+                gridCopy[point.y][point.x] = 2;
+
+                //FIXME Exception in thread "main" java.lang.NullPointerException: Cannot invoke "boardifier.model.GameElement.getGrid()" because "this.element" is null
+                MoveAction move = new MoveAction(model, board.getFirstElement(point.x, point.y), "merelleboard", positionsToMove.x, positionsToMove.y);
 
                 int score = minimax(gridCopy);
 
