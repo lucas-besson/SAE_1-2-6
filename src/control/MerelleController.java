@@ -62,7 +62,8 @@ public class MerelleController extends Controller {
             MerelleDecider decider = new MerelleDecider(model, this);
             ActionPlayer play = new ActionPlayer(model, this, decider, null);
             play.start();
-        } else {
+        }
+        else {
             boolean ok = false;
             while (!ok) {
                 System.out.print(p.getName() + " > ");
