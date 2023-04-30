@@ -14,6 +14,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 
+import java.awt.*;
+
 public class MerelleBoardUnitTest {
 
     private MerelleBoard board;
@@ -185,22 +187,27 @@ public class MerelleBoardUnitTest {
         Pawn pawn = Mockito.mock(Pawn.class);
         resetReachableCellsTable(wantedReachableCells,true);
         board.setValidCells(pawn,1);
-        boolean [][] reachableCells = board.getReachableCells();
-        for (int[] cell : MerelleBoard.ACTIVECELLS){
-            Assertions.assertEquals(wantedReachableCells[cell[0]][cell[1]], reachableCells[cell[0]][cell[1]]);
-        }
-
-
+        Assertions.assertArrayEquals(wantedReachableCells,board.getReachableCells());
     }
 
     @Test
-    public void testSetValidMillCells(){
-        // Aucun put element -> board.getReachableCells(); == remplie avec que des false
+    public void testSetValidMillCells() {
 
-        // put pions de la même couleur que dans l'appel de la fonction setValidMillCells
-        // -> board.getReachableCells(); == remplie avec autant de true que de pions incérer
+        board.setValidMillCells(1);
+        Assertions.assertArrayEquals(wantedReachableCells, board.getReachableCells());
 
-        // put pions de l'autre couleur que dans l'appel de la fonction setValidMillCells
-        // -> board.getReachableCells(); == remplie avec autant de true que dans le AssertEquals précedent
+        Pawn pawn2 = Mockito.mock(Pawn.class);
+        Mockito.when(pawn2.getColor()).thenReturn(0);
+        board.putElement(pawn2, 0, 3);
+        wantedReachableCells[0][3] = true;
+        board.setValidMillCells(1);
+        Assertions.assertArrayEquals(wantedReachableCells, board.getReachableCells());
+
+        Pawn pawn3 = Mockito.mock(Pawn.class);
+        Mockito.when(pawn3.getColor()).thenReturn(1);
+        board.putElement(pawn3, 1, 1);
+        board.setValidMillCells(1);
+        Assertions.assertArrayEquals(wantedReachableCells, board.getReachableCells());
+
     }
 }
