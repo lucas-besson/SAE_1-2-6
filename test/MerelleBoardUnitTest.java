@@ -7,6 +7,8 @@ import boardifier.model.action.MoveAction;
 import model.MerelleBoard;
 import model.Pawn;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -14,7 +16,23 @@ import org.mockito.junit.MockitoJUnit;
 
 public class MerelleBoardUnitTest {
 
-    @Test
+    private MerelleBoard board;
+    private boolean[][] wantedReachableCells = new boolean[][] {
+            {false,false,false,false,false,false,false},
+            {false,false,false,false,false,false,false},
+            {false,false,false,false,false,false,false},
+            {false,false,false,false,false,false,false},
+            {false,false,false,false,false,false,false},
+            {false,false,false,false,false,false,false},
+            {false,false,false,false,false,false,false}
+    };
+
+    @BeforeEach
+    public void initEach() {
+        GameStageModel gameStage = Mockito.mock(GameStageModel.class);
+        board = new MerelleBoard(0,0,gameStage);
+    }
+        @Test
     public void testisActiveCell(){
         Assertions.assertTrue(MerelleBoard.isActiveCell(0, 0));
         Assertions.assertFalse(MerelleBoard.isActiveCell(0, 4));
@@ -24,15 +42,11 @@ public class MerelleBoardUnitTest {
 
     @Test
     public void testgetPawnABF() {
-        GameStageModel gameStage = Mockito.mock(GameStageModel.class);
-        MerelleBoard board = new MerelleBoard(1,2,gameStage);
         Assertions.assertNull(board.getPawn(Mockito.anyInt(), Mockito.anyInt()));
     }
 
     @Test
     public void testgetPawnABCF() {
-        GameStageModel gameStage = Mockito.mock(GameStageModel.class);
-        MerelleBoard board = new MerelleBoard(1,2,gameStage);
         Pawn pawn = Mockito.mock(Pawn.class);
         board.putElement(pawn,0,0);
         Mockito.when(pawn.getColor()).thenReturn(1);
@@ -42,8 +56,6 @@ public class MerelleBoardUnitTest {
 
     @Test
     public void testgetPawnABCDF() {
-        GameStageModel gameStage = Mockito.mock(GameStageModel.class);
-        MerelleBoard board = new MerelleBoard(1,2,gameStage);
         Pawn pawn = Mockito.mock(Pawn.class);
         board.putElement(pawn,0,0);
         Mockito.when(pawn.getColor()).thenReturn(1);
@@ -54,8 +66,6 @@ public class MerelleBoardUnitTest {
 
     @Test
     public void testgetPawnABCDE() {
-        GameStageModel gameStage = Mockito.mock(GameStageModel.class);
-        MerelleBoard board = new MerelleBoard(1,2,gameStage);
         Pawn pawn = Mockito.mock(Pawn.class);
         board.putElement(pawn,0,0);
         Mockito.when(pawn.getColor()).thenReturn(3);
@@ -65,8 +75,6 @@ public class MerelleBoardUnitTest {
 
     @Test
     public void testMillsChecker(){
-        GameStageModel gameStage = Mockito.mock(GameStageModel.class);
-        MerelleBoard board = new MerelleBoard(1,2,gameStage);
         Pawn p1 = Mockito.mock(Pawn.class);
         Pawn p2 = Mockito.mock(Pawn.class);
         Pawn p3 = Mockito.mock(Pawn.class);
@@ -119,5 +127,80 @@ public class MerelleBoardUnitTest {
         Mockito.verify(p3, Mockito.times(2)).setInAMill(Mockito.anyBoolean());
 
     }
-}
 
+    @Test
+    public void testavailableMoves(){
+
+        // No pawn is in the grid
+        Assertions.assertEquals(24, board.availableMoves(0,1));
+        Assertions.assertEquals(0, board.availableMoves(0,2));
+
+        // 1 pawn, in the corner, in the grid
+        Pawn p1 = Mockito.mock(Pawn.class);
+        board.putElement(p1,0,0);
+        Mockito.when(p1.getColor()).thenReturn(0);
+        Mockito.when(p1.getCol()).thenReturn(1);
+        Mockito.when(p1.getRow()).thenReturn(1);
+        Assertions.assertEquals(23, board.availableMoves(0,1));
+        Assertions.assertEquals(2, board.availableMoves(0,2));
+
+        // 2 pawn, in the corner, next to each other, in the grid
+        Pawn p2 = Mockito.mock(Pawn.class);
+        board.putElement(p2,3,0);
+        Mockito.when(p2.getColor()).thenReturn(0);
+        Mockito.when(p2.getCol()).thenReturn(1);
+        Mockito.when(p2.getRow()).thenReturn(4);
+        Assertions.assertEquals(22, board.availableMoves(0,1));
+        Assertions.assertEquals(3, board.availableMoves(0,2));
+
+        // 3 pawn, two in the corner next to each other, on close to the middle, in the grid
+        Pawn p3 = Mockito.mock(Pawn.class);
+        board.putElement(p3,3,2);
+        Mockito.when(p3.getColor()).thenReturn(0);
+        Mockito.when(p3.getCol()).thenReturn(3);
+        Mockito.when(p3.getRow()).thenReturn(4);
+        Assertions.assertEquals(21, board.availableMoves(0,1));
+        Assertions.assertEquals(6 , board.availableMoves(0,2));
+
+        // All the pawn are encircle
+        Pawn p4 = Mockito.mock(Pawn.class);
+        Mockito.when(p4.getColor()).thenReturn(1);
+        board.putElement(p4,0,3);
+        board.putElement(p4,6,0);
+        board.putElement(p4,3,1);
+        board.putElement(p4,2,2);
+        board.putElement(p4,4,2);
+        board.putElement(p4,3,1);
+
+        Assertions.assertEquals(0 , board.availableMoves(0,2));
+    }
+
+    private void resetReachableCellsTable(boolean[][] table, boolean state) {
+        for (int[] cell : MerelleBoard.ACTIVECELLS){
+            table[cell[0]][cell[1]] = state;
+        }
+    }
+    @Test
+    public void testSetValidCells(){
+        Pawn pawn = Mockito.mock(Pawn.class);
+        resetReachableCellsTable(wantedReachableCells,true);
+        board.setValidCells(pawn,1);
+        boolean [][] reachableCells = board.getReachableCells();
+        for (int[] cell : MerelleBoard.ACTIVECELLS){
+            Assertions.assertEquals(wantedReachableCells[cell[0]][cell[1]], reachableCells[cell[0]][cell[1]]);
+        }
+
+
+    }
+
+    @Test
+    public void testSetValidMillCells(){
+        // Aucun put element -> board.getReachableCells(); == remplie avec que des false
+
+        // put pions de la même couleur que dans l'appel de la fonction setValidMillCells
+        // -> board.getReachableCells(); == remplie avec autant de true que de pions incérer
+
+        // put pions de l'autre couleur que dans l'appel de la fonction setValidMillCells
+        // -> board.getReachableCells(); == remplie avec autant de true que dans le AssertEquals précedent
+    }
+}
