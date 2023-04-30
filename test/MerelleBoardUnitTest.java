@@ -119,5 +119,10 @@ public class MerelleBoardUnitTest {
         Mockito.verify(p3, Mockito.times(2)).setInAMill(Mockito.anyBoolean());
 
     }
+
+    public void computeValidMillCells(){
+
+    }
+
 }
 
