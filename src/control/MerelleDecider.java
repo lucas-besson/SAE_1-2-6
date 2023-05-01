@@ -113,28 +113,22 @@ public class MerelleDecider extends Decider {
         int bestScore = Integer.MIN_VALUE;
         MoveAction bestMove = null;
 
-        grid = new int[MerelleBoard.GRIDNBCOLS][MerelleBoard.GRIDNBROWS];
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[i].length; j++) {
-                if (stage.getGrid("merelleboard").getElements(i, j).isEmpty())
-                    grid[j][i] = 2;
-                else {
-                    grid[j][i] = ((Pawn) stage.getGrid("merelleboard").getElements(i, j).get(0)).getColor();
-                }
-            }
-        }
+        initGridTable();
 
         for (Point point : getPlayerPawnList(playerColor, grid)) {
             for (Point positionsToMove : computeValidCells(point)) {
+                System.out.println(point + " " + computeValidCells(point));
                 // Faire la copie de la grid
                 int[][] gridCopy = Arrays.copyOf(grid, grid.length);
 
-                // Make the move
-                gridCopy[positionsToMove.y][positionsToMove.x] = gridCopy[point.y][point.x];
-                gridCopy[point.y][point.x] = 2;
 
-                //FIXME Exception in thread "main" java.lang.NullPointerException: Cannot invoke "boardifier.model.GameElement.getGrid()" because "this.element" is null
-                MoveAction move = new MoveAction(model, board.getFirstElement(point.x, point.y), "merelleboard", positionsToMove.x, positionsToMove.y);
+                // Make the move
+                pawnToMove = (Pawn) model.getGrid("merelleboard").getElement(point.x, point.y);
+                MoveAction move = new MoveAction(model, pawnToMove, "merelleboard", positionsToMove.y, positionsToMove.x);
+
+                gridCopy[positionsToMove.x][positionsToMove.y] = gridCopy[point.x][point.y];
+                gridCopy[point.x][point.y] = 2;
+
 
                 int score = minimax(gridCopy);
 
@@ -144,10 +138,28 @@ public class MerelleDecider extends Decider {
                 }
             }
         }
-
         actions.addSingleAction(bestMove);
     }
 
+    private void initGridTable() {
+        grid = new int[MerelleBoard.GRIDNBCOLS][MerelleBoard.GRIDNBROWS];
+        for (int col = 0; col < grid.length; col++) {
+            for (int row = 0; row < grid[col].length; row++) {
+                if (model.getGrid("merelleboard").getElements(row, col).isEmpty())
+                    grid[col][row] = 2;
+                else {
+                    grid[col][row] = ((Pawn) model.getGrid("merelleboard").getElements(row, col).get(0)).getColor();
+                }
+            }
+        }
+    }
+
+    /**
+     * Retourne une liste de déplacements possibles d'un pion
+     *
+     * @param point Pion à déplacer
+     * @return Liste de Point ou ce pion peut etre déplacé
+     */
     private List<Point> computeValidCells(Point point) {
         ArrayList<Point> lst = new ArrayList<>();
         int[][][] jumpTable = {
@@ -160,8 +172,8 @@ public class MerelleDecider extends Decider {
                 {{3, 3}, {}, {}, {3, 1}, {}, {}, {3, 3}}
         };
 
-        int jumpX = jumpTable[point.y][point.x][0];
-        int jumpY = jumpTable[point.y][point.x][1];
+        int jumpX = jumpTable[point.x][point.y][0];
+        int jumpY = jumpTable[point.x][point.y][1];
 
         int[][] offsetTable = {
                 {0, -jumpY},
@@ -170,26 +182,33 @@ public class MerelleDecider extends Decider {
         };
 
         for (int[] offsetCoords : offsetTable) {
-            int newX = point.x + offsetCoords[0];
-            int newY = point.y + offsetCoords[1];
+            int newX = point.x + offsetCoords[0]; //col
+            int newY = point.y + offsetCoords[1]; //row
 
             if (!MerelleBoard.isActiveCell(newX, newY))
                 continue; // Do nothing if the cell is unreachable
 
-            if (grid[newX][newY] == 0) {
+            if (grid[newX][newY] == 2) {
                 lst.add(new Point(newX, newY));
             }
         }
         return lst;
     }
 
-
+    /**
+     * Construit une liste de points des Pawn du joueur passé en paramètres.
+     *
+     * @param playerColor Couleur du joueur à récuperer les pions
+     * @param grid        Tableau 2D de la grille actuelle (2: null or not active)
+     * @return Liste de pions du joueur (Point(x, y))
+     */
     private List<Point> getPlayerPawnList(int playerColor, int[][] grid) {
         List<Point> playerPawnList = new ArrayList<>();
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[i].length; j++) {
-                if (grid[i][j] == playerColor)
-                    playerPawnList.add(new Point(i, j));
+
+        for (int col = 0; col < grid.length; col++) {
+            for (int row = 0; row < grid[col].length; row++) {
+                if (grid[col][row] == playerColor)
+                    playerPawnList.add(new Point(col, row));
             }
         }
         return playerPawnList;
@@ -241,7 +260,7 @@ public class MerelleDecider extends Decider {
                     Pawn pawn = (Pawn) board.getFirstElement(pawnX, pawnY);
                     if (pawn == null)
                         break;
-                    if (pawn.getColor() == playerId) {
+                    else if (pawn.getColor() == playerId) {
                         return false;
                     }
                     count++;
