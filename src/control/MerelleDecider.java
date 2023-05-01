@@ -127,7 +127,7 @@ public class MerelleDecider extends Decider {
                 gridCopy[positionsToMove.x][positionsToMove.y] = gridCopy[point.x][point.y];
                 gridCopy[point.x][point.y] = 2;
 
-                int score = minimax(grid, gridCopy, 0, true);
+                int score = minimax(grid, gridCopy, true);
 
                 if (score > bestScore) {
                     bestScore = score;
@@ -215,12 +215,12 @@ public class MerelleDecider extends Decider {
         return playerPawnList;
     }
 
-    private int minimax(int[][] previousGrid, int[][] actualGrid, int depth, boolean isMaximizing) {
+    private int minimax(int[][] previousGrid, int[][] actualGrid, boolean isMaximizing) {
         int result = checkWinner(actualGrid);
         if (result == model.getIdPlayer()) {
-            return 1 * depth;
-        } else if (result == (model.getIdPlayer() + 1) % 2) {
-            return -1 * depth;
+            return 1;
+        } else if (result != 2) {
+            return -1;
         }
 
         int playerColor = isMaximizing ? model.getIdPlayer() : (model.getIdPlayer() + 1) % 2;
@@ -229,9 +229,10 @@ public class MerelleDecider extends Decider {
             Point pawnToRemove = removePawn(playerColor, actualGrid);
             actualGrid[pawnToRemove.x][pawnToRemove.y] = 2;
         }
+        int bestScore;
         if (isMaximizing) {
-            int bestScore = Integer.MIN_VALUE;
-            for (Point point : getPlayerPawnList(playerColor, grid)) {
+            bestScore = Integer.MIN_VALUE;
+            for (Point point : getPlayerPawnList(playerColor, actualGrid)) {
                 for (Point positionsToMove : computeValidCells(point)) {
                     // Faire la copie de la grid
                     int[][] gridCopy = Arrays.copyOf(actualGrid, actualGrid.length);
@@ -239,15 +240,14 @@ public class MerelleDecider extends Decider {
                     gridCopy[positionsToMove.x][positionsToMove.y] = gridCopy[point.x][point.y];
                     gridCopy[point.x][point.y] = 2;
 
-                    int score = minimax(actualGrid, gridCopy, depth - 1, false);
+                    int score = minimax(actualGrid, gridCopy, false);
 
                     bestScore = Math.max(score, bestScore);
                 }
             }
-            return bestScore;
         } else {
-            int bestScore = Integer.MAX_VALUE;
-            for (Point point : getPlayerPawnList(playerColor, grid)) {
+            bestScore = Integer.MAX_VALUE;
+            for (Point point : getPlayerPawnList(playerColor, actualGrid)) {
                 for (Point positionsToMove : computeValidCells(point)) {
                     // Faire la copie de la grid
                     int[][] gridCopy = Arrays.copyOf(actualGrid, actualGrid.length);
@@ -255,13 +255,13 @@ public class MerelleDecider extends Decider {
                     gridCopy[positionsToMove.x][positionsToMove.y] = gridCopy[point.x][point.y];
                     gridCopy[point.x][point.y] = 2;
 
-                    int score = minimax(actualGrid, gridCopy, depth - 1, true);
+                    int score = minimax(actualGrid, gridCopy, true);
 
                     bestScore = Math.min(score, bestScore);
                 }
             }
-            return bestScore;
         }
+        return bestScore;
     }
 
     /**
@@ -271,6 +271,10 @@ public class MerelleDecider extends Decider {
      * @return idPlayer that wins
      */
     private int checkWinner(int[][] actualGrid) {
+        if (getPlayerPawnList(model.getIdPlayer(), actualGrid).size() < 3)
+            return model.getIdPlayer();
+        if (getPlayerPawnList((model.getIdPlayer() + 1) % 2, actualGrid).size() < 3)
+            return (model.getIdPlayer() + 1) % 2;
         return 2;
     }
 
@@ -284,7 +288,7 @@ public class MerelleDecider extends Decider {
      * @return vrai ou faux si oui ou non il y a nouveau moulin
      */
     private boolean isNewMill(int[][] previousGrid, int[][] gridCopy, int playerColor) {
-
+        return false;
     }
 
     /**
@@ -303,7 +307,7 @@ public class MerelleDecider extends Decider {
      * @return RemoveAction à effectuer par le joueur actuel
      */
     private RemoveAction removePawn(int[][] actualGrid) {
-
+        return null;
     }
 
 
