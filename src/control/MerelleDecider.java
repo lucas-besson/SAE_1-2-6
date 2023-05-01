@@ -292,7 +292,7 @@ public class MerelleDecider extends Decider {
     }
 
     /**
-     * Algorithme (non IA) qui vérifie le meilleur pion à supprimer et le supprime de la grille, puis retourne la nouvelle grille
+     * Algorithme (non IA) qui vérifie le meilleur pion à supprimer (par ex. empecher l'autre joueur de finir un moulin...)
      *
      * @param playerColor
      */
@@ -307,7 +307,9 @@ public class MerelleDecider extends Decider {
      * @return RemoveAction à effectuer par le joueur actuel
      */
     private RemoveAction removePawn(int[][] actualGrid) {
-        return null;
+        Point pawnToRemove = removePawn(model.getIdPlayer(), actualGrid);
+        assert pawnToRemove != null;
+        return new RemoveAction(model, board.getFirstElement(pawnToRemove.y, pawnToRemove.x));
     }
 
 
