@@ -9,8 +9,10 @@ import boardifier.model.action.RemoveAction;
 import model.*;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.*;
+import java.util.Random;
 
 public class MerelleDecider extends Decider {
 
@@ -21,11 +23,8 @@ public class MerelleDecider extends Decider {
     ActionList actions = new ActionList(true);
     private Pawn pawnToMove;
     private Point destPoint;
-    private boolean needToRemoveAPawn;
-
 
     Random rand = new Random();
-    private static final Random loto = new Random(Calendar.getInstance().getTimeInMillis());
     private int[][] grid;
     private int[][] bestMoveGrid;
 
@@ -52,7 +51,8 @@ public class MerelleDecider extends Decider {
 
         if (stage.getStatus() == MerelleGameStatus.MOVING) {
             movePawn();
-            if (needToRemoveAPawn) actions.addSingleAction(removePawn(bestMoveGrid));
+            if (isNewMill(grid, bestMoveGrid, model.getIdPlayer()))
+                actions.addSingleAction(removePawn(bestMoveGrid));
             return actions;
         }
         return null;
@@ -126,10 +126,6 @@ public class MerelleDecider extends Decider {
 
                 gridCopy[positionsToMove.x][positionsToMove.y] = gridCopy[point.x][point.y];
                 gridCopy[point.x][point.y] = 2;
-
-                needToRemoveAPawn = false;
-                if (isNewMill(grid, gridCopy, model.getIdPlayer()))
-                    needToRemoveAPawn = true;
 
                 int score = minimax(grid, gridCopy, 0, true);
 
