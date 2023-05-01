@@ -44,6 +44,14 @@ public class MerelleController extends Controller {
         stopStage();
         endGame();
     }
+
+    /**
+     * Changes the current player to the next player in the game.
+     * If the current player is a computer player, then the next player is automatically set
+     * by the model. Otherwise, prompts the current player to input their move through the console.
+     * If the last move made by the player created a new mill, prompts the player to remove an opposing pawn.
+     * @throws  if the game is over and there is no winner.
+     */
     
     public void nextPlayer() {
         // for the first player, the id of the player is already set, so do not compute it
@@ -108,6 +116,11 @@ public class MerelleController extends Controller {
         }
     }
 
+    /**
+     * Analyzes and processes a player's move based on the given input line.
+     * @param line the input line from the player
+     * @return true if the move is valid and will be processed, false otherwise
+     */
     private boolean analyseAndPlay(String line) {
         MerelleStageModel gameStage = (MerelleStageModel) model.getGameStage();
 
@@ -158,6 +171,11 @@ public class MerelleController extends Controller {
         return true;
     }
 
+    /**
+     * Analyzes and plays the move for deleting a pawn in a mill.
+     * @param line the input string containing the information about the pawn to be deleted
+     * @return true if the move was successful, false otherwise
+     */
     private boolean millAnalyseAndPlay(String line) {
         MerelleStageModel gameStage = (MerelleStageModel) model.getGameStage();
 
