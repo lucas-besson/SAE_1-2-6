@@ -65,11 +65,13 @@ public class MerelleDecider extends Decider {
      * -- Sinon elle choisit une case et pose le pion.
      */
     private void placePawn() {
+        boolean needToRemoveAPawn = false;
         List<Point> millsToComplete = getUncompletedMillsForPlayer(model.getIdPlayer(), board);
         // Si l'IA peut complèter un moulin, elle le complète
         if (!millsToComplete.isEmpty()) {
             int selectedPoint = rand.nextInt(millsToComplete.size());
             destPoint = new Point(millsToComplete.get(selectedPoint).x, millsToComplete.get(selectedPoint).y);
+            needToRemoveAPawn = true;
         } else {
             millsToComplete = getUncompletedMillsForPlayer(model.getIdPlayer() == 1 ? 0 : 1, board);
             // Si l'IA ne peut pas completer de moulin alors on vérifie si l'autre joueur peut : on le bloque
@@ -82,10 +84,15 @@ public class MerelleDecider extends Decider {
                 destPoint = casesVides.get(rand.nextInt(casesVides.size()));
             }
         }
-
         pawnToMove = selectNextInPot();
         MoveAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x);
         actions.addSingleAction(move);
+
+        if (needToRemoveAPawn) {
+            initGridTable();
+            grid[destPoint.x][destPoint.y] = model.getIdPlayer();
+            actions.addSingleAction(removePawn(grid));
+        }
     }
 
 
@@ -227,6 +234,7 @@ public class MerelleDecider extends Decider {
 
         if (isNewMill(previousGrid, actualGrid, playerColor)) {
             Point pawnToRemove = removePawn(playerColor, actualGrid);
+            assert pawnToRemove != null;
             actualGrid[pawnToRemove.x][pawnToRemove.y] = 2;
         }
         int bestScore;
@@ -283,11 +291,32 @@ public class MerelleDecider extends Decider {
      * Check if a new mill is present between the two grids in parameters, for the player set in parameters
      *
      * @param previousGrid Grille précédente
-     * @param gridCopy     Nouvelle grille
+     * @param actualGrid   Nouvelle grille
      * @param playerColor  Couleur du joueur
      * @return vrai ou faux si oui ou non il y a nouveau moulin
      */
-    private boolean isNewMill(int[][] previousGrid, int[][] gridCopy, int playerColor) {
+    private boolean isNewMill(int[][] previousGrid, int[][] actualGrid, int playerColor) {
+        for (int[][] mill : MerelleBoard.MILLS) {
+            int x1 = mill[0][0];
+            int y1 = mill[0][1];
+            int x2 = mill[1][0];
+            int y2 = mill[1][1];
+            int x3 = mill[2][0];
+            int y3 = mill[2][1];
+
+            // Vérifier si les 3 positions du mill sont occupées par le joueur actuel
+            if (actualGrid[x1][y1] == actualGrid[x2][y2] &&
+                    actualGrid[x2][y2] == actualGrid[x3][y3] &&
+                    actualGrid[x1][y1] == playerColor) {
+
+                // Vérifier si le joueur n'occupait pas les 3 positions du mill avant
+                if (previousGrid[x1][y1] != actualGrid[x1][y1] ||
+                        previousGrid[x2][y2] != actualGrid[x2][y2] ||
+                        previousGrid[x3][y3] != actualGrid[x3][y3]) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -337,7 +366,7 @@ public class MerelleDecider extends Decider {
      * @param y        position y du pion à verifier
      * @param board    etat actuel du plateau
      * @param mills    liste des moulins possibles
-     * @param playerId
+     * @param playerId id du joueur qui place le pion
      * @return vrai si avec cette combinaison (x, y) un moulin sera créé
      */
     private boolean hasMill(int x, int y, MerelleBoard board, int[][][] mills, int playerId) {
