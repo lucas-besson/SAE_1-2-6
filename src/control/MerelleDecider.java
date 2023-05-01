@@ -2,10 +2,10 @@ package control;
 
 import boardifier.control.Controller;
 import boardifier.control.Decider;
-import boardifier.model.GameElement;
 import boardifier.model.Model;
 import boardifier.model.action.ActionList;
 import boardifier.model.action.MoveAction;
+import boardifier.model.action.RemoveAction;
 import model.*;
 
 import java.awt.*;
@@ -21,12 +21,13 @@ public class MerelleDecider extends Decider {
     ActionList actions = new ActionList(true);
     private Pawn pawnToMove;
     private Point destPoint;
+    private boolean needToRemoveAPawn;
 
-    private boolean needToRemovePawn;
 
     Random rand = new Random();
     private static final Random loto = new Random(Calendar.getInstance().getTimeInMillis());
     private int[][] grid;
+    private int[][] bestMoveGrid;
 
     public MerelleDecider(Model model, Controller control) {
         super(model, control);
@@ -44,9 +45,6 @@ public class MerelleDecider extends Decider {
         else
             AIpot = stage.getRedPot();
 
-        GameElement pawnToMove = null; // the pawn that is moved
-        needToRemovePawn = false;
-
         if (stage.getStatus() == MerelleGameStatus.PLACING) {
             placePawn();
             return actions;
@@ -54,6 +52,7 @@ public class MerelleDecider extends Decider {
 
         if (stage.getStatus() == MerelleGameStatus.MOVING) {
             movePawn();
+            if (needToRemoveAPawn) actions.addSingleAction(removePawn(bestMoveGrid));
             return actions;
         }
         return null;
@@ -107,7 +106,6 @@ public class MerelleDecider extends Decider {
      * Dans la phase de déplacements des pions, analyse et déplace un pion du jeu
      */
     private void movePawn() {
-//        System.exit(100);
         // INPROGRESS pour chaque pions du joueur actuel (IA), créer tous les déplacement possibles et utiliser minimax() pour etudier les scores futurs
         int playerColor = model.getIdPlayer();
         int bestScore = Integer.MIN_VALUE;
@@ -129,18 +127,25 @@ public class MerelleDecider extends Decider {
                 gridCopy[positionsToMove.x][positionsToMove.y] = gridCopy[point.x][point.y];
                 gridCopy[point.x][point.y] = 2;
 
+                needToRemoveAPawn = false;
+                if (isNewMill(grid, gridCopy, model.getIdPlayer()))
+                    needToRemoveAPawn = true;
 
-                int score = minimax(gridCopy);
+                int score = minimax(grid, gridCopy, 0, true);
 
                 if (score > bestScore) {
                     bestScore = score;
                     bestMove = move;
+                    bestMoveGrid = Arrays.copyOf(gridCopy, gridCopy.length);
                 }
             }
         }
         actions.addSingleAction(bestMove);
     }
 
+    /**
+     * Convertit la board en tableau 2D
+     */
     private void initGridTable() {
         grid = new int[MerelleBoard.GRIDNBCOLS][MerelleBoard.GRIDNBROWS];
         for (int col = 0; col < grid.length; col++) {
@@ -214,11 +219,94 @@ public class MerelleDecider extends Decider {
         return playerPawnList;
     }
 
-    private int minimax(int[][] grid) {
-        return 1;
+    private int minimax(int[][] previousGrid, int[][] actualGrid, int depth, boolean isMaximizing) {
+        int result = checkWinner(actualGrid);
+        if (result == model.getIdPlayer()) {
+            return 1 * depth;
+        } else if (result == (model.getIdPlayer() + 1) % 2) {
+            return -1 * depth;
+        }
+
+        int playerColor = isMaximizing ? model.getIdPlayer() : (model.getIdPlayer() + 1) % 2;
+
+        if (isNewMill(previousGrid, actualGrid, playerColor)) {
+            Point pawnToRemove = removePawn(playerColor, actualGrid);
+            actualGrid[pawnToRemove.x][pawnToRemove.y] = 2;
+        }
+        if (isMaximizing) {
+            int bestScore = Integer.MIN_VALUE;
+            for (Point point : getPlayerPawnList(playerColor, grid)) {
+                for (Point positionsToMove : computeValidCells(point)) {
+                    // Faire la copie de la grid
+                    int[][] gridCopy = Arrays.copyOf(actualGrid, actualGrid.length);
+
+                    gridCopy[positionsToMove.x][positionsToMove.y] = gridCopy[point.x][point.y];
+                    gridCopy[point.x][point.y] = 2;
+
+                    int score = minimax(actualGrid, gridCopy, depth - 1, false);
+
+                    bestScore = Math.max(score, bestScore);
+                }
+            }
+            return bestScore;
+        } else {
+            int bestScore = Integer.MAX_VALUE;
+            for (Point point : getPlayerPawnList(playerColor, grid)) {
+                for (Point positionsToMove : computeValidCells(point)) {
+                    // Faire la copie de la grid
+                    int[][] gridCopy = Arrays.copyOf(actualGrid, actualGrid.length);
+
+                    gridCopy[positionsToMove.x][positionsToMove.y] = gridCopy[point.x][point.y];
+                    gridCopy[point.x][point.y] = 2;
+
+                    int score = minimax(actualGrid, gridCopy, depth - 1, true);
+
+                    bestScore = Math.min(score, bestScore);
+                }
+            }
+            return bestScore;
+        }
     }
 
-    private void removePawn() {
+    /**
+     * Retourne le vainqueur du tour, 2 si aucun vainqueur
+     *
+     * @param actualGrid grille à vérifier
+     * @return idPlayer that wins
+     */
+    private int checkWinner(int[][] actualGrid) {
+        return 2;
+    }
+
+
+    /**
+     * Check if a new mill is present between the two grids in parameters, for the player set in parameters
+     *
+     * @param previousGrid Grille précédente
+     * @param gridCopy     Nouvelle grille
+     * @param playerColor  Couleur du joueur
+     * @return vrai ou faux si oui ou non il y a nouveau moulin
+     */
+    private boolean isNewMill(int[][] previousGrid, int[][] gridCopy, int playerColor) {
+
+    }
+
+    /**
+     * Algorithme (non IA) qui vérifie le meilleur pion à supprimer et le supprime de la grille, puis retourne la nouvelle grille
+     *
+     * @param playerColor
+     */
+    private Point removePawn(int playerColor, int[][] actualGrid) {
+        return null;
+    }
+
+    /**
+     * Retourne le meilleure RemoveAction à effectuer pour la grille actuelle.
+     *
+     * @param actualGrid
+     * @return RemoveAction à effectuer par le joueur actuel
+     */
+    private RemoveAction removePawn(int[][] actualGrid) {
 
     }
 
