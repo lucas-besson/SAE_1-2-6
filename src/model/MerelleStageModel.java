@@ -19,6 +19,14 @@ public class MerelleStageModel extends GameStageModel {
         setupCallbacks();
     }
 
+    public int getBlackPawnsToPlay() {
+        return blackPawnsToPlay;
+    }
+
+    public int getRedPawnsToPlay() {
+        return redPawnsToPlay;
+    }
+
     public MerelleBoard getBoard() {
         return board;
     }
