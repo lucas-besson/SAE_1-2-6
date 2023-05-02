@@ -9,6 +9,7 @@ import boardifier.model.action.RemoveAction;
 import model.*;
 
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -305,7 +306,57 @@ public class MerelleDecider extends Decider {
      * @param playerColor
      */
     private Point removePawn(int playerColor, int[][] actualGrid) {
+        ArrayList<Point> best_possible_positions = new ArrayList<>();
+        var opponent = (model.getIdPlayer() + 1) % 2;
+
+        /* Pour chaque pion adverse, je regarde pour chacun de ces coups
+           s'il y a possibilité de faire un moulin si OUI on ajoute la position du coup dans
+           la liste best_possible_positions */ // Des lignes : 308 à 318
+
+        for(int i = 0; i < getPlayerPawnList(opponent, actualGrid).size(); i++) {
+            Point opPawn = getPlayerPawnList(opponent, actualGrid).get(i);
+
+            for(int j = 0; j < computeValidCells(opPawn).size(); j++) {
+                Point position = computeValidCells(opPawn).get(j);
+
+                if(getPossibleMills(position, actualGrid)) {
+                    best_possible_positions.add(position);
+                }
+            }
+        }
+
+        if(best_possible_positions.isEmpty()) { return getPlayerPawnList(opponent, actualGrid).get(0); }
+
+        //Vérification du meilleur pion à enlever parmis tous les coups ou un moulin est faisable
+        var bestPosition = best_possible_positions.get(0);
+        for(Point position : best_possible_positions) {
+            if(nb_pawn_op( , opponent, actualGrid)) {
+                bestPosition = position;
+            }
+        }
         return null;
+    }
+
+    /**
+     * TODO: Doit retourner Vrai si un moulin est faisable à la position entré en paramètre sinon False
+     * @param position
+     * @param actualGrid
+     * @return
+     */
+    private boolean getPossibleMills(Point position, int [][] actualGrid) {
+        return false;
+    }
+
+    /**
+     * TODO: Doit retourner le nombre de pions adverse pour une liste donnée en entrée
+     * @return
+     */
+    private int nb_pawn_op(ArrayList<Point> positions, int[][] actualGrid) {
+        int pawnNumber = 0;
+        for(Point position : positions) {
+            if(board.getFirstElement(position.getLocation().x, position.getLocation().y).)
+        }
+        return pawnNumber;
     }
 
     /**
