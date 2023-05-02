@@ -39,10 +39,8 @@ public class MerelleDecider extends Decider {
         // do a cast get a variable of the real type to get access to the attributes of MerelleStageModel
 
         // Prends le bon pot de pions
-        if (model.getIdPlayer() == Pawn.PAWN_BLACK)
-            AIpot = stage.getBlackPot();
-        else
-            AIpot = stage.getRedPot();
+        if (model.getIdPlayer() == Pawn.PAWN_BLACK) AIpot = stage.getBlackPot();
+        else AIpot = stage.getRedPot();
 
         if (stage.getStatus() == MerelleGameStatus.PLACING) {
             placePawn();
@@ -103,8 +101,7 @@ public class MerelleDecider extends Decider {
      */
     private Pawn selectNextInPot() {
         int i = 0;
-        while (i < MerellePawnPot.PAWNS_IN_POT && AIpot.getElement(i, 0) == null)
-            i++;
+        while (i < MerellePawnPot.PAWNS_IN_POT && AIpot.getElement(i, 0) == null) i++;
         return (Pawn) AIpot.getElement(i, 0);
     }
 
@@ -170,24 +167,12 @@ public class MerelleDecider extends Decider {
      */
     private List<Point> computeValidCells(Point point) {
         ArrayList<Point> lst = new ArrayList<>();
-        int[][][] jumpTable = {
-                {{3, 3}, {}, {}, {3, 1}, {}, {}, {3, 3}},
-                {{}, {2, 2}, {}, {2, 1}, {}, {2, 2}, {}},
-                {{}, {}, {1, 1}, {1, 1}, {1, 1}, {}, {}},
-                {{1, 3}, {1, 2}, {1, 1}, {}, {1, 1}, {1, 2}, {1, 3}},
-                {{}, {}, {1, 1}, {1, 1}, {1, 1}, {}, {}},
-                {{}, {2, 2}, {}, {2, 1}, {}, {2, 2}, {}},
-                {{3, 3}, {}, {}, {3, 1}, {}, {}, {3, 3}}
-        };
+        int[][][] jumpTable = {{{3, 3}, {}, {}, {3, 1}, {}, {}, {3, 3}}, {{}, {2, 2}, {}, {2, 1}, {}, {2, 2}, {}}, {{}, {}, {1, 1}, {1, 1}, {1, 1}, {}, {}}, {{1, 3}, {1, 2}, {1, 1}, {}, {1, 1}, {1, 2}, {1, 3}}, {{}, {}, {1, 1}, {1, 1}, {1, 1}, {}, {}}, {{}, {2, 2}, {}, {2, 1}, {}, {2, 2}, {}}, {{3, 3}, {}, {}, {3, 1}, {}, {}, {3, 3}}};
 
         int jumpX = jumpTable[point.x][point.y][0];
         int jumpY = jumpTable[point.x][point.y][1];
 
-        int[][] offsetTable = {
-                {0, -jumpY},
-                {-jumpX, 0}, {jumpX, 0},
-                {0, jumpY}
-        };
+        int[][] offsetTable = {{0, -jumpY}, {-jumpX, 0}, {jumpX, 0}, {0, jumpY}};
 
         for (int[] offsetCoords : offsetTable) {
             int newX = point.x + offsetCoords[0]; //col
@@ -215,8 +200,7 @@ public class MerelleDecider extends Decider {
 
         for (int col = 0; col < grid.length; col++) {
             for (int row = 0; row < grid[col].length; row++) {
-                if (grid[col][row] == playerColor)
-                    playerPawnList.add(new Point(col, row));
+                if (grid[col][row] == playerColor) playerPawnList.add(new Point(col, row));
             }
         }
         return playerPawnList;
@@ -305,16 +289,11 @@ public class MerelleDecider extends Decider {
             int y3 = mill[2][1];
 
             // Vérifier si les 3 positions du mill sont occupées par le joueur actuel
-            if (actualGrid[x1][y1] == actualGrid[x2][y2] &&
-                    actualGrid[x2][y2] == actualGrid[x3][y3] &&
-                    actualGrid[x1][y1] == playerColor) {
+            if (actualGrid[x1][y1] == actualGrid[x2][y2] && actualGrid[x2][y2] == actualGrid[x3][y3] && actualGrid[x1][y1] == playerColor) {
 
                 // Vérifier si le joueur n'occupait pas les 3 positions du mill avant
-                if (previousGrid[x1][y1] != actualGrid[x1][y1] ||
-                        previousGrid[x2][y2] != actualGrid[x2][y2] ||
-                        previousGrid[x3][y3] != actualGrid[x3][y3]) {
+                if (previousGrid[x1][y1] != actualGrid[x1][y1] || previousGrid[x2][y2] != actualGrid[x2][y2] || previousGrid[x3][y3] != actualGrid[x3][y3])
                     return true;
-                }
             }
         }
         return false;
@@ -377,8 +356,7 @@ public class MerelleDecider extends Decider {
                     int pawnY = position[0];
                     int pawnX = position[1];
                     Pawn pawn = (Pawn) board.getFirstElement(pawnX, pawnY);
-                    if (pawn == null)
-                        break;
+                    if (pawn == null) break;
                     else if (pawn.getColor() == playerId) {
                         return false;
                     }
