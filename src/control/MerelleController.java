@@ -116,6 +116,9 @@ public class MerelleController extends Controller {
         }
     }
 
+    public boolean AccesAnalyseAndPlay(String line) {
+        return analyseAndPlay(line);
+    }
     /**
      * Analyzes and processes a player's move based on the given input line.
      * @param line the input line from the player
