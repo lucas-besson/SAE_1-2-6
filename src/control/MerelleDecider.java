@@ -4,6 +4,7 @@ import boardifier.control.Controller;
 import boardifier.control.Decider;
 import boardifier.model.Model;
 import boardifier.model.action.ActionList;
+import boardifier.model.action.GameAction;
 import boardifier.model.action.MoveAction;
 import boardifier.model.action.RemoveAction;
 import model.*;
@@ -29,6 +30,27 @@ public class MerelleDecider extends Decider {
     private int[][] grid;
     private int[][] bestMoveGrid;
 
+    private static final int[][][] MOULINS = {
+            // Vertical mills
+            {{0,0},{0,3},{0,6}},
+            {{1,1},{1,3},{1,5}},
+            {{2,2},{2,3},{2,4}},
+            {{3,0},{3,1},{3,2}},
+            {{3,4},{3,5},{3,6}},
+            {{4,2},{4,3},{4,4}},
+            {{5,1},{5,3},{5,5}},
+            {{6,0},{6,3},{6,6}},
+            // Horizontal mills
+            {{0,0},{3,0},{6,0}},
+            {{1,1},{3,1},{5,1}},
+            {{2, 2}, {3, 2}, {4, 2}},
+            {{0, 3}, {1, 3}, {2, 3}},
+            {{4, 3}, {5, 3}, {6, 3}},
+            {{2, 4}, {3, 4}, {4, 4}},
+            {{1, 5}, {3, 5}, {5, 5}},
+            {{0, 6}, {3, 6}, {6, 6}}
+    };
+
     public MerelleDecider(Model model, Controller control) {
         super(model, control);
         stage = (MerelleStageModel) model.getGameStage();
@@ -51,7 +73,7 @@ public class MerelleDecider extends Decider {
         if (stage.getStatus() == MerelleGameStatus.MOVING) {
             movePawn();
             if (isNewMill(grid, bestMoveGrid, model.getIdPlayer()))
-                actions.addSingleAction(removePawn(bestMoveGrid));
+                actions.addSingleAction(removePawnAction(bestMoveGrid));
             return actions;
         }
         return null;
@@ -90,7 +112,7 @@ public class MerelleDecider extends Decider {
         if (needToRemoveAPawn) {
             initGridTable();
             grid[destPoint.x][destPoint.y] = model.getIdPlayer();
-            actions.addSingleAction(removePawn(grid));
+            actions.addSingleAction(removePawnAction(grid));
         }
     }
 
@@ -218,7 +240,7 @@ public class MerelleDecider extends Decider {
         int playerColor = isMaximizing ? model.getIdPlayer() : (model.getIdPlayer() + 1) % 2;
 
         if (isNewMill(previousGrid, actualGrid, playerColor)) {
-            Point pawnToRemove = removePawn(playerColor, actualGrid);
+            Point pawnToRemove = removePawn(actualGrid);
             assert pawnToRemove != null;
             actualGrid[pawnToRemove.x][pawnToRemove.y] = 2;
         }
@@ -303,38 +325,86 @@ public class MerelleDecider extends Decider {
     /**
      * Algorithme (non IA) qui vérifie le meilleur pion à supprimer (par ex. empecher l'autre joueur de finir un moulin...)
      *
-     * @param playerColor
+     * @param plateau
      */
-    private Point removePawn(int playerColor, int[][] actualGrid) {
-        ArrayList<Point> best_possible_positions = new ArrayList<>();
-        var opponent = (model.getIdPlayer() + 1) % 2;
-
-        /* Pour chaque pion adverse, je regarde pour chacun de ces coups
-           s'il y a possibilité de faire un moulin si OUI on ajoute la position du coup dans
-           la liste best_possible_positions */ // Des lignes : 308 à 318
-
-        for(int i = 0; i < getPlayerPawnList(opponent, actualGrid).size(); i++) {
-            Point opPawn = getPlayerPawnList(opponent, actualGrid).get(i);
-
-            for(int j = 0; j < computeValidCells(opPawn).size(); j++) {
-                Point position = computeValidCells(opPawn).get(j);
-
-                if(getPossibleMills(position, actualGrid)) {
-                    best_possible_positions.add(position);
+    private Point removePawn(int[][] plateau) {
+        Point meilleurPion = null;
+        int joueur = 1; // On recherche le pion de l'adversaire, qui est représenté par 1
+        for (int i = 0; i < plateau.length; i++) {
+            for (int j = 0; j < plateau[i].length; j++) {
+                if (plateau[i][j] == joueur) {
+                    int nbMoulins = compteMoulins(i, j, plateau);
+                    if (nbMoulins > 0) { // Le pion forme au moins un moulin
+                        // Si le pion peut être retiré sans former de moulin à l'adversaire, c'est le meilleur pion à retirer
+                        if (!peutFaireMoulin(i, j, plateau)) {
+                            return new Point(i, j); // Retourne l'objet Point qui représente la position du pion à retirer
+                        } else {
+                            // Si le pion doit être retiré pour éviter un moulin à l'adversaire, le choisit comme meilleur pion à retirer
+                            if (nbMoulins == 2) { // Si l'adversaire a deux pions qui forment des moulins, retirer n'importe lequel des deux peut être bénéfique
+                                return new Point(i, j); // Retourne l'objet Point qui représente la position du pion à retirer
+                            } else if (nbMoulins == 1) { // Si l'adversaire a un seul pion qui forme un moulin
+                                if (meilleurPion == null || compteMoulins(meilleurPion.x, meilleurPion.y, plateau) == 0) {
+                                    meilleurPion = new Point(i, j);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
+        if(meilleurPion == null) {
+            meilleurPion = getPlayerPawnList(model.getIdPlayer() + 1 % 2, plateau).get(0);
+        }
+        return meilleurPion; // Retourne l'objet Point qui représente la position du pion à retirer, ou null si aucun pion ne peut être retiré
+    }
 
-        if(best_possible_positions.isEmpty()) { return getPlayerPawnList(opponent, actualGrid).get(0); }
-
-        //Vérification du meilleur pion à enlever parmis tous les coups ou un moulin est faisable
-        var bestPosition = best_possible_positions.get(0);
-        for(Point position : best_possible_positions) {
-            if(nb_pawn_op( , opponent, actualGrid)) {
-                bestPosition = position;
+    private boolean peutFaireMoulin(int x, int y, int[][] plateau) {
+        int joueur = plateau[x][y];
+        for (int i = 0; i < 3; i++) {
+            if (plateau[x][(y+i)%3] != joueur) {
+                break;
+            }
+            if (i == 2) {
+                return true;
             }
         }
-        return null;
+        for (int i = 0; i < 3; i++) {
+            if (plateau[(x+i)%3][y] != joueur) {
+                break;
+            }
+            if (i == 2) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Méthode pour compter le nombre de moulins pour un pion donné
+    private int compteMoulins(int x, int y, int[][] plateau) {
+        int moulins = 0;
+        int joueur = plateau[x][y];
+        if (joueur == 0) {
+            return 0;
+        }
+        // Vérifie les moulins horizontaux et verticaux
+        if (plateau[x][(y+1)%3] == joueur && plateau[x][(y+2)%3] == joueur) {
+            moulins++;
+        }
+        if (plateau[(x+1)%3][y] == joueur && plateau[(x+2)%3][y] == joueur) {
+            moulins++;
+        }
+        // Vérifie les moulins diagonaux
+        if ((x == 0 && y == 0) || (x == 1 && y == 1) || (x == 2 && y == 2)) {
+            if (plateau[(x+1)%3][(y+1)%3] == joueur && plateau[(x+2)%3][(y+2)%3] == joueur) {
+                moulins++;
+            }
+        }
+        if ((x == 0 && y == 2) || (x == 1 && y == 1) || (x == 2 && y == 0)) {
+            if (plateau[(x+1)%3][(y+2)%3] == joueur && plateau[(x+2)%3][(y+1)%3] == joueur) {
+                moulins++;
+            }
+        }
+        return moulins;
     }
 
     /**
@@ -351,13 +421,13 @@ public class MerelleDecider extends Decider {
      * TODO: Doit retourner le nombre de pions adverse pour une liste donnée en entrée
      * @return
      */
-    private int nb_pawn_op(ArrayList<Point> positions, int[][] actualGrid) {
-        int pawnNumber = 0;
-        for(Point position : positions) {
-            if(board.getFirstElement(position.getLocation().x, position.getLocation().y).)
-        }
-        return pawnNumber;
-    }
+//    private int nb_pawn_op(ArrayList<Point> positions, int[][] actualGrid) {
+//        int pawnNumber = 0;
+//        for(Point position : positions) {
+//            if(board.getFirstElement(position.getLocation().x, position.getLocation().y).)
+//        }
+//        return pawnNumber;
+//    }
 
     /**
      * Retourne le meilleure RemoveAction à effectuer pour la grille actuelle.
@@ -365,8 +435,8 @@ public class MerelleDecider extends Decider {
      * @param actualGrid
      * @return RemoveAction à effectuer par le joueur actuel
      */
-    private RemoveAction removePawn(int[][] actualGrid) {
-        Point pawnToRemove = removePawn(model.getIdPlayer(), actualGrid);
+    private RemoveAction removePawnAction(int[][] actualGrid) {
+        Point pawnToRemove = removePawn(actualGrid);
         assert pawnToRemove != null;
         return new RemoveAction(model, board.getFirstElement(pawnToRemove.y, pawnToRemove.x));
     }
