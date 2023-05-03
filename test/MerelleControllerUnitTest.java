@@ -1,5 +1,6 @@
 import boardifier.control.ActionPlayer;
 import boardifier.control.Controller;
+import boardifier.model.GameException;
 import boardifier.model.GameStageModel;
 import boardifier.model.Model;
 import boardifier.model.Player;
@@ -18,21 +19,25 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockitoSession;
 
 public class MerelleControllerUnitTest {
-    // TO FINISH
+
+    // stageLoop methode based on boardifier method and Merelle methode that have already been test.
+    /*
     @Test
-    public void teststageLoop(){
-        GameStageModel gameStageModel = Mockito.mock(GameStageModel.class);
-        View view = Mockito.mock(View.class);
+    public void teststageLoop() throws GameException {
         Model model = Mockito.mock(Model.class);
-        Mockito.when(model.getGameStage()).thenReturn(gameStageModel);
-        Mockito.when(gameStageModel.getModel()).thenReturn(model);
-        Mockito.when(model.getGameStage().getModel().isEndStage()).thenReturn(true);
+        View view = Mockito.mock(View.class);
+        MerelleStageModel gameStageModel = Mockito.mock(MerelleStageModel.class);
         MerelleController merelleController = new MerelleController(model,view);
-        //Mockito.verify(merelleController).nextPlayer();
-        //Mockito.verify(merelleController).update();
-        //Mockito.verify(merelleController).stopStage();
-        //Mockito.verify(merelleController).endGame();
+        Mockito.when(model.getGameStage()).thenReturn(gameStageModel);
+        Mockito.when(gameStageModel.isEndStage()).thenReturn(false);
+        merelleController.setFirstStageName("test");
+        merelleController.startGame();
+        merelleController.stageLoop();
+
+
+
     }
+    */
 
     // TO FINISH
     @Test
