@@ -52,7 +52,7 @@ public class MerelleController extends Controller {
      * If the last move made by the player created a new mill, prompts the player to remove an opposing pawn.
      * @throws  if the game is over and there is no winner.
      */
-    
+
     public void nextPlayer() {
         // for the first player, the id of the player is already set, so do not compute it
         if (!firstPlayer) {
@@ -116,7 +116,7 @@ public class MerelleController extends Controller {
         }
     }
 
-    public boolean AccesAnalyseAndPlay(String line) {
+    public boolean AccessAnalyseAndPlay(String line) {
         return analyseAndPlay(line);
     }
     /**
@@ -139,7 +139,7 @@ public class MerelleController extends Controller {
         if (!MerelleBoard.isActiveCell(col, row)) return false;
 
         int color = model.getIdPlayer();
-        
+
         // collect the pawn from the correct place depending on the game stage
         Pawn pawn = null;
         // first part of the game : the player have to empty the pot
@@ -149,7 +149,7 @@ public class MerelleController extends Controller {
             GridElement pot = null;
             if (color == 0) pot = gameStage.getBlackPot();
             else pot = gameStage.getRedPot();
-            
+
             if (pot.isEmptyAt(pawnIndex, 0)) return false;
             pawn = (Pawn) pot.getElement(pawnIndex, 0);
             gameStage.getBoard().setValidCells(pawn, gameStage.getStatus());
@@ -174,6 +174,10 @@ public class MerelleController extends Controller {
         return true;
     }
 
+
+    public boolean AccessMillAnalyseAndPlay(String line) {
+        return millAnalyseAndPlay   (line);
+    }
     /**
      * Analyzes and plays the move for deleting a pawn in a mill.
      * @param line the input string containing the information about the pawn to be deleted

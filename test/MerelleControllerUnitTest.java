@@ -1,26 +1,19 @@
-import boardifier.control.ActionPlayer;
-import boardifier.control.Controller;
-import boardifier.model.GameException;
-import boardifier.model.GameStageModel;
 import boardifier.model.Model;
-import boardifier.model.Player;
 import boardifier.view.View;
 import control.MerelleController;
-import control.MerelleDecider;
 import model.*;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 
-import javax.sound.sampled.Line;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyInt;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.mockitoSession;
+import static org.mockito.Mockito.when;
 
 public class MerelleControllerUnitTest {
 
-    // stageLoop methode based on boardifier method and Merelle methode that have already been test.
+    // stageLoop methode based on boardifier method and Merelle methode that have already been tested.
     /*
     @Test
     public void teststageLoop() throws GameException {
@@ -41,7 +34,7 @@ public class MerelleControllerUnitTest {
 
     // TO FINISH
     @Test
-    public void testnextPlayer(){
+    public void testnextPlayer() {
 
 //        V1
 //        Player player = Mockito.mock(Player.class);
@@ -63,53 +56,88 @@ public class MerelleControllerUnitTest {
     @Test
     public void testAnalyseAndPlay() {
 //        Player player = Mockito.mock(Player.class);
-        MerelleStageModel merelleStageModel = Mockito.mock(MerelleStageModel.class);
-        MerellePawnPot merellePawnPot = Mockito.mock(MerellePawnPot.class);
-        MerelleBoard merelleBoard = Mockito.mock(MerelleBoard.class);
-        Pawn pawn = Mockito.mock(Pawn.class);
-        Model model = Mockito.mock(Model.class);
-        View view = Mockito.mock(View.class);
-        MerelleController merelleController = new MerelleController(model,view);
-        Mockito.when(model.getGameStage()).thenReturn(merelleStageModel);
-        Mockito.when(merellePawnPot.getElement(Mockito.anyInt(),Mockito.anyInt())).thenReturn(pawn);
-        Mockito.when(merelleStageModel.getBlackPot()).thenReturn(merellePawnPot);
-        Mockito.when(merelleStageModel.getRedPot()).thenReturn(merellePawnPot);
-        Mockito.when(merelleStageModel.getBoard()).thenReturn(merelleBoard);
+        MerelleStageModel merelleStageModel = mock(MerelleStageModel.class);
+        MerellePawnPot merellePawnPot = mock(MerellePawnPot.class);
+        MerelleBoard merelleBoard = mock(MerelleBoard.class);
+        Pawn pawn = mock(Pawn.class);
+        Model model = mock(Model.class);
+        View view = mock(View.class);
+        MerelleController merelleController = new MerelleController(model, view);
+        when(model.getGameStage()).thenReturn(merelleStageModel);
+        when(merellePawnPot.getElement(anyInt(), anyInt())).thenReturn(pawn);
+        when(merelleStageModel.getBlackPot()).thenReturn(merellePawnPot);
+        when(merelleStageModel.getRedPot()).thenReturn(merellePawnPot);
+        when(merelleStageModel.getBoard()).thenReturn(merelleBoard);
 
 //        Pawn index to small
-        Assertions.assertFalse(merelleController.AccesAnalyseAndPlay("0A1"));
+        assertFalse(merelleController.AccessAnalyseAndPlay("0A1"));
 
 //        The cell is not actif
-        Assertions.assertFalse(merelleController.AccesAnalyseAndPlay("1A2"));
+        assertFalse(merelleController.AccessAnalyseAndPlay("1A2"));
 
 //        The BlackPot is empty for pawn N x
-        Mockito.when(model.getIdPlayer()).thenReturn(0);
-        Mockito.when(merelleStageModel.getStatus()).thenReturn(MerelleGameStatus.PLACING);
-        Mockito.when(merellePawnPot.isEmptyAt(Mockito.anyInt(),Mockito.anyInt())).thenReturn(true);
-        Assertions.assertFalse(merelleController.AccesAnalyseAndPlay("1A1"));
+        when(model.getIdPlayer()).thenReturn(0);
+        when(merelleStageModel.getStatus()).thenReturn(MerelleGameStatus.PLACING);
+        when(merellePawnPot.isEmptyAt(anyInt(), anyInt())).thenReturn(true);
+        assertFalse(merelleController.AccessAnalyseAndPlay("1A1"));
 
 //        The RedPot is not empty for pawn but can not reach the cell
-        Mockito.when(model.getIdPlayer()).thenReturn(1);
-        Mockito.when(merelleStageModel.getStatus()).thenReturn(MerelleGameStatus.PLACING);
-        Mockito.when(merellePawnPot.isEmptyAt(Mockito.anyInt(),Mockito.anyInt())).thenReturn(false);
-        Mockito.when(merelleBoard.canReachCell(Mockito.anyInt(),Mockito.anyInt())).thenReturn(false);
-        Assertions.assertFalse(merelleController.AccesAnalyseAndPlay("1A1"));
+        when(model.getIdPlayer()).thenReturn(1);
+        when(merelleStageModel.getStatus()).thenReturn(MerelleGameStatus.PLACING);
+        when(merellePawnPot.isEmptyAt(anyInt(), anyInt())).thenReturn(false);
+        when(merelleBoard.canReachCell(anyInt(), anyInt())).thenReturn(false);
+        assertFalse(merelleController.AccessAnalyseAndPlay("1A1"));
 
 //        Status 2 : the pawn can not be found
-        Mockito.when(merelleStageModel.getStatus()).thenReturn(MerelleGameStatus.MOVING);
-        Mockito.when(merelleBoard.getPawn(Mockito.anyInt(),Mockito.anyInt())).thenReturn(null);
-        Assertions.assertFalse(merelleController.AccesAnalyseAndPlay("1A1"));
+        when(merelleStageModel.getStatus()).thenReturn(MerelleGameStatus.MOVING);
+        when(merelleBoard.getPawn(anyInt(), anyInt())).thenReturn(null);
+        assertFalse(merelleController.AccessAnalyseAndPlay("1A1"));
 
 //        Status 2 : the pawn has been found
-        Mockito.when(merelleStageModel.getStatus()).thenReturn(MerelleGameStatus.MOVING);
-        Mockito.when(merelleBoard.getPawn(Mockito.anyInt(),Mockito.anyInt())).thenReturn(pawn);
-        Assertions.assertFalse(merelleController.AccesAnalyseAndPlay("1A1"));
+        when(merelleStageModel.getStatus()).thenReturn(MerelleGameStatus.MOVING);
+        when(merelleBoard.getPawn(anyInt(), anyInt())).thenReturn(pawn);
+        assertFalse(merelleController.AccessAnalyseAndPlay("1A1"));
 
 //        The move is possible
-        Mockito.when(model.getIdPlayer()).thenReturn(0);
-        Mockito.when(merelleStageModel.getStatus()).thenReturn(MerelleGameStatus.PLACING);
+        when(model.getIdPlayer()).thenReturn(0);
+        when(merelleStageModel.getStatus()).thenReturn(MerelleGameStatus.PLACING);
 
-        Mockito.when(merelleBoard.canReachCell(Mockito.anyInt(),Mockito.anyInt())).thenReturn(true);
-        Assertions.assertTrue(merelleController.AccesAnalyseAndPlay("1A1"));
+        when(merelleBoard.canReachCell(anyInt(), anyInt())).thenReturn(true);
+        assertTrue(merelleController.AccessAnalyseAndPlay("1A1"));
     }
+
+    @Test
+    public void testMillAnalyseAndPlay() {
+//        Player player = Mockito.mock(Player.class);
+        MerelleStageModel merelleStageModel = mock(MerelleStageModel.class);
+        MerellePawnPot merellePawnPot = mock(MerellePawnPot.class);
+        MerelleBoard merelleBoard = mock(MerelleBoard.class);
+        Pawn pawn = mock(Pawn.class);
+        Model model = mock(Model.class);
+        View view = mock(View.class);
+        MerelleController merelleController = new MerelleController(model, view);
+        when(model.getGameStage()).thenReturn(merelleStageModel);
+        when(merellePawnPot.getElement(anyInt(), anyInt())).thenReturn(pawn);
+        when(merelleStageModel.getBlackPot()).thenReturn(merellePawnPot);
+        when(merelleStageModel.getRedPot()).thenReturn(merellePawnPot);
+        when(merelleStageModel.getBoard()).thenReturn(merelleBoard);
+
+//        The pawn has a non-valid number
+        assertFalse(merelleController.AccessMillAnalyseAndPlay("0"));
+
+//        The pawn number correspond to an unexciting pawn
+        when(merelleBoard.getPawn(anyInt(), anyInt())).thenReturn(null);
+        assertFalse(merelleController.AccessMillAnalyseAndPlay(("1")));
+
+//        The pawn has been recovered, but can not be removed for this mill action
+        when(merelleBoard.getPawn(anyInt(), anyInt())).thenReturn(pawn);
+        when(merelleBoard.canReachCell(anyInt(), anyInt())).thenReturn(false);
+        assertFalse(merelleController.AccessMillAnalyseAndPlay(("1")));
+
+//        The pawn has been recovered, and the player can remove it for this mill action.
+        when(merelleBoard.getPawn(anyInt(), anyInt())).thenReturn(pawn);
+        when(merelleBoard.canReachCell(anyInt(), anyInt())).thenReturn(true);
+        assertTrue(merelleController.AccessMillAnalyseAndPlay(("1")));
+    }
+
 }
