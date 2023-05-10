@@ -2,6 +2,7 @@ package control;
 
 import boardifier.control.ActionPlayer;
 import boardifier.control.Controller;
+import boardifier.control.Decider;
 import boardifier.model.GridElement;
 import boardifier.model.Model;
 import boardifier.model.Player;
@@ -40,7 +41,7 @@ public class MerelleController extends Controller {
         stopStage();
         endGame();
     }
-    
+
     public void nextPlayer() {
         // for the first player, the id of the player is already set, so do not compute it
         if (!firstPlayer) {
@@ -56,7 +57,11 @@ public class MerelleController extends Controller {
         if (p.getType() == Player.COMPUTER) {
             System.out.println("COMPUTER PLAYS");
             // FIXME choose between IntelligentDecider or BasicDecider for this
-            MerelleDecider decider = new MerelleDecider(model, this);
+            Decider decider;
+            if (p.getName() == "computer" || p.getName() == "computer2")
+                decider = new IntelligentDecider(model, this);
+            else
+                decider = new BasicDecider(model, this);
             ActionPlayer play = new ActionPlayer(model, this, decider, null);
             play.start();
         } else {
@@ -119,7 +124,7 @@ public class MerelleController extends Controller {
         if (!MerelleBoard.isActiveCell(col, row)) return false;
 
         int color = model.getIdPlayer();
-        
+
         // collect the pawn from the correct place depending on the game stage
         Pawn pawn = null;
         // first part of the game : the player have to empty the pot
@@ -129,7 +134,7 @@ public class MerelleController extends Controller {
             GridElement pot = null;
             if (color == 0) pot = gameStage.getBlackPot();
             else pot = gameStage.getRedPot();
-            
+
             if (pot.isEmptyAt(pawnIndex, 0)) return false;
             pawn = (Pawn) pot.getElement(pawnIndex, 0);
             gameStage.getBoard().setValidCells(pawn, gameStage.getStatus());

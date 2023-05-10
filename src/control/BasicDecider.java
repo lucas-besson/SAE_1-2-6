@@ -1,8 +1,16 @@
 package control;
 
+import boardifier.control.Controller;
+import boardifier.model.Model;
+
 import java.awt.*;
 
 public class BasicDecider extends MerelleDecider {
+
+    public BasicDecider(Model model, Controller control) {
+        super(model, control);
+    }
+
     /**
      * Dans la phase de placement des pions, analyse et place un pion du pot
      * -- Si l'IA peut completer un moulin, elle le complète.
@@ -11,7 +19,7 @@ public class BasicDecider extends MerelleDecider {
      */
     @Override
     void placePawn() {
-
+        // TODO
     }
 
     /**
@@ -19,7 +27,7 @@ public class BasicDecider extends MerelleDecider {
      */
     @Override
     void movePawn() {
-
+        // TODO
     }
 
     /**
@@ -29,6 +37,7 @@ public class BasicDecider extends MerelleDecider {
      */
     @Override
     Point removePawn(int[][] plateau) {
+        // TODO
         return null;
     }
 }
