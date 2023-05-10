@@ -60,8 +60,7 @@ public class MerelleController extends Controller {
             Decider decider;
             if (p.getName() == "computer" || p.getName() == "computer2")
                 decider = new IntelligentDecider(model, this);
-            else
-                decider = new BasicDecider(model, this);
+            else decider = new BasicDecider(model, this);
             ActionPlayer play = new ActionPlayer(model, this, decider, null);
             play.start();
         } else {
@@ -113,12 +112,12 @@ public class MerelleController extends Controller {
         MerelleStageModel gameStage = (MerelleStageModel) model.getGameStage();
 
         // get the pawn value from the first char
-        int pawnIndex = (int) (line.charAt(0) - '1');
+        int pawnIndex = line.charAt(0) - '1';
         if ((pawnIndex < 0) || (pawnIndex > MerellePawnPot.PAWNS_IN_POT)) return false;
 
         // get the ccords in the board
-        int col = (int) (Character.toUpperCase(line.charAt(1)) - 'A');
-        int row = (int) (line.charAt(2) - '1');
+        int col = Character.toUpperCase(line.charAt(1)) - 'A';
+        int row = line.charAt(2) - '1';
 
         // check if the coordinates are playable
         if (!MerelleBoard.isActiveCell(col, row)) return false;
@@ -163,7 +162,7 @@ public class MerelleController extends Controller {
         MerelleStageModel gameStage = (MerelleStageModel) model.getGameStage();
 
         // get the pawn value from the first char
-        int pawnIndex = (int) (line.charAt(0) - '1');
+        int pawnIndex = line.charAt(0) - '1';
         if ((pawnIndex < 0) || (pawnIndex > MerellePawnPot.PAWNS_IN_POT)) return false;
 
         int color = model.getIdPlayer();

@@ -1,6 +1,8 @@
 package model;
 
-import boardifier.model.*;
+import boardifier.model.GameStageModel;
+import boardifier.model.Model;
+import boardifier.model.StageElementsFactory;
 
 public class MerelleStageModel extends GameStageModel {
 
@@ -22,6 +24,7 @@ public class MerelleStageModel extends GameStageModel {
     public MerelleBoard getBoard() {
         return board;
     }
+
     public void setBoard(MerelleBoard board) {
         this.board = board;
         addGrid(board);
@@ -30,6 +33,7 @@ public class MerelleStageModel extends GameStageModel {
     public MerellePawnPot getBlackPot() {
         return blackPot;
     }
+
     public void setBlackPot(MerellePawnPot blackPot) {
         this.blackPot = blackPot;
         addGrid(blackPot);
@@ -38,6 +42,7 @@ public class MerelleStageModel extends GameStageModel {
     public MerellePawnPot getRedPot() {
         return redPot;
     }
+
     public void setRedPot(MerellePawnPot redPot) {
         this.redPot = redPot;
         addGrid(redPot);
@@ -46,9 +51,10 @@ public class MerelleStageModel extends GameStageModel {
     public Pawn[] getBlackPawns() {
         return blackPawns;
     }
+
     public void setBlackPawns(Pawn[] blackPawns) {
         this.blackPawns = blackPawns;
-        for(int i=0;i<blackPawns.length;i++) {
+        for (int i = 0; i < blackPawns.length; i++) {
             addElement(blackPawns[i]);
         }
     }
@@ -56,34 +62,34 @@ public class MerelleStageModel extends GameStageModel {
     public Pawn[] getRedPawns() {
         return redPawns;
     }
+
     public void setRedPawns(Pawn[] redPawns) {
         this.redPawns = redPawns;
-        for(int i=0;i<redPawns.length;i++) {
+        for (int i = 0; i < redPawns.length; i++) {
             addElement(redPawns[i]);
         }
     }
 
-    public int getStatus(){
+    public int getStatus() {
         if (blackPot.isEmpty() && redPot.isEmpty()) return MerelleGameStatus.MOVING;
         else return MerelleGameStatus.PLACING;
     }
 
     private void setupCallbacks() {
-        onMoveInGrid((element, gridDest, rowDest, colDest)->{
+        onMoveInGrid((element, gridDest, rowDest, colDest) -> {
             ((Pawn) element).setInAMill(false); // FIXME : ne marche pas ?
         });
-        onRemoveFromGrid((element, gridDest, rowDest, colDest)->{
+        onRemoveFromGrid((element, gridDest, rowDest, colDest) -> {
             if (gridDest != board) return;
             Pawn p = (Pawn) element;
             if (p.getColor() == 0) {
                 blackPawnsToPlay--;
-            }
-            else {
+            } else {
                 redPawnsToPlay--;
             }
         });
     }
- 
+
     public boolean isEndStage() {
         MerelleStageModel merelleModel = (MerelleStageModel) model.getGameStage();
 
@@ -95,12 +101,11 @@ public class MerelleStageModel extends GameStageModel {
         if (blackPawnsToPlay == 2) {
             model.setIdWinner(1);
             model.stopStage();
-        }
-        else if (redPawnsToPlay == 2){
+        } else if (redPawnsToPlay == 2) {
             model.setIdWinner(0);
             model.stopStage();
-        };
-        return ((Model)model).isEndStage();
+        }
+        return model.isEndStage();
     }
 
     @Override

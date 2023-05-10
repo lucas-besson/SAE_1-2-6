@@ -100,12 +100,9 @@ public class IntelligentDecider extends MerelleDecider {
 
     int minimax(int[][] previousGrid, int[][] actualGrid, boolean isMaximizing, int depth) {
         int result = checkWinner(actualGrid);
-        if (result == model.getIdPlayer())
-            return 1;
-        else if (result == (model.getIdPlayer() + 1) % 2)
-            return -1;
-        else if (depth > 2000 || result == 2)
-            return 0;
+        if (result == model.getIdPlayer()) return 1;
+        else if (result == (model.getIdPlayer() + 1) % 2) return -1;
+        else if (depth > 2000 || result == 2) return 0;
 
         int playerColor = isMaximizing ? model.getIdPlayer() : (model.getIdPlayer() + 1) % 2;
 

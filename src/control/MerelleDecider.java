@@ -45,15 +45,7 @@ public abstract class MerelleDecider extends Decider {
     }
 
     static void main(String[] args) {
-        int[][] previousGrid = new int[][]{
-                {0, 2, 2, 1, 2, 2, 0},
-                {2, 0, 2, 2, 2, 0, 2},
-                {2, 2, 0, 1, 0, 2, 2},
-                {1, 2, 1, 2, 1, 2, 1},
-                {2, 2, 0, 1, 0, 2, 2},
-                {2, 0, 2, 2, 2, 0, 2},
-                {0, 2, 2, 1, 2, 2, 0}
-        };
+        int[][] previousGrid = new int[][]{{0, 2, 2, 1, 2, 2, 0}, {2, 0, 2, 2, 2, 0, 2}, {2, 2, 0, 1, 0, 2, 2}, {1, 2, 1, 2, 1, 2, 1}, {2, 2, 0, 1, 0, 2, 2}, {2, 0, 2, 2, 2, 0, 2}, {0, 2, 2, 1, 2, 2, 0}};
 
 //        System.out.println(MerelleDecider.getFreePoints(previousGrid));
 //        System.out.println(MerelleDecider.hasMill(1, 3, previousGrid, 1));
@@ -330,8 +322,7 @@ public abstract class MerelleDecider extends Decider {
     List<Point> getUncompletedMillsForPlayer(int couleurJoueur, int[][] grid) {
         List<Point> emptyCellsForMill = new ArrayList<>();
 
-        if (model.getIdPlayer() == 1)
-            return emptyCellsForMill;
+        if (model.getIdPlayer() == 1) return emptyCellsForMill;
 
         // Pour chaque case vide
         for (Point caseVide : getFreePoints(grid)) {
@@ -359,8 +350,7 @@ public abstract class MerelleDecider extends Decider {
                 for (int[] position : mill) {
                     int pawnX = position[0];
                     int pawnY = position[1];
-                    if (grid[pawnX][pawnY] == playerId)
-                        count++;
+                    if (grid[pawnX][pawnY] == playerId) count++;
                 }
                 if (count == 3) {
                     return true;
@@ -379,8 +369,7 @@ public abstract class MerelleDecider extends Decider {
      */
     boolean contains(int[][] millToCheck, int[] position) {
         for (int[] millPoint : millToCheck) {
-            if (millPoint[0] == position[0] && millPoint[1] == position[1])
-                return true;
+            if (millPoint[0] == position[0] && millPoint[1] == position[1]) return true;
         }
         return false;
     }
