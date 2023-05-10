@@ -21,13 +21,13 @@ public class MerelleStageModelUnitTest {
         Mockito.when(model.getGameStage()).thenReturn(merelleStageModel);
         merelleStageModel.setBoard(merelleBoard);
         merelleStageModel.setBlackPot(merellePawnPot);
-        merelleStageModel.isEndStage();
+//        merelleStageModel.isEndStage();
 
         //Premier if :
         Mockito.when(model.getIdPlayer()).thenReturn(3);
         Mockito.when(merelleBoard.availableMoves(Mockito.anyInt(),Mockito.anyInt())).thenReturn(0);
-        Mockito.verify(model,Mockito.times(2)).getIdPlayer();
         merelleStageModel.isEndStage();
+        Mockito.verify(model,Mockito.times(2)).getIdPlayer();
 
         // Deuxieme IF :
         Mockito.when(merelleBoard.availableMoves(Mockito.anyInt(),Mockito.anyInt())).thenReturn(2);
@@ -43,6 +43,7 @@ public class MerelleStageModelUnitTest {
 
         // Troisème IF :
         Mockito.when(merelleBoard.availableMoves(Mockito.anyInt(),Mockito.anyInt())).thenReturn(2);
+        merelleStageModel.removedFromGrid(new Pawn(1,0,merelleStageModel), merelleBoard,0,0);
         merelleStageModel.removedFromGrid(new Pawn(1,1,merelleStageModel), merelleBoard,0,0);
         merelleStageModel.removedFromGrid(new Pawn(1,1,merelleStageModel), merelleBoard,0,0);
         merelleStageModel.removedFromGrid(new Pawn(1,1,merelleStageModel), merelleBoard,0,0);

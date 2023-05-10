@@ -1,20 +1,11 @@
-import boardifier.control.ActionPlayer;
-import boardifier.model.GameElement;
 import boardifier.model.GameStageModel;
-import boardifier.model.action.ActionList;
-import boardifier.model.action.GameAction;
-import boardifier.model.action.MoveAction;
 import model.MerelleBoard;
 import model.Pawn;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnit;
 
-import java.awt.*;
 
 public class MerelleBoardUnitTest {
 
@@ -44,7 +35,7 @@ public class MerelleBoardUnitTest {
 
     @Test
     public void testgetPawnABF() {
-        Assertions.assertNull(board.getPawn(Mockito.anyInt(), Mockito.anyInt()));
+        Assertions.assertNull(board.getPawn(1, 1));
     }
 
     @Test
