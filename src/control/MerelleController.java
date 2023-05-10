@@ -10,11 +10,7 @@ import boardifier.model.action.GameAction;
 import boardifier.model.action.MoveAction;
 import boardifier.model.action.RemoveAction;
 import boardifier.view.View;
-import model.MerelleBoard;
-import model.MerelleGameStatus;
-import model.MerellePawnPot;
-import model.MerelleStageModel;
-import model.Pawn;
+import model.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -59,6 +55,7 @@ public class MerelleController extends Controller {
 
         if (p.getType() == Player.COMPUTER) {
             System.out.println("COMPUTER PLAYS");
+            // FIXME choose between IntelligentDecider or BasicDecider for this
             MerelleDecider decider = new MerelleDecider(model, this);
             ActionPlayer play = new ActionPlayer(model, this, decider, null);
             play.start();
