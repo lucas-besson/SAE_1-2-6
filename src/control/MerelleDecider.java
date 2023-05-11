@@ -35,6 +35,7 @@ public abstract class MerelleDecider extends Decider {
 
     static List<Point> getFreePoints(int[][] grid) {
         ArrayList<Point> lst = new ArrayList<>();
+        //        INPROGRESS : changer les doubles boucles for en boucle for (int[] cell : ACTIVECELLS)
         for (int col = 0; col < grid.length; col++) {
             for (int row = 0; row < grid[col].length; row++) {
                 if (MerelleBoard.isActiveCell(row, col) && grid[col][row] == 2)
@@ -100,6 +101,7 @@ public abstract class MerelleDecider extends Decider {
      */
     void initGridTable() {
         grid = new int[MerelleBoard.GRIDNBCOLS][MerelleBoard.GRIDNBROWS];
+//        INPROGRESS : changer les doubles boucles for en boucle for (int[] cell : ACTIVECELLS)
         for (int col = 0; col < grid.length; col++) {
             for (int row = 0; row < grid[col].length; row++) {
                 if (model.getGrid("merelleboard").getElements(row, col).isEmpty())
@@ -160,7 +162,7 @@ public abstract class MerelleDecider extends Decider {
      */
     List<Point> getPlayerPawnList(int playerColor, int[][] grid) {
         List<Point> playerPawnList = new ArrayList<>();
-
+//        INPROGRESS : changer les doubles boucles for en boucle for (int[] cell : ACTIVECELLS)
         for (int col = 0; col < grid.length; col++) {
             for (int row = 0; row < grid[col].length; row++) {
                 if (grid[col][row] == playerColor) playerPawnList.add(new Point(col, row));
@@ -322,7 +324,7 @@ public abstract class MerelleDecider extends Decider {
     List<Point> getUncompletedMillsForPlayer(int couleurJoueur, int[][] grid) {
         List<Point> emptyCellsForMill = new ArrayList<>();
 
-        if (model.getIdPlayer() == 1) return emptyCellsForMill;
+//        if (model.getIdPlayer() == 1) return emptyCellsForMill;
 
         // Pour chaque case vide
         for (Point caseVide : getFreePoints(grid)) {

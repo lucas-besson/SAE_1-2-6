@@ -46,6 +46,9 @@ public class IntelligentDecider extends MerelleDecider {
         actions.addSingleAction(move);
 
         // Si un moulin est completé
+        System.out.println(needToRemoveAPawn);
+
+        // FIXME : Le decider retourne un element null a enlever
         if (needToRemoveAPawn) {
             grid[destPoint.x][destPoint.y] = model.getIdPlayer();
             actions.addSingleAction(removePawnAction(grid));
@@ -172,7 +175,11 @@ public class IntelligentDecider extends MerelleDecider {
             }
         }
         if (meilleurPion == null) {
+
             meilleurPion = getPlayerPawnList(model.getIdPlayer() + 1 % 2, plateau).get(0);
+//            FIXME : le pion retourner à des coordoné inéxistant
+            System.out.println(meilleurPion);
+
         }
         return meilleurPion; // Retourne l'objet Point qui représente la position du pion à retirer, ou null si aucun pion ne peut être retiré
     }
