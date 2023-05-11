@@ -2,6 +2,7 @@ package control;
 
 import boardifier.control.ActionPlayer;
 import boardifier.control.Controller;
+import boardifier.control.Decider;
 import boardifier.model.GridElement;
 import boardifier.model.Model;
 import boardifier.model.Player;
@@ -10,11 +11,7 @@ import boardifier.model.action.GameAction;
 import boardifier.model.action.MoveAction;
 import boardifier.model.action.RemoveAction;
 import boardifier.view.View;
-import model.MerelleBoard;
-import model.MerelleGameStatus;
-import model.MerellePawnPot;
-import model.MerelleStageModel;
-import model.Pawn;
+import model.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -52,7 +49,6 @@ public class MerelleController extends Controller {
      * If the last move made by the player created a new mill, prompts the player to remove an opposing pawn.
      * @throws  if the game is over and there is no winner.
      */
-
     public void nextPlayer() {
         // for the first player, the id of the player is already set, so do not compute it
         if (!firstPlayer) {
@@ -67,7 +63,11 @@ public class MerelleController extends Controller {
 
         if (p.getType() == Player.COMPUTER) {
             System.out.println("COMPUTER PLAYS");
-            MerelleDecider decider = new MerelleDecider(model, this);
+            // FIXME choose between IntelligentDecider or BasicDecider for this
+            Decider decider;
+            if (p.getName() == "computer" || p.getName() == "computer2")
+                decider = new IntelligentDecider(model, this);
+            else decider = new BasicDecider(model, this);
             ActionPlayer play = new ActionPlayer(model, this, decider, null);
             play.start();
         }
@@ -128,12 +128,12 @@ public class MerelleController extends Controller {
         MerelleStageModel gameStage = (MerelleStageModel) model.getGameStage();
 
         // get the pawn value from the first char
-        int pawnIndex = (int) (line.charAt(0) - '1');
+        int pawnIndex = line.charAt(0) - '1';
         if ((pawnIndex < 0) || (pawnIndex > MerellePawnPot.PAWNS_IN_POT)) return false;
 
         // get the ccords in the board
-        int col = (int) (Character.toUpperCase(line.charAt(1)) - 'A');
-        int row = (int) (line.charAt(2) - '1');
+        int col = Character.toUpperCase(line.charAt(1)) - 'A';
+        int row = line.charAt(2) - '1';
 
         // check if the coordinates are playable
         if (!MerelleBoard.isActiveCell(col, row)) return false;
@@ -187,7 +187,7 @@ public class MerelleController extends Controller {
         MerelleStageModel gameStage = (MerelleStageModel) model.getGameStage();
 
         // get the pawn value from the first char
-        int pawnIndex = (int) (line.charAt(0) - '1');
+        int pawnIndex = line.charAt(0) - '1';
         if ((pawnIndex < 0) || (pawnIndex > MerellePawnPot.PAWNS_IN_POT)) return false;
 
         int color = model.getIdPlayer();

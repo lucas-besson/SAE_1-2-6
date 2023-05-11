@@ -2,51 +2,66 @@ package control;
 
 import boardifier.control.Controller;
 import boardifier.control.Decider;
-import boardifier.model.GameElement;
 import boardifier.model.Model;
 import boardifier.model.action.ActionList;
-import boardifier.model.action.MoveAction;
+import boardifier.model.action.RemoveAction;
 import model.*;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
-public class MerelleDecider extends Decider {
 
-    private MerelleStageModel stage;
-    private MerelleBoard board;
-    private MerellePawnPot AIpot;
+public abstract class MerelleDecider extends Decider {
+
+    MerelleStageModel stage;
+    MerelleBoard board;
+    MerellePawnPot aIpot;
 
     ActionList actions = new ActionList(true);
-    private Pawn pawnToMove;
-    private Point destPoint;
-
-    private boolean needToRemovePawn;
+    Pawn pawnToMove;
+    Point destPoint;
 
     Random rand = new Random();
-    private static final Random loto = new Random(Calendar.getInstance().getTimeInMillis());
+    int[][] grid;
+    int[][] secondGrid;
 
     public MerelleDecider(Model model, Controller control) {
         super(model, control);
+        stage = (MerelleStageModel) model.getGameStage();
+        board = stage.getBoard();// get the board
+    }
+
+    static List<Point> getFreePoints(int[][] grid) {
+        ArrayList<Point> lst = new ArrayList<>();
+        for (int col = 0; col < grid.length; col++) {
+            for (int row = 0; row < grid[col].length; row++) {
+                if (MerelleBoard.isActiveCell(row, col) && grid[col][row] == 2)
+                    lst.add(new Point(col, row));
+            }
+        }
+        return lst;
+    }
+
+    static void main(String[] args) {
+        int[][] previousGrid = new int[][]{{0, 2, 2, 1, 2, 2, 0}, {2, 0, 2, 2, 2, 0, 2}, {2, 2, 0, 1, 0, 2, 2}, {1, 2, 1, 2, 1, 2, 1}, {2, 2, 0, 1, 0, 2, 2}, {2, 0, 2, 2, 2, 0, 2}, {0, 2, 2, 1, 2, 2, 0}};
+
+//        System.out.println(MerelleDecider.getFreePoints(previousGrid));
+//        System.out.println(MerelleDecider.hasMill(1, 3, previousGrid, 1));
+//        System.out.println(MerelleDecider.hasMill(3, 1, previousGrid, 1));
+//        System.out.println(MerelleDecider.hasMill(3, 5, previousGrid, 1));
+//        System.out.println(MerelleDecider.hasMill(5, 3, previousGrid, 1));
     }
 
     @Override
     public ActionList decide() {
-        // do a cast get a variable of the real type to get access to the attributes of MerelleStageModel
-        stage = (MerelleStageModel) model.getGameStage();
-        board = stage.getBoard(); // get the board
+
+        initGridTable();
 
         // Prends le bon pot de pions
-        if (model.getIdPlayer() == Pawn.PAWN_BLACK)
-            AIpot = stage.getBlackPot();
-        else
-            AIpot = stage.getRedPot();
-
-        GameElement pawnToMove = null; // the pawn that is moved
-        needToRemovePawn = false;
+        if (model.getIdPlayer() == Pawn.PAWN_BLACK) aIpot = stage.getBlackPot();
+        else aIpot = stage.getRedPot();
 
         if (stage.getStatus() == MerelleGameStatus.PLACING) {
             placePawn();
@@ -60,134 +75,282 @@ public class MerelleDecider extends Decider {
         return null;
     }
 
+
     /**
      * Dans la phase de placement des pions, analyse et place un pion du pot
      * -- Si l'IA peut completer un moulin, elle le complète.
      * -- Sinon si l'autre joueur peut completer un moulin, elle le bloque
      * -- Sinon elle choisit une case et pose le pion.
      */
-    private void placePawn() {
-        List<Point> millsToComplete = getUncompletedMillsForPlayer(model.getIdPlayer(), board);
-        // Si l'IA peut complèter un moulin, elle le complète
-        if (!millsToComplete.isEmpty()) {
-            int selectedPoint = rand.nextInt(millsToComplete.size());
-            destPoint = new Point(millsToComplete.get(selectedPoint).x, millsToComplete.get(selectedPoint).y);
-        } else {
-            millsToComplete = getUncompletedMillsForPlayer(model.getIdPlayer() == 1 ? 0 : 1, board);
-            // Si l'IA ne peut pas completer de moulin alors on vérifie si l'autre joueur peut : on le bloque
-            if (!millsToComplete.isEmpty()) {
-                int selectedPoint = rand.nextInt(millsToComplete.size());
-                destPoint = new Point(millsToComplete.get(selectedPoint).x, millsToComplete.get(selectedPoint).y);
-            } else {
-                // Sinon on remplit une case aléatoirement
-                List<Point> casesVides = board.computeValidCells(null, 1);
-                destPoint = casesVides.get(rand.nextInt(casesVides.size()));
+    abstract void placePawn();
+
+    /**
+     * Dans la phase de déplacements des pions, analyse et déplace un pion du jeu
+     */
+    abstract void movePawn();
+
+    /**
+     * Algorithme qui vérifie le meilleur pion à supprimer (par ex. empecher l'autre joueur de finir un moulin...)
+     */
+    abstract Point removePawn(int[][] plateau);
+
+
+    /**
+     * Convertit la board en tableau 2D
+     */
+    void initGridTable() {
+        grid = new int[MerelleBoard.GRIDNBCOLS][MerelleBoard.GRIDNBROWS];
+        for (int col = 0; col < grid.length; col++) {
+            for (int row = 0; row < grid[col].length; row++) {
+                if (model.getGrid("merelleboard").getElements(row, col).isEmpty())
+                    grid[col][row] = 2;
+                else {
+                    grid[col][row] = ((Pawn) model.getGrid("merelleboard").getElements(row, col).get(0)).getColor();
+                }
             }
         }
-
-        pawnToMove = selectNextInPot();
-        MoveAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x);
-        actions.addSingleAction(move);
     }
 
+    /**
+     * Retourne une liste de déplacements possibles d'un pion
+     *
+     * @param point Pion à déplacer
+     * @return Liste de Point ou ce pion peut etre déplacé
+     */
+    List<Point> computeValidCells(Point point) {
+        ArrayList<Point> lst = new ArrayList<>();
+        int[][][] jumpTable = {{{3, 3}, {}, {}, {3, 1}, {}, {}, {3, 3}}, {{}, {2, 2}, {}, {2, 1}, {}, {2, 2}, {}}, {{}, {}, {1, 1}, {1, 1}, {1, 1}, {}, {}}, {{1, 3}, {1, 2}, {1, 1}, {}, {1, 1}, {1, 2}, {1, 3}}, {{}, {}, {1, 1}, {1, 1}, {1, 1}, {}, {}}, {{}, {2, 2}, {}, {2, 1}, {}, {2, 2}, {}}, {{3, 3}, {}, {}, {3, 1}, {}, {}, {3, 3}}};
+
+        int jumpX = jumpTable[point.x][point.y][0];
+        int jumpY = jumpTable[point.x][point.y][1];
+
+        int[][] offsetTable = {{0, -jumpY}, {-jumpX, 0}, {jumpX, 0}, {0, jumpY}};
+
+        for (int[] offsetCoords : offsetTable) {
+            int newX = point.x + offsetCoords[0]; //col
+            int newY = point.y + offsetCoords[1]; //row
+
+            if (!MerelleBoard.isActiveCell(newX, newY))
+                continue; // Do nothing if the cell is unreachable
+
+            if (grid[newX][newY] == 2) {
+                lst.add(new Point(newX, newY));
+            }
+        }
+        return lst;
+    }
 
     /**
      * Selectionne le pion suivant dans le pot de pions
      *
      * @return Pion suivant
      */
-    private Pawn selectNextInPot() {
+    Pawn selectNextInPot() {
         int i = 0;
-        while (i < MerellePawnPot.PAWNS_IN_POT && AIpot.getElement(i, 0) == null)
-            i++;
-        return (Pawn) AIpot.getElement(i, 0);
+        while (i < MerellePawnPot.PAWNS_IN_POT && aIpot.getElement(i, 0) == null) i++;
+        return (Pawn) aIpot.getElement(i, 0);
     }
-
 
     /**
-     * Dans la phase de déplacements des pions, analyse et déplace un pion du jeu
+     * Construit une liste de points des Pawn du joueur passé en paramètres.
+     *
+     * @param playerColor Couleur du joueur à récuperer les pions
+     * @param grid        Tableau 2D de la grille actuelle (2: null or not active)
+     * @return Liste de pions du joueur (Point(x, y))
      */
-    private void movePawn() {
-        System.exit(100);
-//        // INPROGRESS pour chaque pions du joueur actuel (IA), créer tous les déplacement possibles et utiliser minimax() pour etudier les scores futurs
-//        int playerColor = model.getIdPlayer();
-//        int bestScore = Integer.MIN_VALUE;
-//        MoveAction bestMove;
-//
-//        for (Pawn pawn : getPlayerPawnList(playerColor)) {
-//            for (Point positionsToMove : board.computeValidCells(pawn, MerelleGameStatus.MOVING)) {
-//                // TODO Faire le mouvement
-//                int score = minimax(board);
-//                // TODO Annuler le mouvement
-//                if (score > bestScore) {
-//                    bestScore = score;
-//                    bestMove = move; // TODO Assigner le meilleur mouvememnt
-//                }
-//            }
-//        }
-    }
+    List<Point> getPlayerPawnList(int playerColor, int[][] grid) {
+        List<Point> playerPawnList = new ArrayList<>();
 
-    private List<Pawn> getPlayerPawnList(int playerColor) {
-        List<Pawn> playerPawnList = new ArrayList<>();
-        for (int i = 0; i < MerellePawnPot.PAWNS_IN_POT; i++) {
-            Pawn pawn = (Pawn) board.getPawn(i, playerColor);
-            if (pawn != null) {
-                playerPawnList.add(pawn);
+        for (int col = 0; col < grid.length; col++) {
+            for (int row = 0; row < grid[col].length; row++) {
+                if (grid[col][row] == playerColor) playerPawnList.add(new Point(col, row));
             }
         }
         return playerPawnList;
     }
 
-    private int minimax(MerelleBoard board) {
-        return 0;
+
+    /**
+     * Retourne le vainqueur du tour, 2 si aucun vainqueur
+     *
+     * @param actualGrid grille à vérifier
+     * @return idPlayer that wins
+     */
+    int checkWinner(int[][] actualGrid) {
+        if (getPlayerPawnList(model.getIdPlayer(), actualGrid).size() < 3)
+            return model.getIdPlayer();
+        if (getPlayerPawnList((model.getIdPlayer() + 1) % 2, actualGrid).size() < 3)
+            return (model.getIdPlayer() + 1) % 2;
+        return 2;
     }
 
-    private void removePawn() {
 
+    /**
+     * Check if a new mill is present between the two grids in parameters, for the player set in parameters
+     *
+     * @param previousGrid Grille précédente
+     * @param actualGrid   Nouvelle grille
+     * @param playerColor  Couleur du joueur
+     * @return vrai ou faux si oui ou non il y a nouveau moulin
+     */
+    boolean isNewMill(int[][] previousGrid, int[][] actualGrid, int playerColor) {
+        for (int[][] mill : MerelleBoard.MILLS) {
+            int x1 = mill[0][0];
+            int y1 = mill[0][1];
+            int x2 = mill[1][0];
+            int y2 = mill[1][1];
+            int x3 = mill[2][0];
+            int y3 = mill[2][1];
+
+            // Vérifier si les 3 positions du mill sont occupées par le joueur actuel
+            if (actualGrid[x1][y1] == actualGrid[x2][y2] && actualGrid[x2][y2] == actualGrid[x3][y3] && actualGrid[x1][y1] == playerColor) {
+
+                // Vérifier si le joueur n'occupait pas les 3 positions du mill avant
+                if (previousGrid[x1][y1] != actualGrid[x1][y1] || previousGrid[x2][y2] != actualGrid[x2][y2] || previousGrid[x3][y3] != actualGrid[x3][y3])
+                    return true;
+            }
+        }
+        return false;
     }
 
+    /**
+     * Vérifie si en placant le pion en (x,y)
+     *
+     * @param x
+     * @param y
+     * @param plateau
+     * @return
+     */
+    boolean canMakeMill(int x, int y, int[][] plateau) {
+        int joueur = plateau[x][y];
+        for (int i = 0; i < 3; i++) {
+            if (plateau[x][(y + i) % 3] != joueur) {
+                break;
+            }
+            if (i == 2) {
+                return true;
+            }
+        }
+        for (int i = 0; i < 3; i++) {
+            if (plateau[(x + i) % 3][y] != joueur) {
+                break;
+            }
+            if (i == 2) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Méthode pour compter le nombre de moulins pour un pion donné
+     *
+     * @param x
+     * @param y
+     * @param plateau
+     * @return
+     */
+    int millsCount(int x, int y, int[][] plateau) {
+        int moulins = 0;
+        int joueur = plateau[x][y];
+        if (joueur == 0) {
+            return 0;
+        }
+        // Vérifie les moulins horizontaux et verticaux
+        if (plateau[x][(y + 1) % 3] == joueur && plateau[x][(y + 2) % 3] == joueur) {
+            moulins++;
+        }
+        if (plateau[(x + 1) % 3][y] == joueur && plateau[(x + 2) % 3][y] == joueur) {
+            moulins++;
+        }
+        // Vérifie les moulins diagonaux
+        if ((x == 0 && y == 0) || (x == 1 && y == 1) || (x == 2 && y == 2)) {
+            if (plateau[(x + 1) % 3][(y + 1) % 3] == joueur && plateau[(x + 2) % 3][(y + 2) % 3] == joueur) {
+                moulins++;
+            }
+        }
+        if ((x == 0 && y == 2) || (x == 1 && y == 1) || (x == 2 && y == 0)) {
+            if (plateau[(x + 1) % 3][(y + 2) % 3] == joueur && plateau[(x + 2) % 3][(y + 1) % 3] == joueur) {
+                moulins++;
+            }
+        }
+        return moulins;
+    }
+
+    /**
+     * TODO: Doit retourner le nombre de pions adverse pour une liste donnée en entrée
+     * @return
+     */
+//    private int nb_pawn_op(ArrayList<Point> positions, int[][] actualGrid) {
+//        int pawnNumber = 0;
+//        for(Point position : positions) {
+//            if(board.getFirstElement(position.getLocation().x, position.getLocation().y).)
+//        }
+//        return pawnNumber;
+//    }
+
+    /**
+     * Retourne le meilleure RemoveAction à effectuer pour la grille actuelle.
+     *
+     * @param actualGrid
+     * @return RemoveAction à effectuer par le joueur actuel
+     */
+    RemoveAction removePawnAction(int[][] actualGrid) {
+        Point pawnToRemove = removePawn(actualGrid);
+        assert pawnToRemove != null;
+        return new RemoveAction(model, board.getFirstElement(pawnToRemove.y, pawnToRemove.x));
+    }
+
+//    /**
+//     * TODO: Doit retourner Vrai si un moulin est faisable à la position entré en paramètre sinon False
+//     *
+//     * @param position
+//     * @param actualGrid
+//     * @return
+//     */
+//    boolean getPossibleMills(Point position, int[][] actualGrid) {
+//        return false;
+//    }
 
     /**
      * Analyse les moulins qui sont prêts à etre validés (dont il reste qu'un pion pour valider le moulin)
      *
      * @param couleurJoueur Couleur du joueur a analyser les moulins
-     * @param board
+     * @param grid
      * @return Liste des cases à remplir pour faire un moulin
      */
-    private List<Point> getUncompletedMillsForPlayer(int couleurJoueur, MerelleBoard board) {
+    List<Point> getUncompletedMillsForPlayer(int couleurJoueur, int[][] grid) {
         List<Point> emptyCellsForMill = new ArrayList<>();
 
-        for (Point caseVide : board.computeValidCells(null, 1)) {
-            if (hasMill(caseVide.x, caseVide.y, board, MerelleBoard.MILLS, couleurJoueur))
+        if (model.getIdPlayer() == 1) return emptyCellsForMill;
+
+        // Pour chaque case vide
+        for (Point caseVide : getFreePoints(grid)) {
+            // Si en placant un pion de la couleur indiquée on fait un moulin, on ajoute le pion à la liste
+            if (hasMill(caseVide.x, caseVide.y, grid, couleurJoueur))
                 emptyCellsForMill.add(caseVide);
         }
+
         return emptyCellsForMill;
     }
 
     /**
-     * Vérifie si en plaçant le pion en (x, y) on crée un moulin
+     * Vérifie si en plaçant le pion en (col, row) on crée un moulin
      *
-     * @param x        position x du pion à verifier
-     * @param y        position y du pion à verifier
-     * @param board    etat actuel du plateau
-     * @param mills    liste des moulins possibles
-     * @param playerId
-     * @return vrai si avec cette combinaison (x, y) un moulin sera créé
+     * @param col      position col du pion à verifier
+     * @param row      position y du pion à verifier
+     * @param grid     etat actuel du plateau
+     * @param playerId id du joueur qui place le pion
+     * @return vrai si avec cette combinaison (col, y) un moulin sera créé
      */
-    private boolean hasMill(int x, int y, MerelleBoard board, int[][][] mills, int playerId) {
-        for (int[][] mill : mills) {
-            if (contains(mill, new int[]{x, y})) {
+    boolean hasMill(int col, int row, int[][] grid, int playerId) {
+        for (int[][] mill : MerelleBoard.MILLS) {
+            if (contains(mill, new int[]{col, row})) {
                 int count = 1;
                 for (int[] position : mill) {
-                    int pawnY = position[0];
-                    int pawnX = position[1];
-                    Pawn pawn = (Pawn) board.getFirstElement(pawnX, pawnY);
-                    if (pawn == null)
-                        break;
-                    if (pawn.getColor() == playerId) {
-                        return false;
-                    }
-                    count++;
+                    int pawnX = position[0];
+                    int pawnY = position[1];
+                    if (grid[pawnX][pawnY] == playerId) count++;
                 }
                 if (count == 3) {
                     return true;
@@ -197,20 +360,19 @@ public class MerelleDecider extends Decider {
         return false;
     }
 
-
     /**
      * Vérifie que les coordonnées données sont contenues dans la combinaison de coordonnées (moulin) fourni
      *
-     * @param mill     moulin à vérifier
-     * @param position position à vérifier
+     * @param millToCheck moulin à vérifier
+     * @param position    position à vérifier
      * @return vrai si la position est contenue dans le moulin
      */
-    private boolean contains(int[][] mill, int[] position) {
-        for (int[] p : mill) {
-            if (p[0] == position[0] && p[1] == position[1]) {
-                return true;
-            }
+    boolean contains(int[][] millToCheck, int[] position) {
+        for (int[] millPoint : millToCheck) {
+            if (millPoint[0] == position[0] && millPoint[1] == position[1]) return true;
         }
         return false;
     }
 }
+
+
