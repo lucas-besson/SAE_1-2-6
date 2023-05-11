@@ -62,10 +62,10 @@ public class MerelleController extends Controller {
         MerelleStageModel merelleModel = (MerelleStageModel) model.getGameStage();
 
         if (p.getType() == Player.COMPUTER) {
-            System.out.println("COMPUTER PLAYS");
+            System.out.println(p.getName() + " PLAYS");
             // FIXME choose between IntelligentDecider or BasicDecider for this
             Decider decider;
-            if (p.getName() == "computer" || p.getName() == "computer2")
+            if (p.getName() == "computer" || p.getName() == "computer1")
                 decider = new IntelligentDecider(model, this);
             else decider = new BasicDecider(model, this);
             ActionPlayer play = new ActionPlayer(model, this, decider, null);

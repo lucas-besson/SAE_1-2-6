@@ -33,26 +33,19 @@ public abstract class MerelleDecider extends Decider {
         board = stage.getBoard();// get the board
     }
 
+    /**
+     * Retourne les cases vides, actives
+     *
+     * @param grid situation actuelle du jeu
+     * @return liste de Point de cases vides et actives
+     */
     static List<Point> getFreePoints(int[][] grid) {
         ArrayList<Point> lst = new ArrayList<>();
         //        INPROGRESS : changer les doubles boucles for en boucle for (int[] cell : ACTIVECELLS)
-        for (int col = 0; col < grid.length; col++) {
-            for (int row = 0; row < grid[col].length; row++) {
-                if (MerelleBoard.isActiveCell(row, col) && grid[col][row] == 2)
-                    lst.add(new Point(col, row));
-            }
-        }
+        for (int[] activePoint : MerelleBoard.ACTIVECELLS)
+            if (grid[activePoint[0]][activePoint[1]] == 2)
+                lst.add(new Point(activePoint[0], activePoint[1]));
         return lst;
-    }
-
-    static void main(String[] args) {
-        int[][] previousGrid = new int[][]{{0, 2, 2, 1, 2, 2, 0}, {2, 0, 2, 2, 2, 0, 2}, {2, 2, 0, 1, 0, 2, 2}, {1, 2, 1, 2, 1, 2, 1}, {2, 2, 0, 1, 0, 2, 2}, {2, 0, 2, 2, 2, 0, 2}, {0, 2, 2, 1, 2, 2, 0}};
-
-//        System.out.println(MerelleDecider.getFreePoints(previousGrid));
-//        System.out.println(MerelleDecider.hasMill(1, 3, previousGrid, 1));
-//        System.out.println(MerelleDecider.hasMill(3, 1, previousGrid, 1));
-//        System.out.println(MerelleDecider.hasMill(3, 5, previousGrid, 1));
-//        System.out.println(MerelleDecider.hasMill(5, 3, previousGrid, 1));
     }
 
     @Override
@@ -78,26 +71,23 @@ public abstract class MerelleDecider extends Decider {
 
 
     /**
-     * Dans la phase de placement des pions, analyse et place un pion du pot
-     * -- Si l'IA peut completer un moulin, elle le complète.
-     * -- Sinon si l'autre joueur peut completer un moulin, elle le bloque
-     * -- Sinon elle choisit une case et pose le pion.
+     * Dans la phase de placement des pions, analyse et place un pion du pot -- Methode abstraite, à redéfinir.
      */
     abstract void placePawn();
 
     /**
-     * Dans la phase de déplacements des pions, analyse et déplace un pion du jeu
+     * Dans la phase de déplacements des pions, analyse et déplace un pion du jeu  -- Methode abstraite, à redéfinir.
      */
     abstract void movePawn();
 
     /**
-     * Algorithme qui vérifie le meilleur pion à supprimer (par ex. empecher l'autre joueur de finir un moulin...)
+     * Algorithme qui vérifie le meilleur pion à supprimer  -- Methode abstraite, à redéfinir.
      */
     abstract Point removePawn(int[][] plateau);
 
 
     /**
-     * Convertit la board en tableau 2D
+     * Actualise la grid avec le statut actuel de MerelleBoard
      */
     void initGridTable() {
         grid = new int[MerelleBoard.GRIDNBCOLS][MerelleBoard.GRIDNBROWS];
@@ -163,27 +153,11 @@ public abstract class MerelleDecider extends Decider {
     List<Point> getPlayerPawnList(int playerColor, int[][] grid) {
         List<Point> playerPawnList = new ArrayList<>();
 //        INPROGRESS : changer les doubles boucles for en boucle for (int[] cell : ACTIVECELLS)
-        for (int col = 0; col < grid.length; col++) {
-            for (int row = 0; row < grid[col].length; row++) {
-                if (grid[col][row] == playerColor) playerPawnList.add(new Point(col, row));
-            }
+        for (int[] activePoint : MerelleBoard.ACTIVECELLS) {
+            if (grid[activePoint[0]][activePoint[1]] == playerColor)
+                playerPawnList.add(new Point(activePoint[0], activePoint[1]));
         }
         return playerPawnList;
-    }
-
-
-    /**
-     * Retourne le vainqueur du tour, 2 si aucun vainqueur
-     *
-     * @param actualGrid grille à vérifier
-     * @return idPlayer that wins
-     */
-    int checkWinner(int[][] actualGrid) {
-        if (getPlayerPawnList(model.getIdPlayer(), actualGrid).size() < 3)
-            return model.getIdPlayer();
-        if (getPlayerPawnList((model.getIdPlayer() + 1) % 2, actualGrid).size() < 3)
-            return (model.getIdPlayer() + 1) % 2;
-        return 2;
     }
 
 
@@ -216,7 +190,7 @@ public abstract class MerelleDecider extends Decider {
     }
 
     /**
-     * Vérifie si en placant le pion en (x,y)
+     * Vérifie si en placant le pion en (x,y) on crée un nouveau moulin
      *
      * @param x
      * @param y
@@ -280,21 +254,9 @@ public abstract class MerelleDecider extends Decider {
     }
 
     /**
-     * TODO: Doit retourner le nombre de pions adverse pour une liste donnée en entrée
-     * @return
-     */
-//    private int nb_pawn_op(ArrayList<Point> positions, int[][] actualGrid) {
-//        int pawnNumber = 0;
-//        for(Point position : positions) {
-//            if(board.getFirstElement(position.getLocation().x, position.getLocation().y).)
-//        }
-//        return pawnNumber;
-//    }
-
-    /**
-     * Retourne le meilleure RemoveAction à effectuer pour la grille actuelle.
-     *
-     * @param actualGrid
+     * Retourne le meilleur RemoveAction à effectuer pour la grille actuelle - Appelle removePawn() et convertit
+     * le Point to remove to a RemoveAction
+     * @param actualGrid statut actuel de la grille
      * @return RemoveAction à effectuer par le joueur actuel
      */
     RemoveAction removePawnAction(int[][] actualGrid) {
@@ -302,17 +264,6 @@ public abstract class MerelleDecider extends Decider {
         assert pawnToRemove != null;
         return new RemoveAction(model, board.getFirstElement(pawnToRemove.y, pawnToRemove.x));
     }
-
-//    /**
-//     * TODO: Doit retourner Vrai si un moulin est faisable à la position entré en paramètre sinon False
-//     *
-//     * @param position
-//     * @param actualGrid
-//     * @return
-//     */
-//    boolean getPossibleMills(Point position, int[][] actualGrid) {
-//        return false;
-//    }
 
     /**
      * Analyse les moulins qui sont prêts à etre validés (dont il reste qu'un pion pour valider le moulin)
