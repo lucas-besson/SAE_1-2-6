@@ -3,6 +3,7 @@ package model;
 import boardifier.model.ElementTypes;
 import boardifier.model.GameElement;
 import boardifier.model.GameStageModel;
+import view.MerelleStageView;
 
 public class Pawn extends GameElement {
 
@@ -41,12 +42,12 @@ public class Pawn extends GameElement {
     public int getCol() {
         // Each cells are 5 units wide, the x being stored at the center
         // Return the pawn column starting from 1 
-        return (int) (x + 2.5) / 5;
+        return (int)(x + MerelleStageView.BOARD_CELL_WIDTH / 2) / MerelleStageView.BOARD_CELL_WIDTH;
     }
 
     public int getRow() {
         // Each cells are 2 units tall, the y being stored at the center
         // Return the pawn row starting from 1 
-        return (int) (y + 1) / 2;
+        return (int)(y + MerelleStageView.BOARD_CELL_HEIGHT / 2) / MerelleStageView.BOARD_CELL_HEIGHT;
     }
 }

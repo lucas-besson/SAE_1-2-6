@@ -21,6 +21,14 @@ public class MerelleStageModel extends GameStageModel {
         setupCallbacks();
     }
 
+    public int getBlackPawnsToPlay() {
+        return blackPawnsToPlay;
+    }
+
+    public int getRedPawnsToPlay() {
+        return redPawnsToPlay;
+    }
+
     public MerelleBoard getBoard() {
         return board;
     }
@@ -75,9 +83,14 @@ public class MerelleStageModel extends GameStageModel {
         else return MerelleGameStatus.PLACING;
     }
 
-    private void setupCallbacks() {
-        onMoveInGrid((element, gridDest, rowDest, colDest) -> {
-            ((Pawn) element).setInAMill(false); // FIXME : ne marche pas ?
+    /**
+     * Sets up the callbacks for the board's events.
+     * When a pawn is moved within the grid, its 'in a mill' flag is set to false.
+     **/
+
+     private void setupCallbacks() {
+        onMoveInGrid((element, gridDest, rowDest, colDest)->{
+            ((Pawn) element).setInAMill(false);
         });
         onRemoveFromGrid((element, gridDest, rowDest, colDest) -> {
             if (gridDest != board) return;
@@ -90,6 +103,11 @@ public class MerelleStageModel extends GameStageModel {
         });
     }
 
+    /**
+     * Checks whether the Merelle stage is ended or not. If the following player doesn't have any move available,
+     * the game ends and the actual player wins. If a player has only two pawns remaining, the other player wins.
+     * @return true if the stage is ended, false otherwise
+     */
     public boolean isEndStage() {
         MerelleStageModel merelleModel = (MerelleStageModel) model.getGameStage();
 
@@ -107,6 +125,7 @@ public class MerelleStageModel extends GameStageModel {
         }
         return model.isEndStage();
     }
+
 
     @Override
     public StageElementsFactory getDefaultElementFactory() {
