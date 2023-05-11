@@ -2,8 +2,10 @@ package control;
 
 import boardifier.control.Controller;
 import boardifier.model.Model;
+import boardifier.model.action.MoveAction;
 
 import java.awt.*;
+import java.util.List;
 
 public class BasicDecider extends MerelleDecider {
 
@@ -19,7 +21,12 @@ public class BasicDecider extends MerelleDecider {
      */
     @Override
     void placePawn() {
-        // TODO
+        pawnToMove = selectNextInPot();
+        initGridTable();
+        List<Point> freePoints = getFreePoints(grid);
+
+        destPoint = freePoints.get(rand.nextInt(freePoints.size()));
+        actions.addSingleAction(new MoveAction(model, pawnToMove, "merelleboard", destPoint.x, destPoint.x));
     }
 
     /**
@@ -27,7 +34,7 @@ public class BasicDecider extends MerelleDecider {
      */
     @Override
     void movePawn() {
-        // TODO
+
     }
 
     /**
