@@ -109,10 +109,9 @@ public class MerelleStageModel extends GameStageModel {
      * @return true if the stage is ended, false otherwise
      */
     public boolean isEndStage() {
-        MerelleStageModel merelleModel = (MerelleStageModel) model.getGameStage();
 
         // if the folowing player doesn't have any move available, the game end and the actual player win
-        if (merelleModel.getBoard().availableMoves(((model.getIdPlayer() == 1) ? 0 : 1), merelleModel.getStatus()) == 0) {
+        if (this.getBoard().availableMoves(((model.getIdPlayer() == 1) ? 0 : 1), this.getStatus()) == 0) {
             model.setIdWinner(model.getIdPlayer());
             model.stopStage();
         }

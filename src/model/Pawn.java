@@ -41,13 +41,13 @@ public class Pawn extends GameElement {
 
     public int getCol() {
         // Each cells are 5 units wide, the x being stored at the center
-        // Return the pawn column starting from 1 
-        return (int)(x + MerelleStageView.BOARD_CELL_WIDTH / 2) / MerelleStageView.BOARD_CELL_WIDTH;
+        // Return the pawn column starting from 1
+        return (int)(x + MerelleStageView.BOARD_CELL_WIDTH / 2.0) / MerelleStageView.BOARD_CELL_WIDTH;
     }
 
     public int getRow() {
         // Each cells are 2 units tall, the y being stored at the center
-        // Return the pawn row starting from 1 
-        return (int)(y + MerelleStageView.BOARD_CELL_HEIGHT / 2) / MerelleStageView.BOARD_CELL_HEIGHT;
+        // Return the pawn row starting from 1
+        return (int)(y + MerelleStageView.BOARD_CELL_HEIGHT / 2.0) / MerelleStageView.BOARD_CELL_HEIGHT;
     }
 }

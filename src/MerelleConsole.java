@@ -8,7 +8,7 @@ public class MerelleConsole {
 
     public static void main(String[] args) {
 
-        int mode = 2;
+        int mode = 1;
         if (args.length == 1) {
             try {
                 mode = Integer.parseInt(args[0]);
