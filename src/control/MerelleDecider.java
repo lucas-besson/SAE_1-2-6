@@ -113,6 +113,9 @@ public abstract class MerelleDecider extends Decider {
      */
     List<Point> computeValidCells(Point point) {
         ArrayList<Point> lst = new ArrayList<>();
+        if (grid[point.x][point.y] == 2) {
+            return lst;
+        }
         int[][][] jumpTable = {{{3, 3}, {}, {}, {3, 1}, {}, {}, {3, 3}}, {{}, {2, 2}, {}, {2, 1}, {}, {2, 2}, {}}, {{}, {}, {1, 1}, {1, 1}, {1, 1}, {}, {}}, {{1, 3}, {1, 2}, {1, 1}, {}, {1, 1}, {1, 2}, {1, 3}}, {{}, {}, {1, 1}, {1, 1}, {1, 1}, {}, {}}, {{}, {2, 2}, {}, {2, 1}, {}, {2, 2}, {}}, {{3, 3}, {}, {}, {3, 1}, {}, {}, {3, 3}}};
 
         int jumpX = jumpTable[point.x][point.y][0];
