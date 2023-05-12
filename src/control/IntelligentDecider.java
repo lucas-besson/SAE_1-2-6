@@ -18,6 +18,8 @@ public class IntelligentDecider extends MerelleDecider {
     void placePawn() {
         boolean needToRemoveAPawn = false;
 
+        initGridTable();
+
         // Moulins que l'ia peut completer
         java.util.List<Point> millsToComplete = getUncompletedMillsForPlayer(model.getIdPlayer(), grid);
 
@@ -46,6 +48,9 @@ public class IntelligentDecider extends MerelleDecider {
         actions.addSingleAction(move);
 
         // Si un moulin est completé
+        System.out.println(needToRemoveAPawn);
+
+        // FIXME : Le decider retourne un element null a enlever
         if (needToRemoveAPawn) {
             grid[destPoint.x][destPoint.y] = model.getIdPlayer();
             actions.addSingleAction(removePawnAction(grid));
@@ -85,13 +90,29 @@ public class IntelligentDecider extends MerelleDecider {
         }
 
         if (bestScore == 0) {
-            // TODO si la victoire n'est pas encore à portée du minimax, on fait un mouvement aléatoire
-            //      (pour éviter les jeux interminables (déplacements en avant et en arrière, et ainsi de suite)
+            initGridTable();
+
+            List<Point> playerPawnList = getPlayerPawnList(model.getIdPlayer(), grid);
+
+            playerPawnList.removeIf(pawn -> computeValidCells(pawn).isEmpty());
+
+            if (!playerPawnList.isEmpty()) {
+                Point toMove = playerPawnList.get(rand.nextInt(playerPawnList.size()));
+                pawnToMove = (Pawn) model.getGrid("merelleboard").getFirstElement(toMove.y, toMove.x);
+                System.out.println(toMove);
+
+                List<Point> destinations = computeValidCells(toMove);
+
+                destPoint = destinations.get(rand.nextInt(destinations.size()));
+
+                bestMove = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x);
+            }
         }
 
         // Make the move
         actions.addSingleAction(bestMove);
         grid[pawnToMove.getCol() - 1][pawnToMove.getRow() - 1] = 2;
+        assert bestMove != null;
         secondGrid[bestMove.getColDest()][bestMove.getRowDest()] = playerColor;
 
         if (isNewMill(grid, secondGrid, playerColor))
@@ -146,6 +167,25 @@ public class IntelligentDecider extends MerelleDecider {
         return bestScore;
     }
 
+    /**
+     * Retourne le vainqueur du tour, 2 si aucun vainqueur
+     *
+     * @param actualGrid grille à vérifier
+     * @return idPlayer that wins
+     */
+    int checkWinner(int[][] actualGrid) {
+        if (getPlayerPawnList(model.getIdPlayer(), actualGrid).size() < 3)
+            return model.getIdPlayer();
+        if (getPlayerPawnList((model.getIdPlayer() + 1) % 2, actualGrid).size() < 3)
+            return (model.getIdPlayer() + 1) % 2;
+        return 2;
+    }
+
+    /**
+     * Algorithme qui vérifie le meilleur pion à supprimer (empecher l'autre joueur de finir un moulin...)
+     *
+     * @param plateau situation actuelle du jeu
+     */
     Point removePawn(int[][] plateau) {
         Point meilleurPion = null;
         int joueur = 1; // On recherche le pion de l'adversaire, qui est représenté par 1
@@ -172,7 +212,11 @@ public class IntelligentDecider extends MerelleDecider {
             }
         }
         if (meilleurPion == null) {
+
             meilleurPion = getPlayerPawnList(model.getIdPlayer() + 1 % 2, plateau).get(0);
+//            FIXME : le pion retourner à des coordoné inéxistant
+            System.out.println(meilleurPion);
+
         }
         return meilleurPion; // Retourne l'objet Point qui représente la position du pion à retirer, ou null si aucun pion ne peut être retiré
     }
