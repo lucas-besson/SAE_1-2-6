@@ -50,7 +50,6 @@ public class IntelligentDecider extends MerelleDecider {
         // Si un moulin est completé
         System.out.println(needToRemoveAPawn);
 
-        // FIXME : Le decider retourne un element null a enlever
         if (needToRemoveAPawn) {
             grid[destPoint.x][destPoint.y] = model.getIdPlayer();
             actions.addSingleAction(removePawnAction(grid));
@@ -59,7 +58,6 @@ public class IntelligentDecider extends MerelleDecider {
 
     @Override
     void movePawn() {
-        // INPROGRESS pour chaque pions du joueur actuel (IA), créer tous les déplacement possibles et utiliser minimax() pour etudier les scores futurs
         int playerColor = model.getIdPlayer();
         int bestScore = Integer.MIN_VALUE;
         MoveAction bestMove = null;
@@ -115,8 +113,7 @@ public class IntelligentDecider extends MerelleDecider {
         assert bestMove != null;
         secondGrid[bestMove.getColDest()][bestMove.getRowDest()] = playerColor;
 
-        if (isNewMill(grid, secondGrid, playerColor))
-            actions.addSingleAction(removePawnAction(secondGrid));
+        if (isNewMill(grid, secondGrid, playerColor)) actions.addSingleAction(removePawnAction(secondGrid));
     }
 
     int minimax(int[][] previousGrid, int[][] actualGrid, boolean isMaximizing, int depth) {
@@ -168,42 +165,42 @@ public class IntelligentDecider extends MerelleDecider {
     }
 
     /**
-     * Retourne le vainqueur du tour, 2 si aucun vainqueur
+     * return the winner ID, or 2 if there is no winner
      *
-     * @param actualGrid grille à vérifier
+     * @param actualGrid 2D int table : grid
      * @return idPlayer that wins
      */
     int checkWinner(int[][] actualGrid) {
-        if (getPlayerPawnList(model.getIdPlayer(), actualGrid).size() < 3)
-            return model.getIdPlayer();
+        if (getPlayerPawnList(model.getIdPlayer(), actualGrid).size() < 3) return model.getIdPlayer();
         if (getPlayerPawnList((model.getIdPlayer() + 1) % 2, actualGrid).size() < 3)
             return (model.getIdPlayer() + 1) % 2;
         return 2;
     }
 
     /**
-     * Algorithme qui vérifie le meilleur pion à supprimer (empecher l'autre joueur de finir un moulin...)
+     * Method that return the best pawn to delete (will prevent the opponent to make a mill first)
      *
-     * @param plateau situation actuelle du jeu
+     * @param grid 2D int table : grid
+     * @return Point
      */
-    Point removePawn(int[][] plateau) {
-        Point meilleurPion = null;
+    Point removePawn(int[][] grid) {
+        Point bestPoint = null;
         int joueur = 1; // On recherche le pion de l'adversaire, qui est représenté par 1
-        for (int i = 0; i < plateau.length; i++) {
-            for (int j = 0; j < plateau[i].length; j++) {
-                if (plateau[i][j] == joueur) {
-                    int nbMoulins = millsCount(i, j, plateau);
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j] == joueur) {
+                    int nbMoulins = millsCount(i, j, grid);
                     if (nbMoulins > 0) { // Le pion forme au moins un moulin
                         // Si le pion peut être retiré sans former de moulin à l'adversaire, c'est le meilleur pion à retirer
-                        if (!canMakeMill(i, j, plateau)) {
+                        if (!canMakeMill(i, j, grid)) {
                             return new Point(i, j); // Retourne l'objet Point qui représente la position du pion à retirer
                         } else {
                             // Si le pion doit être retiré pour éviter un moulin à l'adversaire, le choisit comme meilleur pion à retirer
                             if (nbMoulins == 2) { // Si l'adversaire a deux pions qui forment des moulins, retirer n'importe lequel des deux peut être bénéfique
                                 return new Point(i, j); // Retourne l'objet Point qui représente la position du pion à retirer
                             } else if (nbMoulins == 1) { // Si l'adversaire a un seul pion qui forme un moulin
-                                if (meilleurPion == null || millsCount(meilleurPion.x, meilleurPion.y, plateau) == 0) {
-                                    meilleurPion = new Point(i, j);
+                                if (bestPoint == null || millsCount(bestPoint.x, bestPoint.y, grid) == 0) {
+                                    bestPoint = new Point(i, j);
                                 }
                             }
                         }
@@ -211,14 +208,13 @@ public class IntelligentDecider extends MerelleDecider {
                 }
             }
         }
-        if (meilleurPion == null) {
+        if (bestPoint == null) {
 
-            meilleurPion = getPlayerPawnList(model.getIdPlayer() + 1 % 2, plateau).get(0);
-//            FIXME : le pion retourner à des coordoné inéxistant
-            System.out.println(meilleurPion);
+            bestPoint = getPlayerPawnList(model.getIdPlayer() + 1 % 2, grid).get(0);
+            System.out.println(bestPoint);
 
         }
-        return meilleurPion; // Retourne l'objet Point qui représente la position du pion à retirer, ou null si aucun pion ne peut être retiré
+        return bestPoint; // Retourne l'objet Point qui représente la position du pion à retirer, ou null si aucun pion ne peut être retiré
     }
 
 }

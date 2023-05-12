@@ -34,17 +34,15 @@ public abstract class MerelleDecider extends Decider {
     }
 
     /**
-     * Retourne les cases vides, actives
+     * return the active cells base on the given grid
      *
-     * @param grid situation actuelle du jeu
-     * @return liste de Point de cases vides et actives
+     * @param grid actual grid
+     * @return list of Point of empty case
      */
     static List<Point> getFreePoints(int[][] grid) {
         ArrayList<Point> lst = new ArrayList<>();
-        //        INPROGRESS : changer les doubles boucles for en boucle for (int[] cell : ACTIVECELLS)
         for (int[] activePoint : MerelleBoard.ACTIVECELLS)
-            if (grid[activePoint[0]][activePoint[1]] == 2)
-                lst.add(new Point(activePoint[0], activePoint[1]));
+            if (grid[activePoint[0]][activePoint[1]] == 2) lst.add(new Point(activePoint[0], activePoint[1]));
         return lst;
     }
 
@@ -91,23 +89,20 @@ public abstract class MerelleDecider extends Decider {
      */
     void initGridTable() {
         grid = new int[MerelleBoard.GRIDNBCOLS][MerelleBoard.GRIDNBROWS];
-//        INPROGRESS : changer les doubles boucles for en boucle for (int[] cell : ACTIVECELLS)
-        for (int col = 0; col < grid.length; col++) {
-            for (int row = 0; row < grid[col].length; row++) {
-                if (model.getGrid("merelleboard").getElements(row, col).isEmpty())
-                    grid[col][row] = 2;
-                else {
-                    grid[col][row] = ((Pawn) model.getGrid("merelleboard").getElements(row, col).get(0)).getColor();
-                }
+        for (int[] activePoint : MerelleBoard.ACTIVECELLS) {
+            if (model.getGrid("merelleboard").getElements(activePoint[1], activePoint[0]).isEmpty())
+                grid[activePoint[1]][activePoint[0]] = 2;
+            else {
+                grid[activePoint[1]][activePoint[0]] = ((Pawn) model.getGrid("merelleboard").getElements(activePoint[1], activePoint[0]).get(0)).getColor();
             }
         }
     }
 
     /**
-     * Retourne une liste de déplacements possibles d'un pion
+     * return the possible moves for a given pawn
      *
-     * @param point Pion à déplacer
-     * @return Liste de Point ou ce pion peut etre déplacé
+     * @param point point to move
+     * @return list of Point
      */
     List<Point> computeValidCells(Point point) {
         ArrayList<Point> lst = new ArrayList<>();
@@ -122,8 +117,7 @@ public abstract class MerelleDecider extends Decider {
             int newX = point.x + offsetCoords[0]; //col
             int newY = point.y + offsetCoords[1]; //row
 
-            if (!MerelleBoard.isActiveCell(newX, newY))
-                continue; // Do nothing if the cell is unreachable
+            if (!MerelleBoard.isActiveCell(newX, newY)) continue; // Do nothing if the cell is unreachable
 
             if (grid[newX][newY] == 2) {
                 lst.add(new Point(newX, newY));
@@ -133,9 +127,9 @@ public abstract class MerelleDecider extends Decider {
     }
 
     /**
-     * Selectionne le pion suivant dans le pot de pions
+     * select the next pawn on the pot
      *
-     * @return Pion suivant
+     * @return Pawn
      */
     Pawn selectNextInPot() {
         int i = 0;
@@ -144,15 +138,14 @@ public abstract class MerelleDecider extends Decider {
     }
 
     /**
-     * Construit une liste de points des Pawn du joueur passé en paramètres.
+     * return all the pawn possessed by the given player
      *
-     * @param playerColor Couleur du joueur à récuperer les pions
-     * @param grid        Tableau 2D de la grille actuelle (2: null or not active)
-     * @return Liste de pions du joueur (Point(x, y))
+     * @param playerColor color of the player
+     * @param grid        2D int table
+     * @return List of Point
      */
     List<Point> getPlayerPawnList(int playerColor, int[][] grid) {
         List<Point> playerPawnList = new ArrayList<>();
-//        INPROGRESS : changer les doubles boucles for en boucle for (int[] cell : ACTIVECELLS)
         for (int[] activePoint : MerelleBoard.ACTIVECELLS) {
             if (grid[activePoint[0]][activePoint[1]] == playerColor)
                 playerPawnList.add(new Point(activePoint[0], activePoint[1]));
@@ -164,10 +157,10 @@ public abstract class MerelleDecider extends Decider {
     /**
      * Check if a new mill is present between the two grids in parameters, for the player set in parameters
      *
-     * @param previousGrid Grille précédente
-     * @param actualGrid   Nouvelle grille
-     * @param playerColor  Couleur du joueur
-     * @return vrai ou faux si oui ou non il y a nouveau moulin
+     * @param previousGrid previous grid
+     * @param actualGrid   new grid
+     * @param playerColor  color of the player
+     * @return true is there is a new mill, false otherwise
      */
     boolean isNewMill(int[][] previousGrid, int[][] actualGrid, int playerColor) {
         for (int[][] mill : MerelleBoard.MILLS) {
@@ -190,16 +183,16 @@ public abstract class MerelleDecider extends Decider {
     }
 
     /**
-     * Vérifie si en placant le pion en (x,y) on crée un nouveau moulin
+     * Verify if a new mill can be created by placing a pawn in a specific cell
      *
-     * @param x
-     * @param y
-     * @param plateau
-     * @return
+     * @param x       int x coordinate
+     * @param y       int y coordinate
+     * @param plateau 2D int grid
+     * @return true if there will be a new mill, false otherwise
      */
     boolean canMakeMill(int x, int y, int[][] plateau) {
         int joueur = plateau[x][y];
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; true; i++) {
             if (plateau[x][(y + i) % 3] != joueur) {
                 break;
             }
@@ -207,7 +200,7 @@ public abstract class MerelleDecider extends Decider {
                 return true;
             }
         }
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; true; i++) {
             if (plateau[(x + i) % 3][y] != joueur) {
                 break;
             }
@@ -219,12 +212,12 @@ public abstract class MerelleDecider extends Decider {
     }
 
     /**
-     * Méthode pour compter le nombre de moulins pour un pion donné
+     * Method that return the number of mill that a pawn could form if it was placed on the given coordinates
      *
-     * @param x
-     * @param y
-     * @param plateau
-     * @return
+     * @param x       int x coordinate
+     * @param y       int y coordinate
+     * @param plateau 2D int grid
+     * @return int
      */
     int millsCount(int x, int y, int[][] plateau) {
         int moulins = 0;
@@ -254,10 +247,10 @@ public abstract class MerelleDecider extends Decider {
     }
 
     /**
-     * Retourne le meilleur RemoveAction à effectuer pour la grille actuelle - Appelle removePawn() et convertit
-     * le Point to remove to a RemoveAction
-     * @param actualGrid statut actuel de la grille
-     * @return RemoveAction à effectuer par le joueur actuel
+     * return the best possible RemoveAction for the given grid, base on the result of the method removePawn.
+     *
+     * @param actualGrid 2D int table : actual grid
+     * @return RemoveAction
      */
     RemoveAction removePawnAction(int[][] actualGrid) {
         Point pawnToRemove = removePawn(actualGrid);
@@ -266,13 +259,13 @@ public abstract class MerelleDecider extends Decider {
     }
 
     /**
-     * Analyse les moulins qui sont prêts à etre validés (dont il reste qu'un pion pour valider le moulin)
+     * Method that return the cell that can be used to form a mill for the player of the given color.
      *
-     * @param couleurJoueur Couleur du joueur a analyser les moulins
-     * @param grid
-     * @return Liste des cases à remplir pour faire un moulin
+     * @param playerColor int : color of player
+     * @param grid        2D int table : actual grid
+     * @return List of Point
      */
-    List<Point> getUncompletedMillsForPlayer(int couleurJoueur, int[][] grid) {
+    List<Point> getUncompletedMillsForPlayer(int playerColor, int[][] grid) {
         List<Point> emptyCellsForMill = new ArrayList<>();
 
 //        if (model.getIdPlayer() == 1) return emptyCellsForMill;
@@ -280,21 +273,20 @@ public abstract class MerelleDecider extends Decider {
         // Pour chaque case vide
         for (Point caseVide : getFreePoints(grid)) {
             // Si en placant un pion de la couleur indiquée on fait un moulin, on ajoute le pion à la liste
-            if (hasMill(caseVide.x, caseVide.y, grid, couleurJoueur))
-                emptyCellsForMill.add(caseVide);
+            if (hasMill(caseVide.x, caseVide.y, grid, playerColor)) emptyCellsForMill.add(caseVide);
         }
 
         return emptyCellsForMill;
     }
 
     /**
-     * Vérifie si en plaçant le pion en (col, row) on crée un moulin
+     * Verify if a new mill can be created by placing a pawn in a specific cell
      *
-     * @param col      position col du pion à verifier
-     * @param row      position y du pion à verifier
-     * @param grid     etat actuel du plateau
-     * @param playerId id du joueur qui place le pion
-     * @return vrai si avec cette combinaison (col, y) un moulin sera créé
+     * @param col      int : column coordinates
+     * @param row      int : row coordinates
+     * @param grid     2D int table : actual grid
+     * @param playerId int : color of player
+     * @return true if there will be a new mill, false otherwise
      */
     boolean hasMill(int col, int row, int[][] grid, int playerId) {
         for (int[][] mill : MerelleBoard.MILLS) {
@@ -314,11 +306,11 @@ public abstract class MerelleDecider extends Decider {
     }
 
     /**
-     * Vérifie que les coordonnées données sont contenues dans la combinaison de coordonnées (moulin) fourni
+     * Verify if the cell is in the given mill
      *
-     * @param millToCheck moulin à vérifier
-     * @param position    position à vérifier
-     * @return vrai si la position est contenue dans le moulin
+     * @param millToCheck int 2D table : mill
+     * @param position    int table : cell coordinate
+     * @return true if the given mill table contain the cell coordinate, false otherwise
      */
     boolean contains(int[][] millToCheck, int[] position) {
         for (int[] millPoint : millToCheck) {

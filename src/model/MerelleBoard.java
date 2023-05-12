@@ -12,16 +12,39 @@ public class MerelleBoard extends GridElement {
     /**
      * 2D table of all active cells
      */
-    public static final int[][] ACTIVECELLS = {{0, 0}, {0, 3}, {0, 6}, {1, 1}, {1, 3}, {1, 5}, {2, 2}, {2, 3}, {2, 4}, {3, 0}, {3, 1}, {3, 2}, {3, 4}, {3, 5}, {3, 6}, {4, 2}, {4, 3}, {4, 4}, {5, 1}, {5, 3}, {5, 5}, {6, 0}, {6, 3}, {6, 6}};
+    public static final int[][] ACTIVECELLS = {
+            {0, 0}, {0, 3}, {0, 6},
+            {1, 1}, {1, 3}, {1, 5},
+            {2, 2}, {2, 3}, {2, 4},
+            {3, 0}, {3, 1}, {3, 2},
+            {3, 4}, {3, 5}, {3, 6},
+            {4, 2}, {4, 3}, {4, 4},
+            {5, 1}, {5, 3}, {5, 5},
+            {6, 0}, {6, 3}, {6, 6}
+    };
 
     /**
      * 3D table of all possible mills
      */
     public static final int[][][] MILLS = {
             // Vertical mills
-            {{0, 0}, {0, 3}, {0, 6}}, {{1, 1}, {1, 3}, {1, 5}}, {{2, 2}, {2, 3}, {2, 4}}, {{3, 0}, {3, 1}, {3, 2}}, {{3, 4}, {3, 5}, {3, 6}}, {{4, 2}, {4, 3}, {4, 4}}, {{5, 1}, {5, 3}, {5, 5}}, {{6, 0}, {6, 3}, {6, 6}},
+            {{0, 0}, {0, 3}, {0, 6}},
+            {{1, 1}, {1, 3}, {1, 5}},
+            {{2, 2}, {2, 3}, {2, 4}},
+            {{3, 0}, {3, 1}, {3, 2}},
+            {{3, 4}, {3, 5}, {3, 6}},
+            {{4, 2}, {4, 3}, {4, 4}},
+            {{5, 1}, {5, 3}, {5, 5}},
+            {{6, 0}, {6, 3}, {6, 6}},
             // Horizontal mills
-            {{0, 0}, {3, 0}, {6, 0}}, {{1, 1}, {3, 1}, {5, 1}}, {{2, 2}, {3, 2}, {4, 2}}, {{0, 3}, {1, 3}, {2, 3}}, {{4, 3}, {5, 3}, {6, 3}}, {{2, 4}, {3, 4}, {4, 4}}, {{1, 5}, {3, 5}, {5, 5}}, {{0, 6}, {3, 6}, {6, 6}}};
+            {{0, 0}, {3, 0}, {6, 0}},
+            {{1, 1}, {3, 1}, {5, 1}},
+            {{2, 2}, {3, 2}, {4, 2}},
+            {{0, 3}, {1, 3}, {2, 3}},
+            {{4, 3}, {5, 3}, {6, 3}},
+            {{2, 4}, {3, 4}, {4, 4}},
+            {{1, 5}, {3, 5}, {5, 5}},
+            {{0, 6}, {3, 6}, {6, 6}}};
     /**
      * Number of rows and columns in the grid
      */
@@ -35,7 +58,7 @@ public class MerelleBoard extends GridElement {
     }
 
     /**
-     * Constructeur par copie de la board donnée en paramètre
+     * Copy constructor based on the given MerelleBoard and MerelleStageModel
      *
      * @param board board à copier
      */
@@ -48,8 +71,8 @@ public class MerelleBoard extends GridElement {
     /**
      * Method to check if the given coordinates are reachable
      *
-     * @param x
-     * @param y
+     * @param x position
+     * @param y position
      * @return true if the cell is active, false otherwise
      */
     public static boolean isActiveCell(int x, int y) {
@@ -66,7 +89,7 @@ public class MerelleBoard extends GridElement {
      *
      * @param number number that represent the pawn
      * @param color  color of the player
-     * @return
+     * @return a pawn if it was found, null otherwise
      */
     public GameElement getPawn(int number, int color) {
         for (int[] cell : ACTIVECELLS) {
@@ -80,6 +103,12 @@ public class MerelleBoard extends GridElement {
         return null;
     }
 
+    /**
+     * Update the reachableCells table base on the list returned by computeValidCells method.
+     *
+     * @param pawn       pawn that is being moved
+     * @param gameStatus status of the game
+     */
     public void setValidCells(Pawn pawn, int gameStatus) {
         resetReachableCells(false);
         List<Point> valid = computeValidCells(pawn, gameStatus);
@@ -90,6 +119,13 @@ public class MerelleBoard extends GridElement {
         }
     }
 
+    /**
+     * Compute the valid cell to play given a pawn and the status of the game
+     *
+     * @param pawn       pawn that is being moved
+     * @param gameStatus status of the game
+     * @return list of points (valid cells)
+     */
     public List<Point> computeValidCells(Pawn pawn, int gameStatus) {
         List<Point> lst = new ArrayList<>();
 
@@ -100,7 +136,6 @@ public class MerelleBoard extends GridElement {
                     lst.add(new Point(cell[0], cell[1]));
                 }
             }
-            return lst;
         }
 
         // Second stage of the game : the cells have to be empty and within 1 cells around the initial pawn position
@@ -108,7 +143,15 @@ public class MerelleBoard extends GridElement {
             int x = pawn.getCol() - 1;
             int y = pawn.getRow() - 1;
 
-            int[][][] jumpTable = {{{3, 3}, {}, {}, {3, 1}, {}, {}, {3, 3}}, {{}, {2, 2}, {}, {2, 1}, {}, {2, 2}, {}}, {{}, {}, {1, 1}, {1, 1}, {1, 1}, {}, {}}, {{1, 3}, {1, 2}, {1, 1}, {}, {1, 1}, {1, 2}, {1, 3}}, {{}, {}, {1, 1}, {1, 1}, {1, 1}, {}, {}}, {{}, {2, 2}, {}, {2, 1}, {}, {2, 2}, {}}, {{3, 3}, {}, {}, {3, 1}, {}, {}, {3, 3}}};
+            int[][][] jumpTable = {
+                    {{3, 3}, {}, {}, {3, 1}, {}, {}, {3, 3}},
+                    {{}, {2, 2}, {}, {2, 1}, {}, {2, 2}, {}},
+                    {{}, {}, {1, 1}, {1, 1}, {1, 1}, {}, {}},
+                    {{1, 3}, {1, 2}, {1, 1}, {}, {1, 1}, {1, 2}, {1, 3}},
+                    {{}, {}, {1, 1}, {1, 1}, {1, 1}, {}, {}},
+                    {{}, {2, 2}, {}, {2, 1}, {}, {2, 2}, {}},
+                    {{3, 3}, {}, {}, {3, 1}, {}, {}, {3, 3}}
+            };
 
             int jumpX = jumpTable[y][x][0];
             int jumpY = jumpTable[y][x][1];
@@ -127,14 +170,14 @@ public class MerelleBoard extends GridElement {
                     lst.add(new Point(newX, newY));
                 }
             }
-            return lst;
         }
+        return lst;
     }
 
     /**
      * @param color      color of the player
      * @param gameStatus the number of available moves for a given player
-     * @return
+     * @return the number of move that can be played for a player of the given color
      */
     public int availableMoves(int color, int gameStatus) {
         int availableMoove = 0;
@@ -193,13 +236,17 @@ public class MerelleBoard extends GridElement {
     public void setValidMillCells(int color) {
         resetReachableCells(false);
         List<Point> valid = computeValidMillCells(color);
-        if (valid != null) {
-            for (Point p : valid) {
-                reachableCells[p.y][p.x] = true;
-            }
+        for (Point p : valid) {
+            reachableCells[p.y][p.x] = true;
         }
     }
 
+    /**
+     * Compute the pawn that can be removed for a player of the given color.
+     *
+     * @param color color of the player playing the move
+     * @return list of points (valid cells)
+     */
     private List<Point> computeValidMillCells(int color) {
         List<Point> lst = new ArrayList<>();
         for (int[] cell : ACTIVECELLS) {

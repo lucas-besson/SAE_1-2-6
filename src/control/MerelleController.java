@@ -44,13 +44,11 @@ public class MerelleController extends Controller {
 
     /**
      * Changes the current player to the next player in the game.
-     * If the current player is a computer player, then the next player is automatically set
-     * by the model. Otherwise, prompts the current player to input their move through the console.
-     * If the last move made by the player created a new mill, prompts the player to remove an opposing pawn.
-     * @throws  if the game is over and there is no winner.
+     * If the current player is a computer, then the next player is automatically set by the model.
+     * Otherwise, the current player is asked to input their move through the console.
+     * If the last move made by the player created a new mill, the player is asked to remove an opposing pawn.
      */
     public void nextPlayer() {
-        // for the first player, the id of the player is already set, so do not compute it
         if (!firstPlayer) {
             model.setNextPlayer();
         } else {
@@ -63,15 +61,13 @@ public class MerelleController extends Controller {
 
         if (p.getType() == Player.COMPUTER) {
             System.out.println(p.getName() + " PLAYS");
-            // FIXME choose between IntelligentDecider or BasicDecider for this
             Decider decider;
-            if (p.getName() == "computer" || p.getName() == "computer1")
+            if (p.getName().equals( "computer") || p.getName().equals("computer1"))
                 decider = new IntelligentDecider(model, this);
             else decider = new BasicDecider(model, this);
             ActionPlayer play = new ActionPlayer(model, this, decider, null);
             play.start();
-        }
-        else {
+        } else {
             boolean ok = false;
             while (!ok) {
                 System.out.print(p.getName() + " > ");
@@ -88,6 +84,7 @@ public class MerelleController extends Controller {
                         System.out.println("incorrect instruction. retry !");
                     }
                 } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
             }
             // If the last move have created a new mill
@@ -110,6 +107,7 @@ public class MerelleController extends Controller {
                             System.out.println("incorrect instruction. retry !");
                         }
                     } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
                 }
             }
@@ -119,8 +117,10 @@ public class MerelleController extends Controller {
     public boolean AccessAnalyseAndPlay(String line) {
         return analyseAndPlay(line);
     }
+
     /**
      * Analyzes and processes a player's move based on the given input line.
+     *
      * @param line the input line from the player
      * @return true if the move is valid and will be processed, false otherwise
      */
@@ -141,12 +141,12 @@ public class MerelleController extends Controller {
         int color = model.getIdPlayer();
 
         // collect the pawn from the correct place depending on the game stage
-        Pawn pawn = null;
+        Pawn pawn;
         // first part of the game : the player have to empty the pot
         if (gameStage.getStatus() == MerelleGameStatus.PLACING) {
 
             // look for the right pot
-            GridElement pot = null;
+            GridElement pot;
             if (color == 0) pot = gameStage.getBlackPot();
             else pot = gameStage.getRedPot();
 
@@ -176,10 +176,12 @@ public class MerelleController extends Controller {
 
 
     public boolean AccessMillAnalyseAndPlay(String line) {
-        return millAnalyseAndPlay   (line);
+        return millAnalyseAndPlay(line);
     }
+
     /**
      * Analyzes and plays the move for deleting a pawn in a mill.
+     *
      * @param line the input string containing the information about the pawn to be deleted
      * @return true if the move was successful, false otherwise
      */

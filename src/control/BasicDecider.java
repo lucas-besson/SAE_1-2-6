@@ -42,8 +42,7 @@ public class BasicDecider extends MerelleDecider {
 
         actions.addSingleAction(new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x));
 
-        if (needToRemoveAPawn)
-            actions.addSingleAction(removePawnAction(grid));
+        if (needToRemoveAPawn) actions.addSingleAction(removePawnAction(grid));
     }
 
     /**
@@ -71,35 +70,35 @@ public class BasicDecider extends MerelleDecider {
             grid[toMove.x][toMove.y] = 2;
             secondGrid[destPoint.x][destPoint.y] = model.getIdPlayer();
 
-            if (isNewMill(grid, secondGrid, model.getIdPlayer()))
-                actions.addSingleAction(removePawnAction(secondGrid));
+            if (isNewMill(grid, secondGrid, model.getIdPlayer())) actions.addSingleAction(removePawnAction(secondGrid));
 
         }
     }
 
     /**
-     * Algorithme qui vérifie le meilleur pion à supprimer (empecher l'autre joueur de finir un moulin...)
+     * Method that return the best pawn to delete (will prevent the opponent to make a mill first)
      *
-     * @param plateau situation actuelle du jeu
+     * @param grid 2D int table : grid
+     * @return Point
      */
     @Override
-    Point removePawn(int[][] plateau) {
+    Point removePawn(int[][] grid) {
         Point meilleurPion = null;
         int joueur = 1; // On recherche le pion de l'adversaire, qui est représenté par 1
-        for (int i = 0; i < plateau.length; i++) {
-            for (int j = 0; j < plateau[i].length; j++) {
-                if (plateau[i][j] == joueur) {
-                    int nbMoulins = millsCount(i, j, plateau);
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j] == joueur) {
+                    int nbMoulins = millsCount(i, j, grid);
                     if (nbMoulins > 0) { // Le pion forme au moins un moulin
                         // Si le pion peut être retiré sans former de moulin à l'adversaire, c'est le meilleur pion à retirer
-                        if (!canMakeMill(i, j, plateau)) {
+                        if (!canMakeMill(i, j, grid)) {
                             return new Point(i, j); // Retourne l'objet Point qui représente la position du pion à retirer
                         } else {
                             // Si le pion doit être retiré pour éviter un moulin à l'adversaire, le choisit comme meilleur pion à retirer
                             if (nbMoulins == 2) { // Si l'adversaire a deux pions qui forment des moulins, retirer n'importe lequel des deux peut être bénéfique
                                 return new Point(i, j); // Retourne l'objet Point qui représente la position du pion à retirer
                             } else if (nbMoulins == 1) { // Si l'adversaire a un seul pion qui forme un moulin
-                                if (meilleurPion == null || millsCount(meilleurPion.x, meilleurPion.y, plateau) == 0) {
+                                if (meilleurPion == null || millsCount(meilleurPion.x, meilleurPion.y, grid) == 0) {
                                     meilleurPion = new Point(i, j);
                                 }
                             }
@@ -109,7 +108,7 @@ public class BasicDecider extends MerelleDecider {
             }
         }
         if (meilleurPion == null) {
-            meilleurPion = getPlayerPawnList(model.getIdPlayer() + 1 % 2, plateau).get(0);
+            meilleurPion = getPlayerPawnList(model.getIdPlayer() + 1 % 2, grid).get(0);
         }
         return meilleurPion; // Retourne l'objet Point qui représente la position du pion à retirer, ou null si aucun pion ne peut être retiré
     }

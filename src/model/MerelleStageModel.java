@@ -62,8 +62,8 @@ public class MerelleStageModel extends GameStageModel {
 
     public void setBlackPawns(Pawn[] blackPawns) {
         this.blackPawns = blackPawns;
-        for (int i = 0; i < blackPawns.length; i++) {
-            addElement(blackPawns[i]);
+        for (Pawn blackPawn : blackPawns) {
+            addElement(blackPawn);
         }
     }
 
@@ -73,8 +73,8 @@ public class MerelleStageModel extends GameStageModel {
 
     public void setRedPawns(Pawn[] redPawns) {
         this.redPawns = redPawns;
-        for (int i = 0; i < redPawns.length; i++) {
-            addElement(redPawns[i]);
+        for (Pawn redPawn : redPawns) {
+            addElement(redPawn);
         }
     }
 
