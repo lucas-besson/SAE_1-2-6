@@ -47,9 +47,6 @@ public class IntelligentDecider extends MerelleDecider {
         MoveAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x);
         actions.addSingleAction(move);
 
-        // Si un moulin est completé
-        System.out.println(needToRemoveAPawn);
-
         if (needToRemoveAPawn) {
             grid[destPoint.x][destPoint.y] = model.getIdPlayer();
             actions.addSingleAction(removePawnAction(grid));
@@ -91,7 +88,6 @@ public class IntelligentDecider extends MerelleDecider {
             initGridTable();
 
             List<Point> playerPawnList = getPlayerPawnList(model.getIdPlayer(), grid);
-            System.out.println(playerPawnList);
 
             playerPawnList.removeIf(pawn -> computeValidCells(pawn).isEmpty());
 
