@@ -87,7 +87,7 @@ public class IntelligentDecider extends MerelleDecider {
             }
         }
 
-        if (bestScore == 0) {
+        if (bestScore == 0 || pawnToMove == null) {
             initGridTable();
 
             List<Point> playerPawnList = getPlayerPawnList(model.getIdPlayer(), grid);
@@ -97,7 +97,6 @@ public class IntelligentDecider extends MerelleDecider {
             if (!playerPawnList.isEmpty()) {
                 Point toMove = playerPawnList.get(rand.nextInt(playerPawnList.size()));
                 pawnToMove = (Pawn) model.getGrid("merelleboard").getFirstElement(toMove.y, toMove.x);
-                System.out.println(toMove);
 
                 List<Point> destinations = computeValidCells(toMove);
 
@@ -113,7 +112,8 @@ public class IntelligentDecider extends MerelleDecider {
         assert bestMove != null;
         secondGrid[bestMove.getColDest()][bestMove.getRowDest()] = playerColor;
 
-        if (isNewMill(grid, secondGrid, playerColor)) actions.addSingleAction(removePawnAction(secondGrid));
+        if (isNewMill(grid, secondGrid, playerColor))
+            actions.addSingleAction(removePawnAction(secondGrid));
     }
 
     int minimax(int[][] previousGrid, int[][] actualGrid, boolean isMaximizing, int depth) {
@@ -126,7 +126,6 @@ public class IntelligentDecider extends MerelleDecider {
 
         if (isNewMill(previousGrid, actualGrid, playerColor)) {
             Point pawnToRemove = removePawn(actualGrid);
-            assert pawnToRemove != null;
             actualGrid[pawnToRemove.x][pawnToRemove.y] = 2;
         }
         int bestScore;
@@ -165,42 +164,29 @@ public class IntelligentDecider extends MerelleDecider {
     }
 
     /**
-     * return the winner ID, or 2 if there is no winner
-     *
-     * @param actualGrid 2D int table : grid
-     * @return idPlayer that wins
-     */
-    int checkWinner(int[][] actualGrid) {
-        if (getPlayerPawnList(model.getIdPlayer(), actualGrid).size() < 3) return model.getIdPlayer();
-        if (getPlayerPawnList((model.getIdPlayer() + 1) % 2, actualGrid).size() < 3)
-            return (model.getIdPlayer() + 1) % 2;
-        return 2;
-    }
-
-    /**
      * Method that return the best pawn to delete (will prevent the opponent to make a mill first)
      *
      * @param grid 2D int table : grid
      * @return Point
      */
     Point removePawn(int[][] grid) {
-        Point bestPoint = null;
-        int joueur = 1; // On recherche le pion de l'adversaire, qui est représenté par 1
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[i].length; j++) {
-                if (grid[i][j] == joueur) {
-                    int nbMoulins = millsCount(i, j, grid);
+        Point meilleurPion = getPlayerPawnList(model.getIdPlayer() + 1 % 2, grid).get(0);
+        int joueur = model.getIdPlayer(); // On recherche le pion de l'adversaire, qui est représenté par 1
+        for (int col = 0; col < grid.length; col++) {
+            for (int row = 0; row < grid[col].length; row++) {
+                if (grid[col][row] == joueur) {
+                    int nbMoulins = millsCount(col, row, grid);
                     if (nbMoulins > 0) { // Le pion forme au moins un moulin
                         // Si le pion peut être retiré sans former de moulin à l'adversaire, c'est le meilleur pion à retirer
-                        if (!canMakeMill(i, j, grid)) {
-                            return new Point(i, j); // Retourne l'objet Point qui représente la position du pion à retirer
+                        if (!canMakeMill(col, row, grid)) {
+                            return new Point(col, row); // Retourne l'objet Point qui représente la position du pion à retirer
                         } else {
                             // Si le pion doit être retiré pour éviter un moulin à l'adversaire, le choisit comme meilleur pion à retirer
                             if (nbMoulins == 2) { // Si l'adversaire a deux pions qui forment des moulins, retirer n'importe lequel des deux peut être bénéfique
-                                return new Point(i, j); // Retourne l'objet Point qui représente la position du pion à retirer
+                                return new Point(col, row); // Retourne l'objet Point qui représente la position du pion à retirer
                             } else if (nbMoulins == 1) { // Si l'adversaire a un seul pion qui forme un moulin
-                                if (bestPoint == null || millsCount(bestPoint.x, bestPoint.y, grid) == 0) {
-                                    bestPoint = new Point(i, j);
+                                if (meilleurPion == null || millsCount(meilleurPion.x, meilleurPion.y, grid) == 0) {
+                                    meilleurPion = new Point(col, row);
                                 }
                             }
                         }
@@ -208,13 +194,26 @@ public class IntelligentDecider extends MerelleDecider {
                 }
             }
         }
-        if (bestPoint == null) {
 
-            bestPoint = getPlayerPawnList(model.getIdPlayer() + 1 % 2, grid).get(0);
-            System.out.println(bestPoint);
-
+        if (grid[meilleurPion.x][meilleurPion.y] == 2) {
+            meilleurPion = getPlayerPawnList(model.getIdPlayer() + 1 % 2, grid).get(0);
         }
-        return bestPoint; // Retourne l'objet Point qui représente la position du pion à retirer, ou null si aucun pion ne peut être retiré
+
+        return meilleurPion; // Retourne l'objet Point qui représente la position du pion à retirer, ou null si aucun pion ne peut être retiré
+    }
+
+    /**
+     * return the winner ID, or 2 if there is no winner
+     *
+     * @param actualGrid 2D int table : grid
+     * @return idPlayer that wins
+     */
+    int checkWinner(int[][] actualGrid) {
+        if (getPlayerPawnList(model.getIdPlayer(), actualGrid).size() < 3)
+            return model.getIdPlayer();
+        if (getPlayerPawnList((model.getIdPlayer() + 1) % 2, actualGrid).size() < 3)
+            return (model.getIdPlayer() + 1) % 2;
+        return 2;
     }
 
 }

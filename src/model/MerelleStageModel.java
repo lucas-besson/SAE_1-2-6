@@ -115,10 +115,10 @@ public class MerelleStageModel extends GameStageModel {
             model.setIdWinner(model.getIdPlayer());
             model.stopStage();
         }
-        if (blackPawnsToPlay == 2) {
+        if (blackPawnsToPlay < 3) {
             model.setIdWinner(1);
             model.stopStage();
-        } else if (redPawnsToPlay == 2) {
+        } else if (redPawnsToPlay < 3) {
             model.setIdWinner(0);
             model.stopStage();
         }

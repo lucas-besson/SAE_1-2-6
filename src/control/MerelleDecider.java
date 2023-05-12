@@ -42,7 +42,8 @@ public abstract class MerelleDecider extends Decider {
     static List<Point> getFreePoints(int[][] grid) {
         ArrayList<Point> lst = new ArrayList<>();
         for (int[] activePoint : MerelleBoard.ACTIVECELLS)
-            if (grid[activePoint[0]][activePoint[1]] == 2) lst.add(new Point(activePoint[0], activePoint[1]));
+            if (grid[activePoint[0]][activePoint[1]] == 2)
+                lst.add(new Point(activePoint[0], activePoint[1]));
         return lst;
     }
 
@@ -78,10 +79,7 @@ public abstract class MerelleDecider extends Decider {
      */
     abstract void movePawn();
 
-    /**
-     * Algorithme qui vérifie le meilleur pion à supprimer  -- Methode abstraite, à redéfinir.
-     */
-    abstract Point removePawn(int[][] plateau);
+    abstract Point removePawn(int[][] actualGrid);
 
 
     /**
@@ -89,11 +87,20 @@ public abstract class MerelleDecider extends Decider {
      */
     void initGridTable() {
         grid = new int[MerelleBoard.GRIDNBCOLS][MerelleBoard.GRIDNBROWS];
-        for (int[] activePoint : MerelleBoard.ACTIVECELLS) {
-            if (model.getGrid("merelleboard").getElements(activePoint[1], activePoint[0]).isEmpty())
-                grid[activePoint[1]][activePoint[0]] = 2;
-            else {
-                grid[activePoint[1]][activePoint[0]] = ((Pawn) model.getGrid("merelleboard").getElements(activePoint[1], activePoint[0]).get(0)).getColor();
+//        for (int[] activePoint : MerelleBoard.ACTIVECELLS) {
+//            if (model.getGrid("merelleboard").getElements(activePoint[1], activePoint[0]).isEmpty())
+//                grid[activePoint[1]][activePoint[0]] = 2;
+//            else {
+//                grid[activePoint[1]][activePoint[0]] = ((Pawn) model.getGrid("merelleboard").getElements(activePoint[1], activePoint[0]).get(0)).getColor();
+//            }
+//        }
+        for (int col = 0; col < grid.length; col++) {
+            for (int row = 0; row < grid[col].length; row++) {
+                if (model.getGrid("merelleboard").getElements(row, col).isEmpty())
+                    grid[col][row] = 2;
+                else {
+                    grid[col][row] = ((Pawn) model.getGrid("merelleboard").getElements(row, col).get(0)).getColor();
+                }
             }
         }
     }
@@ -117,7 +124,8 @@ public abstract class MerelleDecider extends Decider {
             int newX = point.x + offsetCoords[0]; //col
             int newY = point.y + offsetCoords[1]; //row
 
-            if (!MerelleBoard.isActiveCell(newX, newY)) continue; // Do nothing if the cell is unreachable
+            if (!MerelleBoard.isActiveCell(newX, newY))
+                continue; // Do nothing if the cell is unreachable
 
             if (grid[newX][newY] == 2) {
                 lst.add(new Point(newX, newY));
@@ -254,7 +262,6 @@ public abstract class MerelleDecider extends Decider {
      */
     RemoveAction removePawnAction(int[][] actualGrid) {
         Point pawnToRemove = removePawn(actualGrid);
-        assert pawnToRemove != null;
         return new RemoveAction(model, board.getFirstElement(pawnToRemove.y, pawnToRemove.x));
     }
 
@@ -273,7 +280,8 @@ public abstract class MerelleDecider extends Decider {
         // Pour chaque case vide
         for (Point caseVide : getFreePoints(grid)) {
             // Si en placant un pion de la couleur indiquée on fait un moulin, on ajoute le pion à la liste
-            if (hasMill(caseVide.x, caseVide.y, grid, playerColor)) emptyCellsForMill.add(caseVide);
+            if (hasMill(caseVide.x, caseVide.y, grid, playerColor))
+                emptyCellsForMill.add(caseVide);
         }
 
         return emptyCellsForMill;
@@ -318,6 +326,7 @@ public abstract class MerelleDecider extends Decider {
         }
         return false;
     }
+
 }
 
 
