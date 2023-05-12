@@ -6,7 +6,7 @@ The game is won by leaving the opponent with fewer than three pieces, or by bloc
 In conclusion, Nine Men's Morris is a classic board game that has stood the test of time due to its simple yet strategic gameplay. With three (two implemented) distinct phases and the objective of leaving the opponent with fewer than three pieces, it is a game that requires careful planning and tactics to win.
 ## Participants
   - [Nathan BOSCHI](https://github.com/nathanboschi25) [nathanboschi25]
-  - [Robin HALM](https://github.com/ShimoCMoi) [HaRobin]
+  - [Robin HALM](https://github.com/HaRobin) [HaRobin]
   - [Lucas BESSON](https://github.com/lucas-besson) [lucas-besson]
   - [Mathys NOURRY](https://github.com/mathysn) [mathysn]
   - [Tom SIOUAN](https://github.com/tomsnx) [tomsnx]
