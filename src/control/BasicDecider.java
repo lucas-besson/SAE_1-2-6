@@ -39,8 +39,8 @@ public class BasicDecider extends MerelleDecider {
             List<Point> freePoints = getFreePoints(grid);
             destPoint = freePoints.get(rand.nextInt(freePoints.size()));
         }
-
-        actions.addSingleAction(new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x));
+//        FIXME
+//        actions.addSingleAction(new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x));
 
         if (needToRemoveAPawn) actions.addSingleAction(removePawnAction(grid));
     }
@@ -63,8 +63,8 @@ public class BasicDecider extends MerelleDecider {
             List<Point> destinations = computeValidCells(toMove);
 
             destPoint = destinations.get(rand.nextInt(destinations.size()));
-
-            actions.addSingleAction(new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x));
+//            FIXME
+//            actions.addSingleAction(new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x));
 
             secondGrid = grid;
             grid[toMove.x][toMove.y] = 2;

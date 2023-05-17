@@ -1,24 +1,37 @@
 package view;
 
 import boardifier.model.GameElement;
-import boardifier.view.ConsoleColor;
 import boardifier.view.ElementLook;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import model.Pawn;
 
 public class PawnLook extends ElementLook {
 
-    public PawnLook(GameElement element) {
-        super(element, 1, 1);
-        Pawn pawn = (Pawn) element;
+    private Circle circle;
+    public PawnLook(int radius, GameElement element) {
+        super(element);
+        Pawn pawn = (Pawn)element; // unless you did somthing stupid in HoleStageView, it IS really a Pawn instance !
+        circle = new Circle();
+        circle.setRadius(radius);
         if (pawn.getColor() == Pawn.PAWN_BLACK) {
-            shape[0][0] = ConsoleColor.WHITE + ConsoleColor.BLACK_BACKGROUND + pawn.getNumber() + ConsoleColor.RESET;
-        } else {
-            shape[0][0] = ConsoleColor.BLACK + ConsoleColor.RED_BACKGROUND + pawn.getNumber() + ConsoleColor.RESET;
+            circle.setFill(Color.BLACK);
         }
+        else {
+            circle.setFill(Color.RED);
+        }
+        circle.setCenterX(radius);
+        circle.setCenterY(radius);
+        // add the circle to the look
+        addShape(circle);
+        // to fulfill ...
     }
-
     @Override
-    public void onLookChange() {
-        // do nothing since a pawn never change of aspect
+    public void onSelectionChange() {
+        // to fulfill ...
+    }
+    @Override
+    public void onChange() {
+//        FIXME
     }
 }

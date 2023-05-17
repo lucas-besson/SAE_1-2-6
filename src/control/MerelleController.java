@@ -166,8 +166,9 @@ public class MerelleController extends Controller {
 
         // the action is possible and will be processed
         ActionList actions = new ActionList(true);
-        GameAction move = new MoveAction(model, pawn, "merelleboard", row, col);
-        actions.addSingleAction(move);
+//        FIXME
+//        GameAction move = new MoveAction(model, pawn, "merelleboard", row, col);
+//        actions.addSingleAction(move);
         ActionPlayer play = new ActionPlayer(model, this, actions);
         play.start();
 

@@ -44,8 +44,9 @@ public class IntelligentDecider extends MerelleDecider {
         }
 
         pawnToMove = selectNextInPot();
-        MoveAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x);
-        actions.addSingleAction(move);
+//            FIXME
+//        MoveAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x);
+//        actions.addSingleAction(move);
 
         if (needToRemoveAPawn) {
             grid[destPoint.x][destPoint.y] = model.getIdPlayer();
@@ -69,7 +70,8 @@ public class IntelligentDecider extends MerelleDecider {
 
                 // Make the move
                 pawnToMove = (Pawn) model.getGrid("merelleboard").getFirstElement(point.x, point.y);
-                MoveAction move = new MoveAction(model, pawnToMove, "merelleboard", positionsToMove.y, positionsToMove.x);
+                //            FIXME
+//                MoveAction move = new MoveAction(model, pawnToMove, "merelleboard", positionsToMove.y, positionsToMove.x);
 
                 gridCopy[positionsToMove.x][positionsToMove.y] = gridCopy[point.x][point.y];
                 gridCopy[point.x][point.y] = 2;
@@ -78,7 +80,8 @@ public class IntelligentDecider extends MerelleDecider {
 
                 if (score > bestScore) {
                     bestScore = score;
-                    bestMove = move;
+//                    FIXME
+//                    bestMove = move;
                     secondGrid = grid;
                 }
             }
@@ -102,8 +105,8 @@ public class IntelligentDecider extends MerelleDecider {
 
                     destPoint = destinations.get(rand.nextInt(destinations.size()));
                 } while (destinations.isEmpty());
-
-                bestMove = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x);
+//                    FIXME
+//                bestMove = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x);
             }
         }
 

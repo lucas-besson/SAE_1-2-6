@@ -19,14 +19,15 @@ public class MerelleStageView extends GameStageView {
     @Override
     public void createLooks() {
         MerelleStageModel model = (MerelleStageModel) gameStageModel;
-
-        addLook(new MerelleGridLook(BOARD_CELL_WIDTH, BOARD_CELL_HEIGHT, model.getBoard(), -1, true));
-        addLook(new PawnPotLook(POT_CELL_WIDTH, POT_CELL_HEIGHT, model.getBlackPot()));
-        addLook(new PawnPotLook(POT_CELL_WIDTH, POT_CELL_HEIGHT, model.getRedPot()));
+//        addLook(new MerelleGridLook(BOARD_CELL_WIDTH, BOARD_CELL_HEIGHT, model.getBoard(), -1, true));
+//        FIXME add constants
+        addLook(new MerelleGridLook(800, 800, 80, 80, 1, "BLACK", model.getBoard()));
+//        addLook(new PawnPotLook(POT_CELL_WIDTH, POT_CELL_HEIGHT, model.getBlackPot()));
+//        addLook(new PawnPotLook(POT_CELL_WIDTH, POT_CELL_HEIGHT, model.getRedPot()));
 
         for (int i = 0; i < MerellePawnPot.PAWNS_IN_POT; i++) {
-            addLook(new PawnLook(model.getBlackPawns()[i]));
-            addLook(new PawnLook(model.getRedPawns()[i]));
+            addLook(new PawnLook(50, model.getBlackPawns()[i]));
+            addLook(new PawnLook(50, model.getRedPawns()[i]));
         }
     }
 }
