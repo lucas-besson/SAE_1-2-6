@@ -1,9 +1,10 @@
 package boardifier.view;
 
 import boardifier.model.GridElement;
-import boardifier.model.Coord2D;
+import javafx.geometry.Point2D;
 
 public class GridGeometry {
+
     private final GridLook look;
     // constant to defined which point within the cell is required
     public final static int GRIDGEOMETRY_CENTER = 0;
@@ -17,7 +18,7 @@ public class GridGeometry {
     }
 
 
-    public Coord2D getRootPaneLocationForCellCenter(int row, int col) {
+    public Point2D getRootPaneLocationForCellCenter(int row, int col) {
         return getRootPaneLocationForCell(row, col, GRIDGEOMETRY_CENTER);
     }
     /*
@@ -25,8 +26,8 @@ public class GridGeometry {
         in row,col. This method just calls the method computeLocationIfMove() and
        convert the result to obtain coordinates in the root pane.
      */
-    public Coord2D getRootPaneLocationForCell(int row, int col, int position) {
-        Coord2D local = getLocalLocationForCell(row, col, position);
+    public Point2D getRootPaneLocationForCell(int row, int col, int position) {
+        Point2D local = getLocalLocationForCell(row, col, position);
         return local.add(look.getElement().getX(), look.getElement().getY());
     }
 
@@ -34,27 +35,28 @@ public class GridGeometry {
        default computation, may be overridden in subclasses :
        return the center of the cell
      */
-    private Coord2D getLocalLocationForCell(int row, int col, int position) {
+    private Point2D getLocalLocationForCell(int row, int col, int position) {
         // IMPORTANT : checking if it is possible to put the pawn is not done here
         GridElement grid = (GridElement) look.getElement();
         if ((row < 0) || (row >= grid.getNbRows()) || (col < 0) || (col >= grid.getNbCols())) return null;
-        Coord2D p = null;
+        Point2D p = null;
         if (position == GRIDGEOMETRY_CENTER) {
-            p = new Coord2D((col + 0.5) * look.getCellWidth(), (row + 0.5) * look.getCellHeight());
+            p = new Point2D((col + 0.5) * look.getCellWidth(), (row + 0.5) * look.getCellHeight());
         }
         else if (position == GRIDGEOMETRY_TOPLEFT) {
-            p = new Coord2D(col * look.getCellWidth(), row * look.getCellHeight());
+            p = new Point2D(col * look.getCellWidth(), row * look.getCellHeight());
         }
         else if (position == GRIDGEOMETRY_TOPRIGHT) {
-            p = new Coord2D((col + 1) * look.getCellWidth(), row * look.getCellHeight());
+            p = new Point2D((col + 1) * look.getCellWidth(), row * look.getCellHeight());
         }
         else if (position == GRIDGEOMETRY_BOTTOMRIGHT) {
-            p = new Coord2D((col + 1) * look.getCellWidth(), (row + 1) * look.getCellHeight());
+            p = new Point2D((col + 1) * look.getCellWidth(), (row + 1) * look.getCellHeight());
         }
         else if (position == GRIDGEOMETRY_BOTTOMLEFT) {
-            p = new Coord2D(col * look.getCellWidth(), (row + 1) * look.getCellHeight());
+            p = new Point2D(col * look.getCellWidth(), (row + 1) * look.getCellHeight());
         }
         // must add the border width
-        return p;
+        return p.add(look.getBorderWidth(), look.getBorderWidth());
     }
+
 }

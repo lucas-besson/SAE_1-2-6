@@ -1,79 +1,80 @@
 package boardifier.view;
 
 import boardifier.model.GameElement;
+import javafx.scene.Group;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
-import java.util.List;
+import java.util.Collections;
 
-public class RootPane {
+public class RootPane extends Pane {
 
-    private String[][] viewPort;
-    private int width;
-    private int height;
-
-    public RootPane(int width, int height) {
-        this.width = width;
-        this.height = height;
-        viewPort = new String[height][width];
-        clearViewPort();
-    }
+    protected GameStageView gameStageView;
+    protected Group group; // the group that contains all game elements of the current stage
 
     public RootPane() {
-        this(1,1);
+        this.gameStageView = null;
+        group = new Group();
+        //setBackground(Background.EMPTY);
+        resetToDefault();
     }
 
-    public void clearViewPort() {
-        for(int i=0;i<height;i++) {
-            for(int j=0;j<width;j++) {
-                viewPort[i][j] = " ";
+    public final void resetToDefault() {
+        createDefaultGroup();
+        // add the group to the pane
+        getChildren().clear();
+        getChildren().add(group);
+    }
+
+    /**
+     * create the element of the default group
+     * This method can be overriden to define a different visual aspect.
+     */
+    protected void createDefaultGroup() {
+        Rectangle frame = new Rectangle(100, 100, Color.LIGHTGREY);
+        // remove existing children
+        group.getChildren().clear();
+        // adding default ones
+        group.getChildren().addAll(frame);
+    }
+    /**
+     * Initialize the content of the group.
+     * It takes the elements of the model, which are initialized when starting a game stage.
+     * It sorts them so that the element with the highest depth are put in first in the group.
+     * So they will be hidden by elements with a lower depth.
+     */
+    public final void init(GameStageView gameStageView) {
+        if (gameStageView != null) {
+            this.gameStageView = gameStageView;
+            // first sort element by their depth
+            Collections.sort(gameStageView.getLooks(), (a, b) -> a.getDepth() - b.getDepth());
+            // remove existing children
+            group.getChildren().clear();
+            // add game element looks
+            for (ElementLook look : gameStageView.getLooks()) {
+                Group group = look.getGroup();
+                this.group.getChildren().add(group);
             }
+            // add the group to the pane
+            getChildren().clear();
+            getChildren().add(group);
         }
     }
 
-    public void udpate(GameStageView gameStageView) {
-        // first, determine the size of the view
-        int w = 0;
-        int h = 0;
-        List<ElementLook> looks = gameStageView.getLooks();
-        for (ElementLook look : looks) {
-            GameElement element = look.getElement();
-            // just take elements in the stage that are visible
-            if (element.isInStage() && element.isVisible()) {
-                if ((look.width + element.getX()) > w) {
-                    w = (int) (look.width + element.getX());
-                }
-                if ((look.height + element.getY()) > h) {
-                    h = (int) (look.height + element.getY());
-                }
-            }
-        }
-        if ((w != width) || (h != height)) {
-            width = w;
-            height = h;
-            viewPort = new String[height][width];
-            clearViewPort();
-        }
-        // now put looks on the pane
-        for  (ElementLook look : looks) {
-            GameElement element = look.getElement();
-            // just take elements in the stage that are: visible and in the scene
-            if (element.isInStage() && element.isVisible()) {
-                for (int i = 0; i < look.height; i++) {
-                    for (int j = 0; j < look.width; j++) {
-                        if ((element.getY() + i >= 0) && (element.getX() + j >= 0)) {
-                            viewPort[(int) (element.getY() + i)][(int) (element.getX() + j)] = look.getShapePoint(j, i);
-                        }
-                    }
-                }
-            }
-        }
-    }
+    /* ***************************************
+       TRAMPOLINE METHODS
+    **************************************** */
 
-    public void print() {
-        for(int i=0;i<height;i++) {
-            for(int j=0;j<width;j++) {
-                System.out.print(viewPort[i][j]);
-            }
-            System.out.println();
-        }
+    public ElementLook getElementLook(GameElement element) {
+        if (gameStageView == null) return null;
+        return gameStageView.getElementLook(element);
+    }
+    public void update() {
+        if (gameStageView == null) return;
+        gameStageView.update();
     }
 }

@@ -40,7 +40,6 @@ public abstract class GameStageView {
      * Otherwise, the scene will have the given dimension, clipping what is outside its boundaries.
      */
     protected int height;
-    private char[][] viewport; // a buffer of char that is used to store the visual aspect of the stage before begin printed o screen
 
     public GameStageView(String name, GameStageModel gameStageModel) {
         this.name = name;
@@ -81,17 +80,23 @@ public abstract class GameStageView {
     public abstract void createLooks() throws GameException;
 
     /**
-     * udpate all the element's looks of the current stage.
+     * Update look of the elements of the current stage.
+     * Depending on what has changed for an element, it calls different callbacks.
      */
     public void update() {
-        // first get the total size
         for (ElementLook look : looks) {
             GameElement element = look.getElement();
+            if (element.isLocationChanged()) {
+                look.onLocationChange();
+            }
             if (element.isVisibleChanged()) {
                 look.onVisibilityChange();
             }
+            if (element.isSelectedChanged()) {
+                look.onSelectionChange();
+            }
             if (element.isLookChanged()) {
-                look.onLookChange();
+                look.onChange();
             }
         }
     }

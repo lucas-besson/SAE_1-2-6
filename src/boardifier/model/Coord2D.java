@@ -28,8 +28,4 @@ public class Coord2D {
     public void setY(double y) {
         this.y = y;
     }
-
-    public Coord2D add (double x, double y) {
-        return new Coord2D(this.x+x, this.y+y);
-    }
 }

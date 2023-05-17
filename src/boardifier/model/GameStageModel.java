@@ -86,12 +86,8 @@ public abstract class GameStageModel {
     public List<GameElement> getElements() { return elements; }
 
     public void addElement(GameElement element) {
-        elements.add(element);
-    }
 
-    public boolean isElementInStage(GameElement element) {
-        if (elements.contains(element)) return true;
-        return false;
+        elements.add(element);
     }
 
     public List<GridElement> getGrids() {
@@ -192,7 +188,9 @@ public abstract class GameStageModel {
        Helpers methods
     ******************************** */
 
-
+    public String getCurrentPlayerName() {
+        return model.getCurrentPlayer().getName();
+    }
     // get the grid element (if it exists) where is assigned another element
     public GridElement elementGrid(GameElement element) {
         for(GridElement grid : grids) {

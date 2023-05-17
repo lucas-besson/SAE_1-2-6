@@ -1,6 +1,7 @@
 package boardifier.model;
 
 import boardifier.model.animation.Animation;
+import boardifier.view.GridGeometry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -388,9 +389,9 @@ public abstract class GameElement {
     /**
      * Update the element.
      * This method will be called at each frame. It can be used to update the location of the element,
-     * its state, or any other attribute that is defined in its class.*
+     * its state, or any other attribute that is defined in its class.
      */
-    public void update() {
+    public void update(double width, double height, GridGeometry gridGeometry) {
     }
 
     public boolean isLocationChanged() {
@@ -424,6 +425,4 @@ public abstract class GameElement {
     public Model getModel() {
         return gameStageModel.getModel();
     }
-
-    public boolean isInStage() { return gameStageModel.isElementInStage(this); }
 }
