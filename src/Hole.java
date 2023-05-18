@@ -1,15 +1,13 @@
+import control.HoleController;
 import boardifier.control.StageFactory;
-import boardifier.model.GameException;
 import boardifier.model.Model;
-import boardifier.view.RootPane;
-import boardifier.view.View;
-import control.MerelleController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import view.MerelleRootPane;
 import view.MerelleView;
 
-public class MerelleConsole extends Application {
+public class Hole extends Application {
+
     private static int mode;
     public static void main(String[] args) {
         if (args.length == 1) {
@@ -27,7 +25,9 @@ public class MerelleConsole extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
+        // create the global model
         Model model = new Model();
+        // add some players taking mode into account
         if (mode == 0) {
             model.addHumanPlayer("player1");
             model.addHumanPlayer("player2");
@@ -40,13 +40,20 @@ public class MerelleConsole extends Application {
             model.addComputerPlayer("computer1");
             model.addComputerPlayer("computer2");
         }
-
-        StageFactory.registerModelAndView("merelle", "model.MerelleStageModel", "view.MerelleStageView");
+        // register a single stage for the game, called hole
+        StageFactory.registerModelAndView("hole", "model.HoleStageModel", "view.HoleStageView");
+        // create the root pane, using the subclass HoleRootPane
         MerelleRootPane rootPane = new MerelleRootPane();
-        MerelleView merelleView = new MerelleView(model,stage,rootPane);
-        MerelleController control = new MerelleController(model, merelleView);
-        control.setFirstStageName("merelle");
-        stage.setTitle("Nine Men's Morris");
+        // create the global view.
+        MerelleView view = new MerelleView(model, stage, rootPane);
+        // create the controllers.
+        HoleController control = new HoleController(model,view);
+        // set the name of the first stage to create when the game is started
+        control.setFirstStageName("hole");
+        // set the stage title
+        stage.setTitle("The Hole");
+        // show the JavaFx main stage
         stage.show();
+        //view.resetView();
     }
 }

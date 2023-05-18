@@ -1,8 +1,12 @@
 package control;
 
 import boardifier.control.Controller;
+import boardifier.model.Coord2D;
 import boardifier.model.Model;
+import boardifier.model.action.GameAction;
 import boardifier.model.action.MoveAction;
+import boardifier.model.animation.AnimationTypes;
+import boardifier.view.GridLook;
 import model.Pawn;
 
 import java.awt.*;
@@ -44,9 +48,11 @@ public class IntelligentDecider extends MerelleDecider {
         }
 
         pawnToMove = selectNextInPot();
-//            FIXME
-//        MoveAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x);
-//        actions.addSingleAction(move);
+//        NEW
+        GridLook look = (GridLook) control.getElementLook(board);
+        Coord2D center = look.getRootPaneLocationForCellCenter(destPoint.y, destPoint.x);
+        GameAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 10);
+        actions.addSingleAction(move);
 
         if (needToRemoveAPawn) {
             grid[destPoint.x][destPoint.y] = model.getIdPlayer();
@@ -70,8 +76,10 @@ public class IntelligentDecider extends MerelleDecider {
 
                 // Make the move
                 pawnToMove = (Pawn) model.getGrid("merelleboard").getFirstElement(point.x, point.y);
-                //            FIXME
-//                MoveAction move = new MoveAction(model, pawnToMove, "merelleboard", positionsToMove.y, positionsToMove.x);
+//                NEW
+                GridLook look = (GridLook) control.getElementLook(board);
+                Coord2D center = look.getRootPaneLocationForCellCenter(destPoint.y, destPoint.x);
+                GameAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 10);
 
                 gridCopy[positionsToMove.x][positionsToMove.y] = gridCopy[point.x][point.y];
                 gridCopy[point.x][point.y] = 2;
@@ -80,8 +88,8 @@ public class IntelligentDecider extends MerelleDecider {
 
                 if (score > bestScore) {
                     bestScore = score;
-//                    FIXME
-//                    bestMove = move;
+//                    NEW
+                    bestMove = (MoveAction) move;
                     secondGrid = grid;
                 }
             }
@@ -105,8 +113,10 @@ public class IntelligentDecider extends MerelleDecider {
 
                     destPoint = destinations.get(rand.nextInt(destinations.size()));
                 } while (destinations.isEmpty());
-//                    FIXME
-//                bestMove = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x);
+//                NEW
+                GridLook look = (GridLook) control.getElementLook(board);
+                Coord2D center = look.getRootPaneLocationForCellCenter(destPoint.y, destPoint.x);
+                bestMove = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 10);
             }
         }
 

@@ -7,7 +7,7 @@ public class Model {
 
     protected int state; // the game state
     protected final static int STATE_INIT = 1; // e.g. the intro screen
-    protected final static int STATE_PLAY = 2; // when player plays
+    protected final static int STATE_PLAY = 2; // when player is playing within a stage
     protected final static int STATE_PAUSED = 3; // when game is paused
     protected final static int STATE_ENDSTAGE = 4; // when current level  has ended
     protected final static int STATE_ENDGAME = 5; // when game has ended
@@ -153,7 +153,7 @@ public class Model {
         setCaptureEvents(true);
     }
 
-    public boolean isStarted() {
+    public boolean isStageStarted() {
         return state == STATE_PLAY;
     }
     public void pauseGame() {

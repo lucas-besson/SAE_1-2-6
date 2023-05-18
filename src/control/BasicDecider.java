@@ -1,8 +1,12 @@
 package control;
 
 import boardifier.control.Controller;
+import boardifier.model.Coord2D;
 import boardifier.model.Model;
+import boardifier.model.action.GameAction;
 import boardifier.model.action.MoveAction;
+import boardifier.model.animation.AnimationTypes;
+import boardifier.view.GridLook;
 import model.Pawn;
 
 import java.awt.*;
@@ -39,9 +43,11 @@ public class BasicDecider extends MerelleDecider {
             List<Point> freePoints = getFreePoints(grid);
             destPoint = freePoints.get(rand.nextInt(freePoints.size()));
         }
-//        FIXME
-//        actions.addSingleAction(new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x));
-
+//        NEW
+        GridLook look = (GridLook) control.getElementLook(board);
+        Coord2D center = look.getRootPaneLocationForCellCenter(destPoint.y, destPoint.x);
+        GameAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 10);
+        actions.addSingleAction(move);
         if (needToRemoveAPawn) actions.addSingleAction(removePawnAction(grid));
     }
 
@@ -63,8 +69,12 @@ public class BasicDecider extends MerelleDecider {
             List<Point> destinations = computeValidCells(toMove);
 
             destPoint = destinations.get(rand.nextInt(destinations.size()));
-//            FIXME
-//            actions.addSingleAction(new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x));
+
+            GridLook look = (GridLook) control.getElementLook(board);
+            Coord2D center = look.getRootPaneLocationForCellCenter(destPoint.y, destPoint.x);
+            GameAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 10);
+            actions.addSingleAction(move);
+
 
             secondGrid = grid;
             grid[toMove.x][toMove.y] = 2;

@@ -3,6 +3,7 @@ package control;
 import boardifier.control.ActionPlayer;
 import boardifier.control.Controller;
 import boardifier.control.Decider;
+import boardifier.model.Coord2D;
 import boardifier.model.GridElement;
 import boardifier.model.Model;
 import boardifier.model.Player;
@@ -10,6 +11,8 @@ import boardifier.model.action.ActionList;
 import boardifier.model.action.GameAction;
 import boardifier.model.action.MoveAction;
 import boardifier.model.action.RemoveAction;
+import boardifier.model.animation.AnimationTypes;
+import boardifier.view.GridLook;
 import boardifier.view.View;
 import model.*;
 
@@ -20,11 +23,12 @@ import java.io.InputStreamReader;
 public class MerelleController extends Controller {
 
     BufferedReader consoleIn;
-    boolean firstPlayer;
 
     public MerelleController(Model model, View view) {
         super(model, view);
-        firstPlayer = true;
+        setControlKey(new MerelleControllerKey(model, view, this));
+        setControlMouse(new MerelleControllerMouse(model, view, this));
+        setControlAction (new MerelleControllerAction(model, view, this));
     }
 
     /**
@@ -49,11 +53,9 @@ public class MerelleController extends Controller {
      * If the last move made by the player created a new mill, the player is asked to remove an opposing pawn.
      */
     public void nextPlayer() {
-        if (!firstPlayer) {
-            model.setNextPlayer();
-        } else {
-            firstPlayer = false;
-        }
+
+        model.setNextPlayer();
+        
         // get the new player
         Player p = model.getCurrentPlayer();
 
@@ -166,9 +168,12 @@ public class MerelleController extends Controller {
 
         // the action is possible and will be processed
         ActionList actions = new ActionList(true);
-//        FIXME
-//        GameAction move = new MoveAction(model, pawn, "merelleboard", row, col);
-//        actions.addSingleAction(move);
+
+//        NEW
+        GridLook look = (GridLook) this.getElementLook(gameStage.getBoard());
+        Coord2D center = look.getRootPaneLocationForCellCenter(row, col);
+        GameAction move = new MoveAction(model, pawn, "merelleboard", row, col, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 10);
+        actions.addSingleAction(move);
         ActionPlayer play = new ActionPlayer(model, this, actions);
         play.start();
 

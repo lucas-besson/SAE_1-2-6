@@ -10,28 +10,30 @@ import java.util.Map;
 
  */
 public final class AnimationTypes {
-    public static final String MOVETELEPORT_NAME = "move/teleport";
+    public static final String NONE = "none";
+    public static final int NONE_VALUE = -1;
+    public static final String MOVE_TELEPORT = "move/teleport";
     public static final int MOVETELEPORT_VALUE = 10;
-    public static final String MOVELINEARCST_NAME = "move/linearcst";
+    public static final String MOVE_LINEARCST = "move/linearcst";
     public static final int MOVELINEARCST_VALUE = 11;
-    public static final String MOVELINEARPROP_NAME = "move/linearprop";
+    public static final String MOVE_LINEARPROP = "move/linearprop";
     public static final int MOVELINEARPROP_VALUE = 12;
-    public static final String LOOKSIMPLE_NAME = "look/simple";
+    public static final String LOOK_SIMPLE = "look/simple";
     public static final int LOOKSIMPLE_VALUE = 20;
-    public static final String LOOKSEQUENCE_NAME = "look/sequence";
+    public static final String LOOK_SEQUENCE = "look/sequence";
     public static final int LOOKSEQUENCE_VALUE = 21;
-    public static final String LOOKRANDOM_NAME = "look/random";
+    public static final String LOOK_RANDOM = "look/random";
     public static final int LOOKRANDOM_VALUE = 22;
     public static Map<String,Integer> types;
     static {
         types = new HashMap<>();
-        types.put("none",-1);
-        types.put(MOVETELEPORT_NAME,MOVETELEPORT_VALUE);
-        types.put(MOVELINEARCST_NAME,MOVELINEARCST_VALUE);
-        types.put(MOVELINEARPROP_NAME,MOVELINEARPROP_VALUE);
-        types.put(LOOKSEQUENCE_NAME, LOOKSIMPLE_VALUE);
-        types.put(LOOKSEQUENCE_NAME, LOOKSEQUENCE_VALUE);
-        types.put(LOOKRANDOM_NAME,LOOKRANDOM_VALUE);
+        types.put(NONE,NONE_VALUE);
+        types.put(MOVE_TELEPORT,MOVETELEPORT_VALUE);
+        types.put(MOVE_LINEARCST,MOVELINEARCST_VALUE);
+        types.put(MOVE_LINEARPROP,MOVELINEARPROP_VALUE);
+        types.put(LOOK_SEQUENCE, LOOKSIMPLE_VALUE);
+        types.put(LOOK_SEQUENCE, LOOKSEQUENCE_VALUE);
+        types.put(LOOK_RANDOM,LOOKRANDOM_VALUE);
     }
 
     private AnimationTypes() {

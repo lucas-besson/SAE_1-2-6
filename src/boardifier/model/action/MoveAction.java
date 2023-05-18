@@ -15,6 +15,7 @@ public class MoveAction extends GameAction {
     protected double yDest;
     protected double factor; // a speed in pixel/ms or the whole duration, see LinearMoveAnimation
 
+    // construct an action with an animation
     public MoveAction(Model model, GameElement element, String gridDest, int rowDest, int colDest, String animationName, double xDest, double yDest, double factor) {
         super(model, element, animationName);
 
@@ -28,6 +29,9 @@ public class MoveAction extends GameAction {
         createAnimation();
     }
 
+    public MoveAction(Model model, GameElement element, String gridDest, int rowDest, int colDest) {
+        this(model, element, gridDest, rowDest, colDest, AnimationTypes.NONE, 0, 0, 0);
+    }
 
     public String getGridDest() {
         return gridDest;
@@ -45,18 +49,22 @@ public class MoveAction extends GameAction {
         GridElement gridSrc = element.getGrid();
         GridElement gridDest = model.getGrid(this.gridDest);
         if (gridDest == null) return;
+        boolean autoLoc = true;
+        // NB : if an animation has been created, it should lead the element to its correct location, thus no reason to relocate it at its cell center.
+        if (animation != null) autoLoc = false;
         if (gridSrc == gridDest) {
-            gridDest.moveElement(element, rowDest, colDest);
+            gridDest.moveElement(element, rowDest, colDest, autoLoc);
         }
         else {
             gridSrc.removeElement(element);
-            gridDest.putElement(element, rowDest, colDest);
+            gridDest.putElement(element, rowDest, colDest, autoLoc);
         }
         onEndCallback.execute();
     }
 
     protected void createAnimation() {
         animation = null;
+        // only create an animation of type move/xxx
         if (animationName.startsWith("move")) {
             GridElement grid = model.getGrid(gridDest);
             if (grid == null) return;

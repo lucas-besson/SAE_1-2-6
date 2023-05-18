@@ -3,6 +3,7 @@ package model;
 import boardifier.model.GameStageModel;
 import boardifier.model.Model;
 import boardifier.model.StageElementsFactory;
+import boardifier.model.TextElement;
 
 public class MerelleStageModel extends GameStageModel {
 
@@ -13,6 +14,7 @@ public class MerelleStageModel extends GameStageModel {
     private Pawn[] redPawns;
     private int blackPawnsToPlay;
     private int redPawnsToPlay;
+    private TextElement playerName;
 
     public MerelleStageModel(String name, Model model) {
         super(name, model);
@@ -21,6 +23,9 @@ public class MerelleStageModel extends GameStageModel {
         setupCallbacks();
     }
 
+    public TextElement getPlayerName() {
+        return playerName;
+    }
     public int getBlackPawnsToPlay() {
         return blackPawnsToPlay;
     }
@@ -89,6 +94,16 @@ public class MerelleStageModel extends GameStageModel {
      **/
 
      private void setupCallbacks() {
+         onSelectionChange( () -> {
+             // get the selected pawn if any
+             if (selected.size() == 0) {
+                 board.resetReachableCells(false);
+                 return;
+             }
+             Pawn pawn = (Pawn) selected.get(0);
+             // Previously : board.setValidCells(pawn.getNumber());
+             board.setValidCells(pawn,this.getStatus());
+         });
         onMoveInGrid((element, gridDest, rowDest, colDest)->{
             ((Pawn) element).setInAMill(false);
         });
