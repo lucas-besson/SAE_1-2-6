@@ -1,7 +1,9 @@
 package model;
 
+import boardifier.model.GameElement;
 import boardifier.model.GameStageModel;
 import boardifier.model.StageElementsFactory;
+import boardifier.model.TextElement;
 
 public class MerelleStageFactory extends StageElementsFactory {
     private final MerelleStageModel stageModel;
@@ -38,5 +40,11 @@ public class MerelleStageFactory extends StageElementsFactory {
             blackPot.putElement(blackPawns[i], i, 0);
             redPot.putElement(redPawns[i], i, 0);
         }
+
+        // create the text
+        TextElement text = new TextElement(stageModel.getCurrentPlayerName(), stageModel);
+        text.setLocation(10,30);
+        text.setLocationType(GameElement.LOCATION_TOPLEFT);
+        stageModel.setPlayerName(text);
     }
 }
