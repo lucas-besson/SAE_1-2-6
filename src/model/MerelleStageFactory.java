@@ -15,12 +15,16 @@ public class MerelleStageFactory extends StageElementsFactory {
 
     @Override
     public void setup() {
+
+//         TODO creat constant for X position
+
+
         // create the board
         stageModel.setBoard(new MerelleBoard(0, 0, stageModel));
         //create the pots
-        MerellePawnPot blackPot = new MerellePawnPot(50, 0, stageModel);
+        MerellePawnPot blackPot = new MerellePawnPot(400, 0, stageModel);
         stageModel.setBlackPot(blackPot);
-        MerellePawnPot redPot = new MerellePawnPot(60, 0, stageModel);
+        MerellePawnPot redPot = new MerellePawnPot(500, 0, stageModel);
         stageModel.setRedPot(redPot);
 
         // create the pawns

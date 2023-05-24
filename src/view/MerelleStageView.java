@@ -23,7 +23,7 @@ public class MerelleStageView extends GameStageView {
     public void createLooks() {
         MerelleStageModel model = (MerelleStageModel) gameStageModel;
 //        NEW
-        addLook(new HoleBoardLook(320, model.getBoard()));
+        addLook(new MerelleBoardLook(320, model.getBoard()));
         addLook(new PawnPotLook(120,420,model.getBlackPot()));
         addLook(new PawnPotLook(120,420,model.getRedPot()));
 
@@ -34,8 +34,8 @@ public class MerelleStageView extends GameStageView {
 //        addLook(new PawnPotLook(POT_CELL_WIDTH, POT_CELL_HEIGHT, model.getRedPot()));
 
         for (int i = 0; i < MerellePawnPot.PAWNS_IN_POT; i++) {
-            addLook(new PawnLook(50, model.getBlackPawns()[i]));
-            addLook(new PawnLook(50, model.getRedPawns()[i]));
+            addLook(new PawnLook(15, model.getBlackPawns()[i]));
+            addLook(new PawnLook(15, model.getRedPawns()[i]));
         }
         addLook(new TextLook(24, "0x000000", model.getPlayerName()));
     }
