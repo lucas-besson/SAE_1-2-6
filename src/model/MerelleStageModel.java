@@ -6,7 +6,8 @@ import boardifier.model.StageElementsFactory;
 import boardifier.model.TextElement;
 
 public class MerelleStageModel extends GameStageModel {
-
+    public final static int STATE_SELECTPAWN = 1; // the player must select a pawn
+    public final static int STATE_SELECTDEST = 2; // the player must select a destination
     private MerelleBoard board;
     private MerellePawnPot blackPot;
     private MerellePawnPot redPot;
@@ -18,14 +19,13 @@ public class MerelleStageModel extends GameStageModel {
 
     public MerelleStageModel(String name, Model model) {
         super(name, model);
+        state = STATE_SELECTPAWN;
         blackPawnsToPlay = MerellePawnPot.PAWNS_IN_POT;
         redPawnsToPlay = MerellePawnPot.PAWNS_IN_POT;
         setupCallbacks();
     }
 
-    public TextElement getPlayerName() {
-        return playerName;
-    }
+
     public int getBlackPawnsToPlay() {
         return blackPawnsToPlay;
     }
@@ -93,18 +93,18 @@ public class MerelleStageModel extends GameStageModel {
      * When a pawn is moved within the grid, its 'in a mill' flag is set to false.
      **/
 
-     private void setupCallbacks() {
-         onSelectionChange( () -> {
-             // get the selected pawn if any
-             if (selected.size() == 0) {
-                 board.resetReachableCells(false);
-                 return;
-             }
-             Pawn pawn = (Pawn) selected.get(0);
-             // Previously : board.setValidCells(pawn.getNumber());
-             board.setValidCells(pawn,this.getStatus());
-         });
-        onMoveInGrid((element, gridDest, rowDest, colDest)->{
+    private void setupCallbacks() {
+        onSelectionChange(() -> {
+            // get the selected pawn if any
+            if (selected.size() == 0) {
+                board.resetReachableCells(false);
+                return;
+            }
+            Pawn pawn = (Pawn) selected.get(0);
+            // Previously : board.setValidCells(pawn.getNumber());
+            board.setValidCells(pawn, this.getStatus());
+        });
+        onMoveInGrid((element, gridDest, rowDest, colDest) -> {
             ((Pawn) element).setInAMill(false);
         });
         onRemoveFromGrid((element, gridDest, rowDest, colDest) -> {
@@ -121,6 +121,7 @@ public class MerelleStageModel extends GameStageModel {
     /**
      * Checks whether the Merelle stage is ended or not. If the following player doesn't have any move available,
      * the game ends and the actual player wins. If a player has only two pawns remaining, the other player wins.
+     *
      * @return true if the stage is ended, false otherwise
      */
     public boolean isEndStage() {
@@ -140,6 +141,14 @@ public class MerelleStageModel extends GameStageModel {
         return model.isEndStage();
     }
 
+    public TextElement getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(TextElement playerName) {
+        this.playerName = playerName;
+        addElement(playerName);
+    }
 
     @Override
     public StageElementsFactory getDefaultElementFactory() {
