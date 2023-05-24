@@ -16,21 +16,20 @@ public class HoleBoardLook extends GridLook {
         // NB: To have more liberty in the design, GridLook does not compute the cell size from the dimension of the element parameter.
         // If we create the 3x3 board by adding a border of 10 pixels, with cells occupying all the available surface,
         // then, cells have a size of (size-20)/3
-        super(size, size, (size-20)/3, (size-20)/3, 10, "0X000000", element);
+        super(size, size, (size - 20) / 3, (size - 20) / 3, 10, "0X000000", element);
         cells = new Rectangle[3][3];
         // create the rectangles.
-        for (int i=0;i<3;i++) {
-            for(int j=0;j<3;j++) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
                 Color c;
-                if ((i+j)%2 == 0) {
+                if ((i + j) % 2 == 0) {
                     c = Color.BEIGE;
-                }
-                else {
+                } else {
                     c = Color.DARKGRAY;
                 }
                 cells[i][j] = new Rectangle(cellWidth, cellHeight, c);
-                cells[i][j].setX(j*cellWidth+borderWidth);
-                cells[i][j].setY(i*cellHeight+borderWidth);
+                cells[i][j].setX(j * cellWidth + borderWidth);
+                cells[i][j].setY(i * cellHeight + borderWidth);
                 addShape(cells[i][j]);
             }
         }
@@ -39,10 +38,10 @@ public class HoleBoardLook extends GridLook {
     @Override
     public void onChange() {
         // in a pawn is selected, reachableCells changes. Thus, the look of the board must also changes.
-        HoleBoard board = (HoleBoard)element;
+        HoleBoard board = (HoleBoard) element;
         boolean[][] reach = board.getReachableCells();
-        for(int i=0;i<3;i++) {
-            for(int j=0;j<3;j++) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
                 if (reach[i][j]) {
                     cells[i][j].setStrokeWidth(3);
                     cells[i][j].setStrokeMiterLimit(10);

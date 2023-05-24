@@ -73,6 +73,9 @@ public class MerelleController extends Controller {
             boolean ok = false;
             while (!ok) {
                 System.out.print(p.getName() + " > ");
+
+//                On peux récupérer un pion sélectionner grace au gameStageModel.selected
+//                Et la cellule cible grace à MerelleControllerMouse et la mthode getSelectedCellFromClick
                 try {
                     String line = consoleIn.readLine();
                     if (line.equalsIgnoreCase("stop")) {
