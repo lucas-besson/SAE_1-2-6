@@ -23,11 +23,11 @@ public class MerelleBoardLook extends GridLook {
         for (int i=0;i<MerelleBoard.GRIDNBROWS;i++) {
             for(int j=0;j<MerelleBoard.GRIDNBCOLS;j++) {
                 Color c;
-                if ((i+j)%2 == 0) {
-                    c = Color.BEIGE;
+                if (MerelleBoard.isActiveCell(j,i)) {
+                    c = Color.DARKGRAY;
                 }
                 else {
-                    c = Color.DARKGRAY;
+                    c = Color.BEIGE;
                 }
                 cells[i][j] = new Rectangle(cellWidth, cellHeight, c);
                 cells[i][j].setX(j*cellWidth+borderWidth);
@@ -42,17 +42,27 @@ public class MerelleBoardLook extends GridLook {
         // in a pawn is selected, reachableCells changes. Thus, the look of the board must also changes.
         MerelleBoard board = (MerelleBoard)element;
         boolean[][] reach = board.getReachableCells();
-        for(int i=0;i<MerelleBoard.GRIDNBROWS;i++) {
-            for(int j=0;j<MerelleBoard.GRIDNBCOLS;j++) {
-                if (reach[i][j]) {
-                    cells[i][j].setStrokeWidth(3);
-                    cells[i][j].setStrokeMiterLimit(10);
-                    cells[i][j].setStrokeType(StrokeType.CENTERED);
-                    cells[i][j].setStroke(Color.valueOf("0x333333"));
-                } else {
-                    cells[i][j].setStrokeWidth(0);
-                }
+        for (int[] cell : MerelleBoard.ACTIVECELLS) {
+            if (reach[cell[1]][cell[0]]) {
+                cells[cell[1]][cell[0]].setStrokeWidth(3);
+                cells[cell[1]][cell[0]].setStrokeMiterLimit(10);
+                cells[cell[1]][cell[0]].setStrokeType(StrokeType.CENTERED);
+                cells[cell[1]][cell[0]].setStroke(Color.valueOf("0x333333"));
+            } else {
+                cells[cell[1]][cell[0]].setStrokeWidth(0);
             }
         }
+//        for(int i=0;i<MerelleBoard.GRIDNBROWS;i++) {
+//            for(int j=0;j<MerelleBoard.GRIDNBCOLS;j++) {
+//                if (reach[i][j]) {
+//                    cells[i][j].setStrokeWidth(3);
+//                    cells[i][j].setStrokeMiterLimit(10);
+//                    cells[i][j].setStrokeType(StrokeType.CENTERED);
+//                    cells[i][j].setStroke(Color.valueOf("0x333333"));
+//                } else {
+//                    cells[i][j].setStrokeWidth(0);
+//                }
+//            }
+//        }
     }
 }

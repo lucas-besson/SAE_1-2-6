@@ -26,6 +26,7 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
         super(model, view, control);
     }
 
+//    FIXME : adapt this method to the Merelle
     public void handle(MouseEvent event) {
         // if mouse event capture is disabled in the model, just return
         if (!model.isCaptureMouseEvent()) return;
@@ -43,25 +44,25 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
          */
         MerelleStageModel stageModel = (MerelleStageModel) model.getGameStage();
 
-        if (stageModel.getState() == HoleStageModel.STATE_SELECTPAWN) {
+        if (stageModel.getState() == MerelleStageModel.STATE_SELECTPAWN) {
             for (GameElement element : list) {
                 if (element.getType() == ElementTypes.getType("pawn")) {
                     Pawn pawn = (Pawn)element;
                     // check if color of the pawn corresponds to the current player id
                     if (pawn.getColor() == model.getIdPlayer()) {
                         element.toggleSelected();
-                        stageModel.setState(HoleStageModel.STATE_SELECTDEST);
+                        stageModel.setState(MerelleStageModel.STATE_SELECTDEST);
                         return; // do not allow another element to be selected
                     }
                 }
             }
         }
-        else if (stageModel.getState() == HoleStageModel.STATE_SELECTDEST) {
+        else if (stageModel.getState() == MerelleStageModel.STATE_SELECTDEST) {
             // first check if the click is on the current selected pawn. In this case, unselect it
             for (GameElement element : list) {
                 if (element.isSelected()) {
                     element.toggleSelected();
-                    stageModel.setState(HoleStageModel.STATE_SELECTPAWN);
+                    stageModel.setState(MerelleStageModel.STATE_SELECTPAWN);
                     return;
                 }
             }
@@ -96,11 +97,11 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
                 // determine the destination point in the root pane
                 Coord2D center = lookBoard.getRootPaneLocationForCellCenter(dest[0], dest[1]);
                 // create an action with a linear move animation, with 10 pixel/frame
-                GameAction move = new MoveAction(model, pawn, "holeboard", dest[0], dest[1], AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 10);
+                GameAction move = new MoveAction(model, pawn, "merellelboard", dest[0], dest[1], AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 10);
                 // add the action to the action list.
                 actions.addSingleAction(move);
                 stageModel.unselectAll();
-                stageModel.setState(HoleStageModel.STATE_SELECTPAWN);
+                stageModel.setState(MerelleStageModel.STATE_SELECTPAWN);
                 ActionPlayer play = new ActionPlayer(model, control, actions);
                 play.start();
             }

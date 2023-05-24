@@ -69,53 +69,54 @@ public class MerelleController extends Controller {
             else decider = new BasicDecider(model, this);
             ActionPlayer play = new ActionPlayer(model, this, decider, null);
             play.start();
-        } else {
-            boolean ok = false;
-            while (!ok) {
-                System.out.print(p.getName() + " > ");
-
-//                On peux récupérer un pion sélectionner grace au gameStageModel.selected
-//                Et la cellule cible grace à MerelleControllerMouse et la mthode getSelectedCellFromClick
-                try {
-                    String line = consoleIn.readLine();
-                    if (line.equalsIgnoreCase("stop")) {
-                        endGame();
-                        System.exit(100);
-                    }
-                    if (line.length() == 3) {
-                        ok = analyseAndPlay(line);
-                    }
-                    if (!ok) {
-                        System.out.println("incorrect instruction. retry !");
-                    }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            // If the last move have created a new mill
-            if (merelleModel.getBoard().millsChecker(model.getIdPlayer())) {
-                update();
-                System.out.println(p.getName() + ", you have just formed a mill, and must take an opposing pawn.");
-                ok = false;
-                while (!ok) {
-                    System.out.print(p.getName() + " > ");
-                    try {
-                        String line = consoleIn.readLine();
-                        if (line.equalsIgnoreCase("stop")) {
-                            endGame();
-                            System.exit(100);
-                        }
-                        if (line.length() == 1) {
-                            ok = millAnalyseAndPlay(line);
-                        }
-                        if (!ok) {
-                            System.out.println("incorrect instruction. retry !");
-                        }
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
+//        } else {
+//            boolean ok = false;
+//
+//            while (!ok) {
+//                System.out.print(p.getName() + " > ");
+//
+////                On peux récupérer un pion sélectionner grace au gameStageModel.selected
+////                Et la cellule cible grace à MerelleControllerMouse et la mthode getSelectedCellFromClick
+//                try {
+//                    String line = consoleIn.readLine();
+//                    if (line.equalsIgnoreCase("stop")) {
+//                        endGame();
+//                        System.exit(100);
+//                    }
+//                    if (line.length() == 3) {
+//                        ok = analyseAndPlay(line);
+//                    }
+//                    if (!ok) {
+//                        System.out.println("incorrect instruction. retry !");
+//                    }
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
+//            // If the last move have created a new mill
+//            if (merelleModel.getBoard().millsChecker(model.getIdPlayer())) {
+//                update();
+//                System.out.println(p.getName() + ", you have just formed a mill, and must take an opposing pawn.");
+//                ok = false;
+//                while (!ok) {
+//                    System.out.print(p.getName() + " > ");
+//                    try {
+//                        String line = consoleIn.readLine();
+//                        if (line.equalsIgnoreCase("stop")) {
+//                            endGame();
+//                            System.exit(100);
+//                        }
+//                        if (line.length() == 1) {
+//                            ok = millAnalyseAndPlay(line);
+//                        }
+//                        if (!ok) {
+//                            System.out.println("incorrect instruction. retry !");
+//                        }
+//                    } catch (IOException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                }
+//            }
         }
     }
 
