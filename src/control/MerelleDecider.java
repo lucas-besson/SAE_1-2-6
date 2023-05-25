@@ -39,7 +39,7 @@ public abstract class MerelleDecider extends Decider {
      * @param grid actual grid
      * @return list of Point of empty case
      */
-    static List<Point> getFreePoints(int[][] grid) {
+    public List<Point> getFreePoints(int[][] grid) {
         ArrayList<Point> lst = new ArrayList<>();
         for (int[] activePoint : MerelleBoard.ACTIVECELLS)
             if (grid[activePoint[0]][activePoint[1]] == 2)
@@ -72,14 +72,14 @@ public abstract class MerelleDecider extends Decider {
     /**
      * Dans la phase de placement des pions, analyse et place un pion du pot -- Methode abstraite, à redéfinir.
      */
-    abstract void placePawn();
+    protected abstract void placePawn();
 
     /**
      * Dans la phase de déplacements des pions, analyse et déplace un pion du jeu  -- Methode abstraite, à redéfinir.
      */
-    abstract void movePawn();
+    protected abstract void movePawn();
 
-    abstract Point removePawn(int[][] actualGrid);
+    protected abstract Point removePawn(int[][] actualGrid);
 
 
     /**

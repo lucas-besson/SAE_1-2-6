@@ -18,7 +18,7 @@ public class IntelligentDecider extends MerelleDecider {
     }
 
     @Override
-    void placePawn() {
+    protected void placePawn() {
         boolean needToRemoveAPawn = false;
 
         initGridTable();
@@ -63,7 +63,7 @@ public class IntelligentDecider extends MerelleDecider {
     }
 
     @Override
-    void movePawn() {
+    protected void movePawn() {
         int playerColor = model.getIdPlayer();
         int bestScore = Integer.MIN_VALUE;
         MoveAction bestMove = null;
@@ -182,7 +182,7 @@ public class IntelligentDecider extends MerelleDecider {
      * @param grid 2D int table : grid
      * @return Point
      */
-    Point removePawn(int[][] grid) {
+    protected Point removePawn(int[][] grid) {
         List<Point> adversairePions = getPlayerPawnList((model.getIdPlayer() + 1) % 2, grid);
         Point meilleurPion = adversairePions.get(0);
         int joueur = (model.getIdPlayer() + 1) % 2; // On recherche le pion de l'adversaire, qui est représenté par 1
