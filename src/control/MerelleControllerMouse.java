@@ -26,13 +26,13 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
         super(model, view, control);
     }
 
-//    FIXME : adapt this method to the Merelle
+    //    FIXME : adapt this method to the Merelle
     public void handle(MouseEvent event) {
         // if mouse event capture is disabled in the model, just return
         if (!model.isCaptureMouseEvent()) return;
 
         // get the clic x,y in the whole scene (this includes the menu bar if it exists)
-        Coord2D click = new Coord2D(event.getSceneX(),event.getSceneY());
+        Coord2D click = new Coord2D(event.getSceneX(), event.getSceneY());
         // get elements at that position
         List<GameElement> list = control.elementsAt(click);
         // for debug, uncomment next instructions to display x,y and elements at that postion
@@ -47,7 +47,7 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
         if (stageModel.getState() == MerelleStageModel.STATE_SELECTPAWN) {
             for (GameElement element : list) {
                 if (element.getType() == ElementTypes.getType("pawn")) {
-                    Pawn pawn = (Pawn)element;
+                    Pawn pawn = (Pawn) element;
                     // check if color of the pawn corresponds to the current player id
                     if (pawn.getColor() == model.getIdPlayer()) {
                         element.toggleSelected();
@@ -56,8 +56,7 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
                     }
                 }
             }
-        }
-        else if (stageModel.getState() == MerelleStageModel.STATE_SELECTDEST) {
+        } else if (stageModel.getState() == MerelleStageModel.STATE_SELECTDEST) {
             // first check if the click is on the current selected pawn. In this case, unselect it
             for (GameElement element : list) {
                 if (element.isSelected()) {
@@ -70,7 +69,8 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
             boolean boardClicked = false;
             for (GameElement element : list) {
                 if (element == stageModel.getBoard()) {
-                    boardClicked = true; break;
+                    boardClicked = true;
+                    break;
                 }
             }
             if (!boardClicked) return;
@@ -82,15 +82,18 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
             if (model.getIdPlayer() == 1) {
                 pot = stageModel.getRedPot();
             }
-            GameElement pawn = model.getSelected().get(0);
+            Pawn pawn = (Pawn) model.getSelected().get(0);
 
             // thirdly, get the clicked cell in the 3x3 board
             GridLook lookBoard = (GridLook) control.getElementLook(board);
             int[] dest = lookBoard.getCellFromSceneLocation(click);
             // get the cell in the pot that owns the selected pawn
             int[] from = pot.getElementCell(pawn);
-            System.out.println("try to move pawn from pot "+from[0]+","+from[1]+ " to board "+ dest[0]+","+dest[1]);
-            // if the destination cell is valid for for the selected pawn
+            System.out.println("try to move pawn from pot " + from[0] + "," + from[1] + " to board " + dest[0] + "," + dest[1]);
+
+            board.setValidCells(pawn, ((MerelleStageModel) model.getGameStage()).getStatus());
+
+            // if the destination cell is valid for the selected pawn
             if (board.canReachCell(dest[0], dest[1])) {
                 // build the list of actions to do, and pass to the next player when done
                 ActionList actions = new ActionList(true);
@@ -108,4 +111,3 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
         }
     }
 }
-
