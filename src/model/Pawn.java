@@ -3,6 +3,8 @@ package model;
 import boardifier.model.ElementTypes;
 import boardifier.model.GameElement;
 import boardifier.model.GameStageModel;
+import boardifier.model.animation.AnimationStep;
+import boardifier.view.GridGeometry;
 import view.MerelleStageView;
 
 public class Pawn extends GameElement {
@@ -49,5 +51,20 @@ public class Pawn extends GameElement {
         // Each cell is 2 units tall, the y being stored at the center
         // Return the pawn row starting from 1
         return (int)(y + MerelleStageView.BOARD_CELL_HEIGHT / 2.0) / MerelleStageView.BOARD_CELL_HEIGHT;
+    }
+    public void update(double width, double height, GridGeometry gridGeometry) {
+
+        // if must be animated, move the pawn
+        if (animation != null) {
+
+            AnimationStep step = animation.next();
+            if (step != null) {
+                System.out.println(step.getInt(0) + "  " +  step.getInt(1));
+                setLocation(step.getInt(0), step.getInt(1));
+            }
+            else {
+                animation = null;
+            }
+        }
     }
 }
