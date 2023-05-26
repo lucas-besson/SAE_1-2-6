@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -39,6 +40,11 @@ public class MerelleDeciderUnitTest {
             }
 
             @Override
+            public int[][] getGrid() {
+                return super.getGrid();
+            }
+
+            @Override
             public void placePawn() {
                 test=2;
             }
@@ -57,6 +63,11 @@ public class MerelleDeciderUnitTest {
             @Override
             public ActionList decide() {
                 return super.decide();
+            }
+
+            @Override
+            public List<Point> computeValidCells(Point point) {
+                return super.computeValidCells(point);
             }
 
 
@@ -96,6 +107,35 @@ public class MerelleDeciderUnitTest {
         Mockito.when(gridElement.getElements(Mockito.anyInt(),Mockito.anyInt())).thenReturn( gameElements);
         merelleDeciderTest.decide();
         Assertions.assertEquals(3, merelleDeciderTest.getTest());
+    }
+
+    @Test
+    void tescomputeValidCells(){
+        int[][] grid = {
+                {0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 2, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 2, 0},
+                {0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 2, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0}
+        };
+        Point point = Mockito.mock(Point.class);
+        point.x=2;
+        point.y=2;
+        merelleDeciderTest.setGrid(grid);
+        Assertions.assertEquals(new ArrayList<>(),merelleDeciderTest.computeValidCells(point));
+
+        point.x=5;
+        point.y=5;
+        Assertions.assertEquals(2,merelleDeciderTest.computeValidCells(point).size());
+
+
+
+
+
+
+
     }
 
 }

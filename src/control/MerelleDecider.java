@@ -24,6 +24,11 @@ public abstract class MerelleDecider extends Decider {
     Point destPoint;
 
     Random rand = new Random();
+
+    public void setGrid(int[][] grid) {
+        this.grid = grid;
+    }
+
     int[][] grid;
     int[][] secondGrid;
     public int test;
@@ -31,6 +36,11 @@ public abstract class MerelleDecider extends Decider {
     public int getTest() {
         return test;
     }
+
+    public int[][] getGrid() {
+        return grid;
+    }
+
     public MerelleDecider(Model model, Controller control) {
         super(model, control);
         stage = (MerelleStageModel) model.getGameStage();
@@ -115,7 +125,7 @@ public abstract class MerelleDecider extends Decider {
      * @param point point to move
      * @return list of Point
      */
-    List<Point> computeValidCells(Point point) {
+    public List<Point> computeValidCells(Point point) {
         ArrayList<Point> lst = new ArrayList<>();
         if (grid[point.x][point.y] == 2) {
             return lst;
