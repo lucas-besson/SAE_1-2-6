@@ -18,7 +18,7 @@ public class IntelligentDecider extends MerelleDecider {
     }
 
     @Override
-    protected void placePawn() {
+    public void placePawn() {
         boolean needToRemoveAPawn = false;
 
         initGridTable();

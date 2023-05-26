@@ -33,13 +33,18 @@ public class MerelleDeciderUnitTest {
         Mockito.when(model.getGrid(anyString())).thenReturn(merelleBoard);
         merelleDeciderTest = new MerelleDecider(model, controller) {
             public int test=1;
+
+            public int getTest() {
+                return test;
+            }
+
             @Override
-            protected void placePawn() {
+            public void placePawn() {
                 test=2;
             }
             @Override
             protected void movePawn() {
-
+                test=3;
             }
             public List<Point> getFreePoints(int[][] actualGrid) {
                 return super.getFreePoints(actualGrid);
@@ -80,17 +85,17 @@ public class MerelleDeciderUnitTest {
         List<GameElement> gameElements = Mockito.mock(List.class);
 
         Mockito.when(merelleStageModel.getStatus()).thenReturn(1);
-        merelleDeciderTest.decide();
-
-
-        Pawn p1 = Mockito.mock(Pawn.class);
-        Mockito.when(p1.getColor()).thenReturn(0);
         Mockito.when(aIPot.getFirstElement(Mockito.anyInt(),Mockito.anyInt())).thenReturn(gameElement);
         Mockito.when(gridElement.getElements(Mockito.anyInt(),Mockito.anyInt())).thenReturn( gameElements);
         merelleDeciderTest.decide();
-        Assertions.assertEquals(0, ((Pawn) aIPot.getFirstElement(0, 0)).getColor());
+        Assertions.assertEquals(2, merelleDeciderTest.getTest());
 
 
+        Mockito.when(merelleStageModel.getStatus()).thenReturn(2);
+        Mockito.when(aIPot.getFirstElement(Mockito.anyInt(),Mockito.anyInt())).thenReturn(gameElement);
+        Mockito.when(gridElement.getElements(Mockito.anyInt(),Mockito.anyInt())).thenReturn( gameElements);
+        merelleDeciderTest.decide();
+        Assertions.assertEquals(3, merelleDeciderTest.getTest());
     }
 
 }

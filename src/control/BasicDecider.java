@@ -20,7 +20,7 @@ public class BasicDecider extends MerelleDecider {
      * -- Sinon elle choisit une case et pose le pion aléatoirement.
      */
     @Override
-    protected void placePawn() {
+    public void placePawn() {
         initGridTable();
 
         pawnToMove = selectNextInPot();

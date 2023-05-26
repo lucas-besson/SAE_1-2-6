@@ -26,7 +26,11 @@ public abstract class MerelleDecider extends Decider {
     Random rand = new Random();
     int[][] grid;
     int[][] secondGrid;
+    public int test;
 
+    public int getTest() {
+        return test;
+    }
     public MerelleDecider(Model model, Controller control) {
         super(model, control);
         stage = (MerelleStageModel) model.getGameStage();
@@ -72,7 +76,7 @@ public abstract class MerelleDecider extends Decider {
     /**
      * Dans la phase de placement des pions, analyse et place un pion du pot -- Methode abstraite, à redéfinir.
      */
-    protected abstract void placePawn();
+    public abstract void placePawn();
 
     /**
      * Dans la phase de déplacements des pions, analyse et déplace un pion du jeu  -- Methode abstraite, à redéfinir.
