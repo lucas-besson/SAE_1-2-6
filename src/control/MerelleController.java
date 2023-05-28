@@ -54,6 +54,7 @@ public class MerelleController extends Controller {
      */
     public void nextPlayer() {
 
+//        FIXME : mettre le setNextPlayer dans le MouseController ? et donc dans le if pour l'IA pour mieux gérer les mill
         model.setNextPlayer();
         
         // get the new player

@@ -59,7 +59,6 @@ public class Pawn extends GameElement {
 
             AnimationStep step = animation.next();
             if (step != null) {
-                System.out.println(step.getInt(0) + "  " +  step.getInt(1));
                 setLocation(step.getInt(0), step.getInt(1));
             }
             else {

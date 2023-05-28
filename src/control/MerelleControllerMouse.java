@@ -84,7 +84,7 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
             }
             Pawn pawn = (Pawn) model.getSelected().get(0);
 
-            // thirdly, get the clicked cell in the 3x3 board
+            // thirdly, get the clicked cell in the board
             GridLook lookBoard = (GridLook) control.getElementLook(board);
             int[] dest = lookBoard.getCellFromSceneLocation(click);
             // get the cell in the pot that owns the selected pawn
@@ -109,6 +109,10 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
                 stageModel.setState(MerelleStageModel.STATE_SELECTPAWN);
                 ActionPlayer play = new ActionPlayer(model, control, actions);
                 play.start();
+            }
+
+            if (board.millsChecker(model.getIdPlayer())) {
+                System.out.println("Logique pour la mill");
             }
         }
     }
