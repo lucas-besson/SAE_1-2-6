@@ -46,9 +46,9 @@ public class MerelleStageFactory extends StageElementsFactory {
         }
 
         // create the text
-        TextElement text = new TextElement(stageModel.getCurrentPlayerName(), stageModel);
-        text.setLocation(10,30);
-        text.setLocationType(GameElement.LOCATION_TOPLEFT);
-        stageModel.setPlayerName(text);
+//        TextElement text = new TextElement(stageModel.getCurrentPlayerName(), stageModel);
+//        text.setLocation(10,30);
+//        text.setLocationType(GameElement.LOCATION_TOPLEFT);
+//        stageModel.setPlayerName(text);
     }
 }

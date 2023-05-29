@@ -2,67 +2,77 @@ package view;
 
 import boardifier.model.GameElement;
 import boardifier.view.GridLook;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.StrokeType;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.*;
 import model.MerelleBoard;
 
-import java.net.FileNameMap;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ListIterator;
-
 public class MerelleBoardLook extends GridLook {
+    Image millIMG = new Image("C:\\Users\\Robin\\Documents\\GitHub\\SAE_1-2-6\\src\\assets\\images\\mill.png");
+
 
     // the array of rectangle composing the grid
-    private Rectangle[][] cells;
-    final int EMPTYCELL = -1;
-    final int ACTIVCELL = 0;
-    final int HORIZONTAL = 1;
-    final int VERTICAL = 2;
-    final int[][] GRIDLOOK = {
-            {ACTIVCELL, HORIZONTAL, HORIZONTAL, ACTIVCELL, HORIZONTAL, HORIZONTAL, ACTIVCELL},
-            {VERTICAL, ACTIVCELL, HORIZONTAL, ACTIVCELL, HORIZONTAL, ACTIVCELL, VERTICAL},
-            {VERTICAL, VERTICAL, ACTIVCELL, ACTIVCELL, ACTIVCELL, VERTICAL, VERTICAL},
-            {ACTIVCELL, ACTIVCELL, ACTIVCELL, EMPTYCELL, ACTIVCELL, ACTIVCELL, ACTIVCELL},
-            {VERTICAL, VERTICAL, ACTIVCELL, ACTIVCELL, ACTIVCELL, VERTICAL, VERTICAL},
-            {VERTICAL, ACTIVCELL, HORIZONTAL, ACTIVCELL, HORIZONTAL, ACTIVCELL, VERTICAL},
-            {ACTIVCELL, HORIZONTAL, HORIZONTAL, ACTIVCELL, HORIZONTAL, HORIZONTAL, ACTIVCELL}};
-    final int linkWidth = 5;
+    private final Shape[][] cells;
+    final int linkThickness = 5;
+    final int cellRadius = 24;
+    private final Color linesColor = Color.BLACK;
 
     public MerelleBoardLook(int size, GameElement element) {
         // NB: To have more liberty in the design, GridLook does not compute the cell size from the dimension of the element parameter.
         // If we create the 3x3 board by adding a border of 10 pixels, with cells occupying all the available surface,
         // then, cells have a size of (size-20)/3
-        super(size, size, (size - 20) / MerelleBoard.GRIDNBROWS, (size - 20) / MerelleBoard.GRIDNBCOLS, 10, Color.WHITE.toString(), element);
-        cells = new Rectangle[MerelleBoard.GRIDNBROWS][MerelleBoard.GRIDNBCOLS];
-        // create the rectangles.
-        for (int row = 0; row < MerelleBoard.GRIDNBROWS; row++) {
-            for (int col = 0; col < MerelleBoard.GRIDNBCOLS; col++) {
-                int cell = GRIDLOOK[row][col];
-                if (cell == EMPTYCELL) {
-                    cells[row][col] = new Rectangle(cellWidth, cellHeight, Color.WHITE);
-                    cells[row][col].setX(borderWidth + col * cellWidth);
-                    cells[row][col].setY(borderWidth + row * cellHeight);
-                } else if (cell == ACTIVCELL) {
-                    cells[row][col] = new Rectangle(cellWidth, cellHeight, Color.DARKGRAY);
-                    cells[row][col].setStroke(Color.WHITE);
-                    cells[row][col].setStrokeWidth(3);
-                    cells[row][col].setX(borderWidth + col * cellWidth);
-                    cells[row][col].setY(borderWidth + row * cellHeight);
-                } else if (cell == HORIZONTAL) {
-                    cells[row][col] = new Rectangle(cellWidth, linkWidth, Color.RED);
-                    cells[row][col].setX(borderWidth + col * cellWidth);
-                    cells[row][col].setY(borderWidth + row * cellHeight + cellHeight / 2.0);
+        super(size, size, (size - 20) / MerelleBoard.GRIDNBROWS, (size - 20) / MerelleBoard.GRIDNBCOLS, 10, Color.LIGHTSLATEGREY.toString(), element);
+        cells = new Shape[MerelleBoard.GRIDNBROWS][MerelleBoard.GRIDNBCOLS];
+        Rectangle rectangle;
+        Circle circle;
 
-                } else if (cell == VERTICAL) {
-                    cells[row][col] = new Rectangle(linkWidth, cellHeight, Color.RED);
-                    cells[row][col].setX(borderWidth + col * cellWidth + cellWidth / 2.0);
-                    cells[row][col].setY(borderWidth + row * cellHeight);
-                }
-                addShape(cells[row][col]);
+        // Create the background lines.
+        int[] linesSize = {6, 4, 2};
+        for (int i = 0; i < 2; i++) {
+            for (int n : linesSize) {
+                addShape(newLine(
+                        borderWidth + cellWidth / 2.0 + (n % 3) * cellWidth,
+                        borderWidth + cellHeight / 2.0 - linkThickness / 2.0 + cellHeight * (n % 3) + i * n * cellHeight,
+                        n * cellWidth,
+                        linkThickness
+                ));
+                addShape(newLine(
+                        borderWidth + cellWidth / 2.0 - linkThickness / 2.0 + cellWidth * (n % 3) + i * n * cellWidth,
+                        borderWidth + cellHeight / 2.0 + (n % 3) * cellHeight,
+                        linkThickness,
+                        n * cellWidth
+                ));
             }
+            addShape(newLine(
+                    borderWidth + cellWidth / 2.0 - linkThickness / 2.0 + cellWidth * 3,
+                    borderWidth + cellHeight / 2.0 + i * 4 * cellHeight,
+                    linkThickness,
+                    2 * cellWidth
+            ));
+            addShape(newLine(
+                    borderWidth + cellWidth / 2.0 + i * 4 * cellWidth,
+                    borderWidth + cellHeight / 2.0 - linkThickness / 2.0 + cellHeight * 3,
+                    2 * cellWidth,
+                    linkThickness
+            ));
         }
+
+
+        // Create the circle cells.
+        for (int[] cell : MerelleBoard.ACTIVECELLS) {
+            circle = new Circle(cellRadius);
+            circle.setCenterX(borderWidth + cell[0] * cellWidth + cellWidth / 2.0);
+            circle.setCenterY(borderWidth + cell[1] * cellHeight + cellHeight / 2.0);
+            circle.setFill(Color.BLACK);
+            cells[cell[1]][cell[0]] = circle;
+            addShape(cells[cell[1]][cell[0]]);
+        }
+        rectangle = new Rectangle(borderWidth + 3 * cellWidth, borderWidth + 3 * cellHeight, cellWidth, cellHeight);
+        rectangle.setFill(new ImagePattern(millIMG));
+        cells[3][3] = rectangle;
+        addShape(cells[3][3]);
     }
 
     @Override
@@ -73,23 +83,19 @@ public class MerelleBoardLook extends GridLook {
         for (int[] cell : MerelleBoard.ACTIVECELLS) {
             if (reach[cell[1]][cell[0]]) {
                 cells[cell[1]][cell[0]].setStrokeMiterLimit(10);
-                cells[cell[1]][cell[0]].setStrokeType(StrokeType.INSIDE);
+                cells[cell[1]][cell[0]].setStrokeType(StrokeType.OUTSIDE);
+                cells[cell[1]][cell[0]].setStrokeWidth(3);
                 cells[cell[1]][cell[0]].setStroke(Color.RED);
+
             } else {
-                cells[cell[1]][cell[0]].setStroke(Color.WHITE);
+                cells[cell[1]][cell[0]].setStrokeWidth(0);
             }
         }
-//        for(int i=0;i<MerelleBoard.GRIDNBROWS;i++) {
-//            for(int j=0;j<MerelleBoard.GRIDNBCOLS;j++) {
-//                if (reach[i][j]) {
-//                    cells[i][j].setStrokeWidth(3);
-//                    cells[i][j].setStrokeMiterLimit(10);
-//                    cells[i][j].setStrokeType(StrokeType.CENTERED);
-//                    cells[i][j].setStroke(Color.valueOf("0x333333"));
-//                } else {
-//                    cells[i][j].setStrokeWidth(0);
-//                }
-//            }
-//        }
+    }
+
+    private Rectangle newLine(double x, double y, double width, double height) {
+        Rectangle rectangle = new Rectangle(x, y, width, height);
+        rectangle.setFill(linesColor);
+        return rectangle;
     }
 }
