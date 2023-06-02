@@ -2,6 +2,7 @@ import boardifier.control.Controller;
 import boardifier.model.GameElement;
 import boardifier.model.GridElement;
 import boardifier.model.Model;
+import boardifier.model.Player;
 import boardifier.model.action.ActionList;
 import control.MerelleDecider;
 import model.*;
@@ -69,6 +70,10 @@ public class MerelleDeciderUnitTest {
             public List<Point> computeValidCells(Point point) {
                 return super.computeValidCells(point);
             }
+            @Override
+            public boolean isNewMill(int[][] previousGrid, int[][] actualGrid, int playerColor) {
+                return super.isNewMill(previousGrid, actualGrid, playerColor);
+            }
 
 
         };
@@ -129,10 +134,46 @@ public class MerelleDeciderUnitTest {
         point.x=5;
         point.y=5;
         Assertions.assertEquals(2,merelleDeciderTest.computeValidCells(point).size());
+    }
+
+    @Test
+    void isNewMill(){
+        int[][] previousGrid = {
+                {0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 2, 0, 0, 0, 0},
+                {0, 0, 2, 0, 0, 0, 0},
+                {0, 0, 2, 0, 0, 0, 0},
+                {0, 0, 0, 2, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0}
+        };
+
+        int[][] actualGrid = {
+                {0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 2, 0, 0, 0, 0},
+                {0, 0, 2, 0, 0, 0, 0},
+                {0, 0, 2, 0, 0, 0, 0},
+                {0, 0, 0, 2, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0}
+        };
+        // Test d'une grille sans changement
+
+        Assertions.assertFalse(merelleDeciderTest.isNewMill(previousGrid,actualGrid,1));
 
 
+        // Test d'une grille avec un nouveau moulin
+        actualGrid[2][4]=1;
+        actualGrid[3][4]=1;
+        actualGrid[4][4]=1;
+        Assertions.assertTrue(merelleDeciderTest.isNewMill(previousGrid,actualGrid,1));
 
 
+        actualGrid[2][4]=1;
+        actualGrid[3][4]=1;
+        actualGrid[4][4]=2;
+        // Test d'une grille avec un moulin à été supprier
+        Assertions.assertFalse(merelleDeciderTest.isNewMill(previousGrid,actualGrid,1));
 
 
 

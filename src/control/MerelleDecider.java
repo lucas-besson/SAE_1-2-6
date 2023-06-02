@@ -187,7 +187,7 @@ public abstract class MerelleDecider extends Decider {
      * @param playerColor  color of the player
      * @return true is there is a new mill, false otherwise
      */
-    boolean isNewMill(int[][] previousGrid, int[][] actualGrid, int playerColor) {
+    public boolean isNewMill(int[][] previousGrid, int[][] actualGrid, int playerColor) {
         for (int[][] mill : MerelleBoard.MILLS) {
             int x1 = mill[0][0];
             int y1 = mill[0][1];
