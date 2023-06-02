@@ -337,7 +337,7 @@ public abstract class MerelleDecider extends Decider {
      * @param position    int table : cell coordinate
      * @return true if the given mill table contain the cell coordinate, false otherwise
      */
-    boolean contains(int[][] millToCheck, int[] position) {
+    public boolean contains(int[][] millToCheck, int[] position) {
         for (int[] millPoint : millToCheck) {
             if (millPoint[0] == position[0] && millPoint[1] == position[1]) return true;
         }

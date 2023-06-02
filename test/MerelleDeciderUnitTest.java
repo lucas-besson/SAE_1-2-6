@@ -217,6 +217,4 @@ public class MerelleDeciderUnitTest {
         Assertions.assertFalse(merelleDeciderTest.hasMill(3,6,grid,1));
     }
 
-
-
 }
