@@ -313,7 +313,7 @@ public abstract class MerelleDecider extends Decider {
      * @param playerId int : color of player
      * @return true if there will be a new mill, false otherwise
      */
-    boolean hasMill(int col, int row, int[][] grid, int playerId) {
+    public boolean hasMill(int col, int row, int[][] grid, int playerId) {
         for (int[][] mill : MerelleBoard.MILLS) {
             if (contains(mill, new int[]{col, row})) {
                 int count = 1;

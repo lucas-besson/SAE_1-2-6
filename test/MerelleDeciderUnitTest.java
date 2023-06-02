@@ -79,6 +79,10 @@ public class MerelleDeciderUnitTest {
             public int millsCount(int x, int y, int[][] plateau) {
                 return super.millsCount(x, y, plateau);
             }
+            @Override
+            public boolean hasMill(int col, int row, int[][] grid, int playerId) {
+                return super.hasMill(col, row, grid, playerId);
+            }
 
 
         };
@@ -197,7 +201,20 @@ public class MerelleDeciderUnitTest {
         grid[6][6]=1;
         Assertions.assertEquals(2,merelleDeciderTest.millsCount(0,6,grid));
 
-
+    }
+    @Test
+    void testhasMill(){
+        int[][] grid = {
+                {1, 2, 2, 1, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2}
+        };
+        Assertions.assertTrue(merelleDeciderTest.hasMill(0,6,grid,1));
+        Assertions.assertFalse(merelleDeciderTest.hasMill(3,6,grid,1));
     }
 
 
