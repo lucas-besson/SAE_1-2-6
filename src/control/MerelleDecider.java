@@ -215,7 +215,7 @@ public abstract class MerelleDecider extends Decider {
      * @param plateau 2D int grid
      * @return true if there will be a new mill, false otherwise
      */
-    boolean canMakeMill(int x, int y, int[][] plateau) {
+    public boolean canMakeMill(int x, int y, int[][] plateau) {
         int joueur = plateau[x][y];
         for (int i = 0; true; i++) {
             if (plateau[x][(y + i) % 3] != joueur) {
@@ -244,7 +244,7 @@ public abstract class MerelleDecider extends Decider {
      * @param plateau 2D int grid
      * @return int
      */
-    int millsCount(int x, int y, int[][] plateau) {
+    public int millsCount(int x, int y, int[][] plateau) {
         int moulins = 0;
         int joueur = plateau[x][y];
         if (joueur == 0) {

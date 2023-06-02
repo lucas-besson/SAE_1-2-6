@@ -75,6 +75,11 @@ public class MerelleDeciderUnitTest {
                 return super.isNewMill(previousGrid, actualGrid, playerColor);
             }
 
+            @Override
+            public int millsCount(int x, int y, int[][] plateau) {
+                return super.millsCount(x, y, plateau);
+            }
+
 
         };
     }
@@ -115,7 +120,7 @@ public class MerelleDeciderUnitTest {
     }
 
     @Test
-    void tescomputeValidCells(){
+    void testcomputeValidCells(){
         int[][] grid = {
                 {0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0},
@@ -137,7 +142,7 @@ public class MerelleDeciderUnitTest {
     }
 
     @Test
-    void isNewMill(){
+    void testisNewMill(){
         int[][] previousGrid = {
                 {0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0},
@@ -175,8 +180,26 @@ public class MerelleDeciderUnitTest {
         // Test d'une grille avec un moulin à été supprier
         Assertions.assertFalse(merelleDeciderTest.isNewMill(previousGrid,actualGrid,1));
 
+    }
+
+    @Test
+    void testmillsCount(){
+        int[][] grid = {
+                {1, 2, 2, 1, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 1},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2}
+        };
+        Assertions.assertEquals(2,merelleDeciderTest.millsCount(0,6,grid));
+        grid[6][6]=1;
+        Assertions.assertEquals(2,merelleDeciderTest.millsCount(0,6,grid));
 
 
     }
+
+
 
 }
