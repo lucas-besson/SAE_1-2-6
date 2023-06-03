@@ -15,6 +15,7 @@ import boardifier.model.animation.AnimationTypes;
 import boardifier.view.GridLook;
 import boardifier.view.View;
 import model.*;
+import view.MerelleView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -53,14 +54,21 @@ public class MerelleController extends Controller {
      * If the last move made by the player created a new mill, the player is asked to remove an opposing pawn.
      */
     public void nextPlayer() {
+        MerelleStageModel stageModel = (MerelleStageModel) model.getGameStage();
 
 //        FIXME : mettre le setNextPlayer dans le MouseController ? et donc dans le if pour l'IA pour mieux gérer les mill
-        model.setNextPlayer();
-        
+
+        // If the last move introduce a mill, the same player as last move play again to remove an opponent pawn
+        if (stageModel.getBoard().millsChecker(model.getIdPlayer())) {
+            stageModel.setState(MerelleStageModel.STATE_SELECTMILL);
+            ((MerelleView) view).millAlert().show();
+        }
+        else {
+            model.setNextPlayer();
+        }
         // get the new player
         Player p = model.getCurrentPlayer();
 
-        MerelleStageModel merelleModel = (MerelleStageModel) model.getGameStage();
 
         if (p.getType() == Player.COMPUTER) {
             System.out.println(p.getName() + " PLAYS");
@@ -209,7 +217,7 @@ public class MerelleController extends Controller {
         Pawn pawn = (Pawn) gameStage.getBoard().getPawn(pawnIndex + 1, ((color == 0) ? 1 : 0));
         if (pawn == null) return false;
 
-        // See if the pawn can be deleted 
+        // See if the pawn can be deleted
         gameStage.getBoard().setValidMillCells(color);
         if (!gameStage.getBoard().canReachCell(pawn.getRow() - 1, pawn.getCol() - 1)) return false;
 

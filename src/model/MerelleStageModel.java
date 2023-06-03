@@ -8,6 +8,7 @@ import boardifier.model.TextElement;
 public class MerelleStageModel extends GameStageModel {
     public final static int STATE_SELECTPAWN = 1; // the player must select a pawn
     public final static int STATE_SELECTDEST = 2; // the player must select a destination
+    public final static int STATE_SELECTMILL = 3; // the player must select a opponent pawn to be removed
     private MerelleBoard board;
     private MerellePawnPot blackPot;
     private MerellePawnPot redPot;
@@ -104,8 +105,23 @@ public class MerelleStageModel extends GameStageModel {
             // Previously : board.setValidCells(pawn.getNumber());
             board.setValidCells(pawn, this.getStatus());
         });
+        onPutInGrid((element, gridDest, rowDest, colDest) -> {
+            Pawn p = ((Pawn) element);
+            p.setInAMill(false);
+//            LOG :
+//            System.out.println("x : " + colDest + ", y : " + rowDest);
+            p.setCol(colDest);
+            p.setRow(rowDest);
+
+        });
         onMoveInGrid((element, gridDest, rowDest, colDest) -> {
-            ((Pawn) element).setInAMill(false);
+            Pawn p = ((Pawn) element);
+            p.setInAMill(false);
+//            LOG :
+//            System.out.println("x : " + colDest + ", y : " + rowDest);
+            p.setCol(colDest);
+            p.setRow(rowDest);
+
         });
         onRemoveFromGrid((element, gridDest, rowDest, colDest) -> {
             if (gridDest != board) return;
@@ -115,6 +131,7 @@ public class MerelleStageModel extends GameStageModel {
             } else {
                 redPawnsToPlay--;
             }
+            isEndStage();
         });
     }
 

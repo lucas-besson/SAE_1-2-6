@@ -7,6 +7,7 @@ import boardifier.model.*;
 import boardifier.model.action.ActionList;
 import boardifier.model.action.GameAction;
 import boardifier.model.action.MoveAction;
+import boardifier.model.action.RemoveAction;
 import boardifier.model.animation.AnimationTypes;
 import boardifier.view.GridLook;
 import boardifier.view.View;
@@ -36,13 +37,14 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
         // get elements at that position
         List<GameElement> list = control.elementsAt(click);
         // for debug, uncomment next instructions to display x,y and elements at that postion
-        /*
-        System.out.println("click in "+event.getSceneX()+","+event.getSceneY());
-        for(GameElement element : list) {
-            System.out.println(element);
-        }
-         */
+
+//        System.out.println("click in "+event.getSceneX()+","+event.getSceneY());
+//        for(GameElement element : list) {
+//            System.out.println(element);
+//        }
+
         MerelleStageModel stageModel = (MerelleStageModel) model.getGameStage();
+        MerellePawnPot pot = ((model.getIdPlayer() == 0) ? stageModel.getBlackPot() : stageModel.getRedPot());
 
         if (stageModel.getState() == MerelleStageModel.STATE_SELECTPAWN) {
             for (GameElement element : list) {
@@ -50,14 +52,16 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
                     Pawn pawn = (Pawn) element;
                     // check if color of the pawn corresponds to the current player id
                     if (pawn.getColor() == model.getIdPlayer()) {
-                        element.toggleSelected();
-                        stageModel.setState(MerelleStageModel.STATE_SELECTDEST);
-                        return; // do not allow another element to be selected
+                        if ((stageModel.getStatus() == MerelleGameStatus.PLACING && pot.contains(pawn)) || stageModel.getStatus() == MerelleGameStatus.MOVING) {
+                            element.toggleSelected();
+                            stageModel.setState(MerelleStageModel.STATE_SELECTDEST);
+                            return; // do not allow another element to be selected
+                        }
                     }
                 }
             }
         } else if (stageModel.getState() == MerelleStageModel.STATE_SELECTDEST) {
-            // first check if the click is on the current selected pawn. In this case, unselect it
+            // If the pawn is selected again, the stage state is changed
             for (GameElement element : list) {
                 if (element.isSelected()) {
                     element.toggleSelected();
@@ -65,7 +69,7 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
                     return;
                 }
             }
-            // secondly, search if the board has been clicked. If not just return
+            // If the board has been clicked
             boolean boardClicked = false;
             for (GameElement element : list) {
                 if (element == stageModel.getBoard()) {
@@ -74,22 +78,22 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
                 }
             }
             if (!boardClicked) return;
-            // get the board, pot,  and the selected pawn to simplify code in the following
-            MerelleBoard board = stageModel.getBoard();
-            // by default get black pot
-            MerellePawnPot pot = stageModel.getBlackPot();
-            // but if it's player2 that plays, get red pot
-            if (model.getIdPlayer() == 1) {
-                pot = stageModel.getRedPot();
-            }
-            Pawn pawn = (Pawn) model.getSelected().get(0);
 
-            // thirdly, get the clicked cell in the board
+            MerelleBoard board = stageModel.getBoard();
+            Pawn pawn = (Pawn) model.getSelected().get(0);
             GridLook lookBoard = (GridLook) control.getElementLook(board);
+            int[] from;
             int[] dest = lookBoard.getCellFromSceneLocation(click);
-            // get the cell in the pot that owns the selected pawn
-            int[] from = pot.getElementCell(pawn);
-            System.out.println("try to move pawn from pot " + from[0] + "," + from[1] + " to board " + dest[0] + "," + dest[1]);
+
+            // LOG :
+//            if (stageModel.getStatus() == MerelleGameStatus.PLACING) {
+//                from = pot.getElementCell(pawn);
+//                System.out.println("try to move pawn from pot " + from[0] + "," + from[1] + " to board " + dest[0] + "," + dest[1]);
+//            } else if (stageModel.getStatus() == MerelleGameStatus.MOVING) {
+//                from = board.getElementCell(pawn);
+//                System.out.println("try to move pawn from board " + from[0] + "," + from[1] + " to board " + dest[0] + "," + dest[1]);
+//            }
+
 
             board.setValidCells(pawn, ((MerelleStageModel) model.getGameStage()).getStatus());
 
@@ -100,7 +104,7 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
                 ActionList actions = new ActionList(true);
                 // determine the destination point in the root pane
                 Coord2D center = lookBoard.getRootPaneLocationForCellCenter(dest[0], dest[1]);
-                System.out.println(pawn.getX()+" "+pawn.getY()+" "+center.getX()+" "+center.getY());
+                System.out.println(pawn.getX() + " " + pawn.getY() + " " + center.getX() + " " + center.getY());
                 // create an action with a linear move animation, with 10 pixel/frame
                 GameAction move = new MoveAction(model, pawn, "merelleboard", dest[0], dest[1], AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 10);
                 // add the action to the action list.
@@ -111,9 +115,44 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
                 play.start();
             }
 
-            if (board.millsChecker(model.getIdPlayer())) {
-                System.out.println("Logique pour la mill");
+        } else if (stageModel.getState() == MerelleStageModel.STATE_SELECTMILL) {
+            // If the pawn is selected again, the stage state is changed
+            for (GameElement element : list) {
+                if (element.getType() == ElementTypes.getType("pawn")) {
+                    Pawn pawn = (Pawn) element;
+                    // check if color of the pawn corresponds to the opponent player
+                    if (pawn.getColor() != model.getIdPlayer()) {
+                        element.toggleSelected();
+                    }
+                }
             }
+            if (model.getSelected().isEmpty()) return;
+            boolean boardClicked = false;
+            for (GameElement element : list) {
+                if (element == stageModel.getBoard()) {
+                    boardClicked = true;
+                    break;
+                }
+            }
+            if (!boardClicked) return;
+
+            MerelleBoard board = stageModel.getBoard();
+            Pawn pawn = (Pawn) model.getSelected().get(0);
+            GridLook lookBoard = (GridLook) control.getElementLook(board);
+            int[] dest = lookBoard.getCellFromSceneLocation(click);
+
+            board.setValidMillCells(model.getIdPlayer());
+
+            if (board.canReachCell(dest[0], dest[1])) {
+                ActionList actions = new ActionList(true);
+                GameAction deleteAction = new RemoveAction(model, pawn);
+                actions.addSingleAction(deleteAction);
+                stageModel.unselectAll();
+                stageModel.setState(MerelleStageModel.STATE_SELECTPAWN);
+                ActionPlayer play = new ActionPlayer(model, control, actions);
+                play.start();
+            }
+
         }
     }
 }

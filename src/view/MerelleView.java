@@ -13,9 +13,15 @@ public class MerelleView extends View {
     private MenuItem menuStart;
     private MenuItem menuIntro;
     private MenuItem menuQuit;
+    private MillAlert millAlert;
 
     public MerelleView(Model model, Stage stage, RootPane rootPane) {
         super(model, stage, rootPane);
+        millAlert = new MillAlert();
+    }
+
+    public MillAlert millAlert() {
+        return millAlert;
     }
 
     @Override

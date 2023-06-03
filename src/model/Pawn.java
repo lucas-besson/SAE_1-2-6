@@ -14,6 +14,8 @@ public class Pawn extends GameElement {
     private final int number;
     private final int color;
     private boolean isInAMill;
+    private int col;
+    private int row;
 
     public Pawn(int number, int color, GameStageModel gameStageModel) {
         super(gameStageModel);
@@ -41,16 +43,26 @@ public class Pawn extends GameElement {
         isInAMill = inAMill;
     }
 
+    public void setCol(int col) {
+        this.col = col;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
     public int getCol() {
         // Each cell is 5 units wide, the x being stored at the center
         // Return the pawn column starting from 1
-        return (int)(x + MerelleStageView.BOARD_CELL_WIDTH / 2.0) / MerelleStageView.BOARD_CELL_WIDTH;
+//        return (int)(x + MerelleStageView.BOARD_CELL_WIDTH / 2.0) / MerelleStageView.BOARD_CELL_WIDTH;
+        return this.col;
     }
 
     public int getRow() {
         // Each cell is 2 units tall, the y being stored at the center
         // Return the pawn row starting from 1
-        return (int)(y + MerelleStageView.BOARD_CELL_HEIGHT / 2.0) / MerelleStageView.BOARD_CELL_HEIGHT;
+//        return (int)(y + MerelleStageView.BOARD_CELL_HEIGHT / 2.0) / MerelleStageView.BOARD_CELL_HEIGHT;
+        return this.row;
     }
     public void update(double width, double height, GridGeometry gridGeometry) {
 

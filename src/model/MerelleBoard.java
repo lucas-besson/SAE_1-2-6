@@ -140,8 +140,8 @@ public class MerelleBoard extends GridElement {
 
         // Second stage of the game : the cells have to be empty and within 1 cells around the initial pawn position
         else {
-            int x = pawn.getCol() - 1;
-            int y = pawn.getRow() - 1;
+            int x = pawn.getCol(); //-1
+            int y = pawn.getRow(); //-1
 
             int[][][] jumpTable = {
                     {{3, 3}, {}, {}, {3, 1}, {}, {}, {3, 3}},
