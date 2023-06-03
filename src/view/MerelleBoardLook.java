@@ -9,9 +9,10 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.*;
 import model.MerelleBoard;
 
-public class MerelleBoardLook extends GridLook {
-    Image millIMG = new Image("C:\\Users\\Robin\\Documents\\GitHub\\SAE_1-2-6\\src\\assets\\images\\mill.png");
+import java.io.IOException;
 
+public class MerelleBoardLook extends GridLook {
+    Image millIMG = Images.loadImage("assets\\images\\mill.png");
 
     // the array of rectangle composing the grid
     private final Shape[][] cells;
