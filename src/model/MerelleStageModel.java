@@ -146,14 +146,14 @@ public class MerelleStageModel extends GameStageModel {
         // if the folowing player doesn't have any move available, the game end and the actual player win
         if (this.getBoard().availableMoves(((model.getIdPlayer() == 1) ? 0 : 1), this.getStatus()) == 0) {
             model.setIdWinner(model.getIdPlayer());
-            model.stopStage();
+            model.stopGame();
         }
         if (blackPawnsToPlay < 3) {
             model.setIdWinner(1);
-            model.stopStage();
+            model.stopGame();
         } else if (redPawnsToPlay < 3) {
             model.setIdWinner(0);
-            model.stopStage();
+            model.stopGame();
         }
         return model.isEndStage();
     }

@@ -116,7 +116,7 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
             }
 
         } else if (stageModel.getState() == MerelleStageModel.STATE_SELECTMILL) {
-            // If the pawn is selected again, the stage state is changed
+
             for (GameElement element : list) {
                 if (element.getType() == ElementTypes.getType("pawn")) {
                     Pawn pawn = (Pawn) element;

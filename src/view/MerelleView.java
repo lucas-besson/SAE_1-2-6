@@ -17,7 +17,7 @@ public class MerelleView extends View {
 
     public MerelleView(Model model, Stage stage, RootPane rootPane) {
         super(model, stage, rootPane);
-        millAlert = new MillAlert();
+        millAlert = new MillAlert(this.getStage());
     }
 
     public MillAlert millAlert() {
