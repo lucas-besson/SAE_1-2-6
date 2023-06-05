@@ -28,18 +28,18 @@ public class MerelleConsole extends Application {
     public void start(Stage stage) throws Exception {
 
         Model model = new Model();
-        if (mode == 0) {
-            model.addHumanPlayer("player1");
-            model.addHumanPlayer("player2");
-        }
-        else if (mode == 1) {
-            model.addHumanPlayer("player");
-            model.addComputerPlayer("computer");
-        }
-        else if (mode == 2) {
-            model.addComputerPlayer("computer1");
-            model.addComputerPlayer("computer2");
-        }
+//        if (mode == 0) {
+//            model.addHumanPlayer("player1");
+//            model.addHumanPlayer("player2");
+//        }
+//        else if (mode == 1) {
+//            model.addHumanPlayer("player");
+//            model.addComputerPlayer("computer");
+//        }
+//        else if (mode == 2) {
+//            model.addComputerPlayer("computer1");
+//            model.addComputerPlayer("computer2");
+//        }
 
         StageFactory.registerModelAndView("merelle", "model.MerelleStageModel", "view.MerelleStageView");
         MerelleRootPane rootPane = new MerelleRootPane();

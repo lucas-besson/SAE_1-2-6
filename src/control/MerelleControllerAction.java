@@ -5,7 +5,10 @@ import boardifier.control.ControllerAction;
 import boardifier.model.*;
 import boardifier.view.View;
 import javafx.event.*;
+import model.GameMode;
 import view.MerelleView;
+
+import java.util.Optional;
 
 /**
  * A basic action controller that only manages menu actions
@@ -39,9 +42,25 @@ public class MerelleControllerAction extends ControllerAction implements EventHa
         // set event handler on the MenuStart item
         merelleView.getMenuStart().setOnAction(e -> {
             try {
+                GameMode result = ((MerelleView) view).gameModeView().showAndStart();
+                if (result == null) return;
+                model.getPlayers().clear();
+                switch (result.type) {
+                    case GameMode.PvP -> {
+                        model.addHumanPlayer(result.player1);
+                        model.addHumanPlayer(result.player2);
+                    }
+                    case GameMode.PvAI -> {
+                        model.addHumanPlayer(result.player1);
+                        model.addComputerPlayer(result.player2);
+                    }
+                    case GameMode.AIvAI -> {
+                        model.addComputerPlayer(result.player1);
+                        model.addComputerPlayer(result.player2);
+                    }
+                }
                 control.startGame();
-            }
-            catch(GameException err) {
+            } catch (GameException err) {
                 System.err.println(err.getMessage());
                 System.exit(1);
             }

@@ -14,10 +14,16 @@ public class MerelleView extends View {
     private MenuItem menuIntro;
     private MenuItem menuQuit;
     private MillAlert millAlert;
+    private GameModeView gameModeView;
 
     public MerelleView(Model model, Stage stage, RootPane rootPane) {
         super(model, stage, rootPane);
         millAlert = new MillAlert(this.getStage());
+        gameModeView = new GameModeView(this.getStage());
+    }
+
+    public GameModeView gameModeView() {
+        return gameModeView;
     }
 
     public MillAlert millAlert() {
