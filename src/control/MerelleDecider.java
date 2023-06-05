@@ -24,22 +24,8 @@ public abstract class MerelleDecider extends Decider {
     Point destPoint;
 
     Random rand = new Random();
-
-    public void setGrid(int[][] grid) {
-        this.grid = grid;
-    }
-
     int[][] grid;
     int[][] secondGrid;
-    public int test;
-
-    public int getTest() {
-        return test;
-    }
-
-    public int[][] getGrid() {
-        return grid;
-    }
 
     public MerelleDecider(Model model, Controller control) {
         super(model, control);
@@ -53,7 +39,7 @@ public abstract class MerelleDecider extends Decider {
      * @param grid actual grid
      * @return list of Point of empty case
      */
-    public List<Point> getFreePoints(int[][] grid) {
+    static List<Point> getFreePoints(int[][] grid) {
         ArrayList<Point> lst = new ArrayList<>();
         for (int[] activePoint : MerelleBoard.ACTIVECELLS)
             if (grid[activePoint[0]][activePoint[1]] == 2)
@@ -86,14 +72,14 @@ public abstract class MerelleDecider extends Decider {
     /**
      * Dans la phase de placement des pions, analyse et place un pion du pot -- Methode abstraite, à redéfinir.
      */
-    public abstract void placePawn();
+    abstract void placePawn();
 
     /**
      * Dans la phase de déplacements des pions, analyse et déplace un pion du jeu  -- Methode abstraite, à redéfinir.
      */
-    protected abstract void movePawn();
+    abstract void movePawn();
 
-    protected abstract Point removePawn(int[][] actualGrid);
+    abstract Point removePawn(int[][] actualGrid);
 
 
     /**
@@ -125,7 +111,7 @@ public abstract class MerelleDecider extends Decider {
      * @param point point to move
      * @return list of Point
      */
-    public List<Point> computeValidCells(Point point) {
+    List<Point> computeValidCells(Point point) {
         ArrayList<Point> lst = new ArrayList<>();
         if (grid[point.x][point.y] == 2) {
             return lst;
@@ -187,7 +173,7 @@ public abstract class MerelleDecider extends Decider {
      * @param playerColor  color of the player
      * @return true is there is a new mill, false otherwise
      */
-    public boolean isNewMill(int[][] previousGrid, int[][] actualGrid, int playerColor) {
+    boolean isNewMill(int[][] previousGrid, int[][] actualGrid, int playerColor) {
         for (int[][] mill : MerelleBoard.MILLS) {
             int x1 = mill[0][0];
             int y1 = mill[0][1];
@@ -215,7 +201,7 @@ public abstract class MerelleDecider extends Decider {
      * @param plateau 2D int grid
      * @return true if there will be a new mill, false otherwise
      */
-    public boolean canMakeMill(int x, int y, int[][] plateau) {
+    boolean canMakeMill(int x, int y, int[][] plateau) {
         int joueur = plateau[x][y];
         for (int i = 0; true; i++) {
             if (plateau[x][(y + i) % 3] != joueur) {
@@ -244,7 +230,7 @@ public abstract class MerelleDecider extends Decider {
      * @param plateau 2D int grid
      * @return int
      */
-    public int millsCount(int x, int y, int[][] plateau) {
+    int millsCount(int x, int y, int[][] plateau) {
         int moulins = 0;
         int joueur = plateau[x][y];
         if (joueur == 0) {
@@ -313,7 +299,7 @@ public abstract class MerelleDecider extends Decider {
      * @param playerId int : color of player
      * @return true if there will be a new mill, false otherwise
      */
-    public boolean hasMill(int col, int row, int[][] grid, int playerId) {
+    boolean hasMill(int col, int row, int[][] grid, int playerId) {
         for (int[][] mill : MerelleBoard.MILLS) {
             if (contains(mill, new int[]{col, row})) {
                 int count = 1;
@@ -337,7 +323,7 @@ public abstract class MerelleDecider extends Decider {
      * @param position    int table : cell coordinate
      * @return true if the given mill table contain the cell coordinate, false otherwise
      */
-    public boolean contains(int[][] millToCheck, int[] position) {
+    boolean contains(int[][] millToCheck, int[] position) {
         for (int[] millPoint : millToCheck) {
             if (millPoint[0] == position[0] && millPoint[1] == position[1]) return true;
         }
@@ -345,4 +331,5 @@ public abstract class MerelleDecider extends Decider {
     }
 
 }
+
 
