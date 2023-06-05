@@ -64,12 +64,31 @@ public class BasicDeciderUnitTest {
                 {0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0}
         };
-
         assertNotEquals(gridOld, gridNew);
     }
 
     @Test
     public void testRemovePawn() {
-        // TODO: tester c'te méthode
+        int[][] gridOld = {
+                {0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 2, 2, 0, 0, 0},
+                {0, 0, 2, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0}
+        };
+        assertNotEquals(gridOld[3][2], 0);
+
+        int[][] gridNew = {
+                {0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 2, 2, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0}
+        };
+        assertEquals(gridNew[3][2], 0);
     }
 }
