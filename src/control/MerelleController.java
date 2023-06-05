@@ -29,7 +29,7 @@ public class MerelleController extends Controller {
         super(model, view);
         setControlKey(new MerelleControllerKey(model, view, this));
         setControlMouse(new MerelleControllerMouse(model, view, this));
-        setControlAction (new MerelleControllerAction(model, view, this));
+        setControlAction(new MerelleControllerAction(model, view, this));
     }
 
     /**
@@ -56,24 +56,24 @@ public class MerelleController extends Controller {
     public void nextPlayer() {
         MerelleStageModel stageModel = (MerelleStageModel) model.getGameStage();
 
-//        FIXME : mettre le setNextPlayer dans le MouseController ? et donc dans le if pour l'IA pour mieux gérer les mill
+        // get the current player
+        Player p = model.getCurrentPlayer();
 
         // If the last move introduce a mill, the same player as last move play again to remove an opponent pawn
-        if (stageModel.getBoard().millsChecker(model.getIdPlayer())) {
+        if (stageModel.getBoard().millsChecker(model.getIdPlayer()) && p.getType() == Player.HUMAN) {
             stageModel.setState(MerelleStageModel.STATE_SELECTMILL);
             ((MerelleView) view).millAlert().show();
-        }
-        else {
+        } else {
             model.setNextPlayer();
         }
         // get the new player
-        Player p = model.getCurrentPlayer();
+        p = model.getCurrentPlayer();
 
 
         if (p.getType() == Player.COMPUTER) {
             System.out.println(p.getName() + " PLAYS");
             Decider decider;
-            if (p.getName().equals( "computer") || p.getName().equals("computer1"))
+            if (p.getName().equals("computer") || p.getName().equals("computer1"))
                 decider = new IntelligentDecider(model, this);
             else decider = new BasicDecider(model, this);
             ActionPlayer play = new ActionPlayer(model, this, decider, null);
@@ -219,7 +219,7 @@ public class MerelleController extends Controller {
 
         // See if the pawn can be deleted
         gameStage.getBoard().setValidMillCells(color);
-        if (!gameStage.getBoard().canReachCell(pawn.getRow() - 1, pawn.getCol() - 1)) return false;
+        if (!gameStage.getBoard().canReachCell(pawn.getRow(), pawn.getCol())) return false;
 
         // the action is possible and will be processed
         ActionList actions = new ActionList(true);
