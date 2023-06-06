@@ -132,8 +132,8 @@ public abstract class MerelleDecider extends Decider {
         }
         int[][][] jumpTable = {{{3, 3}, {}, {}, {3, 1}, {}, {}, {3, 3}}, {{}, {2, 2}, {}, {2, 1}, {}, {2, 2}, {}}, {{}, {}, {1, 1}, {1, 1}, {1, 1}, {}, {}}, {{1, 3}, {1, 2}, {1, 1}, {}, {1, 1}, {1, 2}, {1, 3}}, {{}, {}, {1, 1}, {1, 1}, {1, 1}, {}, {}}, {{}, {2, 2}, {}, {2, 1}, {}, {2, 2}, {}}, {{3, 3}, {}, {}, {3, 1}, {}, {}, {3, 3}}};
 
-        int jumpX = jumpTable[point.x][point.y][0];
-        int jumpY = jumpTable[point.x][point.y][1];
+        int jumpX = jumpTable[point.y][point.x][0];
+        int jumpY = jumpTable[point.y][point.x][1];
 
         int[][] offsetTable = {{0, -jumpY}, {-jumpX, 0}, {jumpX, 0}, {0, jumpY}};
 
