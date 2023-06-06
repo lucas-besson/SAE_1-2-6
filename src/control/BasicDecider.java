@@ -46,7 +46,7 @@ public class BasicDecider extends MerelleDecider {
 //        NEW
         GridLook look = (GridLook) control.getElementLook(board);
         Coord2D center = look.getRootPaneLocationForCellCenter(destPoint.y, destPoint.x);
-        GameAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 10);
+        GameAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 15);
         actions.addSingleAction(move);
         if (needToRemoveAPawn) actions.addSingleAction(removePawnAction(grid));
     }
@@ -72,7 +72,7 @@ public class BasicDecider extends MerelleDecider {
 
             GridLook look = (GridLook) control.getElementLook(board);
             Coord2D center = look.getRootPaneLocationForCellCenter(destPoint.y, destPoint.x);
-            GameAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 10);
+            GameAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 15);
             actions.addSingleAction(move);
 
 

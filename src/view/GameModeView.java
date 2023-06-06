@@ -19,7 +19,6 @@ import java.util.Optional;
 public class GameModeView {
     ChoiceDialog<GameMode> gameModeChoiceDialog;
     ObservableList<GameMode> gameModesList;
-    Optional<GameMode> result;
 
     public GameModeView(    Stage stage) {
         gameModesList = FXCollections.observableArrayList();
