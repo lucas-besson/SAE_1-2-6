@@ -54,7 +54,7 @@ public class IntelligentDecider extends MerelleDecider {
 //        NEW
         GridLook look = (GridLook) control.getElementLook(board);
         Coord2D center = look.getRootPaneLocationForCellCenter(destPoint.y, destPoint.x);
-        MoveAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 15);
+        MoveAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), MerelleDecider.animationSpeed);
         actions.addSingleAction(move);
 
         if (needToRemoveAPawn) {
@@ -94,7 +94,7 @@ public class IntelligentDecider extends MerelleDecider {
 
                 GridLook look = (GridLook) control.getElementLook(board);
                 Coord2D center = look.getRootPaneLocationForCellCenter(destPoint.y, destPoint.x);
-                MoveAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 15);
+                MoveAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), MerelleDecider.animationSpeed);
 
                 gridCopy[positionsToMove.x][positionsToMove.y] = gridCopy[point.x][point.y];
                 gridCopy[point.x][point.y] = 2;
@@ -137,7 +137,7 @@ public class IntelligentDecider extends MerelleDecider {
 //                NEW
                 GridLook look = (GridLook) control.getElementLook(board);
                 Coord2D center = look.getRootPaneLocationForCellCenter(destPoint.y, destPoint.x);
-                bestMove = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 15);
+                bestMove = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), MerelleDecider.animationSpeed);
             }
         }
 

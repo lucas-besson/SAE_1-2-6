@@ -15,6 +15,7 @@ import java.util.Random;
 
 public abstract class MerelleDecider extends Decider {
 
+    protected static float animationSpeed = 15;
     MerelleStageModel stage;
     MerelleBoard board;
     MerellePawnPot aIpot;
@@ -349,5 +350,11 @@ public abstract class MerelleDecider extends Decider {
         return false;
     }
 
+    public static void increaseAnimationSpeed() {
+        animationSpeed *= 1.2;
+    }
+    public static void decreaseAnimationSpeed() {
+        animationSpeed *= 0.8;
+    }
 }
 

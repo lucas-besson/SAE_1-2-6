@@ -19,6 +19,7 @@ import java.util.Optional;
 public class GameModeView {
     ChoiceDialog<GameMode> gameModeChoiceDialog;
     ObservableList<GameMode> gameModesList;
+    public GameMode selectedGameMode;
 
     public GameModeView(Stage stage) {
         gameModesList = FXCollections.observableArrayList();
@@ -36,7 +37,8 @@ public class GameModeView {
     }
 
     public GameMode showAndStart() {
-        return gameModeChoiceDialog.showAndWait().orElse(null);
+        selectedGameMode = gameModeChoiceDialog.showAndWait().orElse(null);
+        return selectedGameMode;
     }
 
 }
