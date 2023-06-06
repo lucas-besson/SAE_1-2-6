@@ -20,7 +20,7 @@ public class GameModeView {
     ChoiceDialog<GameMode> gameModeChoiceDialog;
     ObservableList<GameMode> gameModesList;
 
-    public GameModeView(    Stage stage) {
+    public GameModeView(Stage stage) {
         gameModesList = FXCollections.observableArrayList();
         gameModesList.addAll(
                 new GameMode("Player vs Player", GameMode.PvP, "Player1", "Player2"),

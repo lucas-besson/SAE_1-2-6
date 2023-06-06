@@ -23,28 +23,11 @@ import java.io.InputStreamReader;
 
 public class MerelleController extends Controller {
 
-    BufferedReader consoleIn;
-
     public MerelleController(Model model, View view) {
         super(model, view);
         setControlKey(new MerelleControllerKey(model, view, this));
         setControlMouse(new MerelleControllerMouse(model, view, this));
         setControlAction(new MerelleControllerAction(model, view, this));
-    }
-
-    /**
-     * Defines what to do within the single stage of the single party
-     * It is pretty straight forward to write :
-     */
-    public void stageLoop() {
-        consoleIn = new BufferedReader(new InputStreamReader(System.in));
-        update();
-        while (!((MerelleStageModel) model.getGameStage()).isEndStage()) {
-            nextPlayer();
-            update();
-        }
-        stopStage();
-        endGame();
     }
 
     /**
@@ -54,6 +37,9 @@ public class MerelleController extends Controller {
      * If the last move made by the player created a new mill, the player is asked to remove an opposing pawn.
      */
     public void nextPlayer() {
+//        TODO : Faire en sorte que les IA commence à jouer dès le début, sans devoir attendre un premier mouvement
+
+
         MerelleStageModel stageModel = (MerelleStageModel) model.getGameStage();
 
         // get the current player
@@ -78,54 +64,6 @@ public class MerelleController extends Controller {
             else decider = new BasicDecider(model, this);
             ActionPlayer play = new ActionPlayer(model, this, decider, null);
             play.start();
-//        } else {
-//            boolean ok = false;
-//
-//            while (!ok) {
-//                System.out.print(p.getName() + " > ");
-//
-////                On peux récupérer un pion sélectionner grace au gameStageModel.selected
-////                Et la cellule cible grace à MerelleControllerMouse et la mthode getSelectedCellFromClick
-//                try {
-//                    String line = consoleIn.readLine();
-//                    if (line.equalsIgnoreCase("stop")) {
-//                        endGame();
-//                        System.exit(100);
-//                    }
-//                    if (line.length() == 3) {
-//                        ok = analyseAndPlay(line);
-//                    }
-//                    if (!ok) {
-//                        System.out.println("incorrect instruction. retry !");
-//                    }
-//                } catch (IOException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-//            // If the last move have created a new mill
-//            if (merelleModel.getBoard().millsChecker(model.getIdPlayer())) {
-//                update();
-//                System.out.println(p.getName() + ", you have just formed a mill, and must take an opposing pawn.");
-//                ok = false;
-//                while (!ok) {
-//                    System.out.print(p.getName() + " > ");
-//                    try {
-//                        String line = consoleIn.readLine();
-//                        if (line.equalsIgnoreCase("stop")) {
-//                            endGame();
-//                            System.exit(100);
-//                        }
-//                        if (line.length() == 1) {
-//                            ok = millAnalyseAndPlay(line);
-//                        }
-//                        if (!ok) {
-//                            System.out.println("incorrect instruction. retry !");
-//                        }
-//                    } catch (IOException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                }
-//            }
         }
     }
 

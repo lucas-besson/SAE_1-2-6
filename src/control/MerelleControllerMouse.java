@@ -45,6 +45,7 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
 
         MerelleStageModel stageModel = (MerelleStageModel) model.getGameStage();
         MerellePawnPot pot = ((model.getIdPlayer() == 0) ? stageModel.getBlackPot() : stageModel.getRedPot());
+        MerelleBoard board = stageModel.getBoard();
 
         if (stageModel.getState() == MerelleStageModel.STATE_SELECTPAWN) {
             for (GameElement element : list) {
@@ -79,7 +80,6 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
             }
             if (!boardClicked) return;
 
-            MerelleBoard board = stageModel.getBoard();
             Pawn pawn = (Pawn) model.getSelected().get(0);
             GridLook lookBoard = (GridLook) control.getElementLook(board);
             int[] from;
@@ -121,7 +121,7 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
                 if (element.getType() == ElementTypes.getType("pawn")) {
                     Pawn pawn = (Pawn) element;
                     // check if color of the pawn corresponds to the opponent player
-                    if (pawn.getColor() != model.getIdPlayer()) {
+                    if (pawn.getColor() != model.getIdPlayer() && board.contains(pawn)) {
                         element.toggleSelected();
                     }
                 }
@@ -136,7 +136,6 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
             }
             if (!boardClicked) return;
 
-            MerelleBoard board = stageModel.getBoard();
             Pawn pawn = (Pawn) model.getSelected().get(0);
             GridLook lookBoard = (GridLook) control.getElementLook(board);
             int[] dest = lookBoard.getCellFromSceneLocation(click);
