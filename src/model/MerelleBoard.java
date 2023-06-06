@@ -50,6 +50,15 @@ public class MerelleBoard extends GridElement {
      */
     public static final int GRIDNBROWS = 7;
     public static final int GRIDNBCOLS = 7;
+    public static final int[][][] JUMP_TABLE = new int[][][]{
+            {{3, 3}, {}, {}, {3, 1}, {}, {}, {3, 3}},
+            {{}, {2, 2}, {}, {2, 1}, {}, {2, 2}, {}},
+            {{}, {}, {1, 1}, {1, 1}, {1, 1}, {}, {}},
+            {{1, 3}, {1, 2}, {1, 1}, {}, {1, 1}, {1, 2}, {1, 3}},
+            {{}, {}, {1, 1}, {1, 1}, {1, 1}, {}, {}},
+            {{}, {2, 2}, {}, {2, 1}, {}, {2, 2}, {}},
+            {{3, 3}, {}, {}, {3, 1}, {}, {}, {3, 3}}
+    };
 
     public MerelleBoard(int x, int y, GameStageModel gameStageModel) {
         // call the super-constructor to create a GRIDNBROWS x GRIDNBCOLS grid, named "merelleboard", and in x,y in space
@@ -143,18 +152,8 @@ public class MerelleBoard extends GridElement {
             int x = pawn.getCol(); //-1
             int y = pawn.getRow(); //-1
 
-            int[][][] jumpTable = {
-                    {{3, 3}, {}, {}, {3, 1}, {}, {}, {3, 3}},
-                    {{}, {2, 2}, {}, {2, 1}, {}, {2, 2}, {}},
-                    {{}, {}, {1, 1}, {1, 1}, {1, 1}, {}, {}},
-                    {{1, 3}, {1, 2}, {1, 1}, {}, {1, 1}, {1, 2}, {1, 3}},
-                    {{}, {}, {1, 1}, {1, 1}, {1, 1}, {}, {}},
-                    {{}, {2, 2}, {}, {2, 1}, {}, {2, 2}, {}},
-                    {{3, 3}, {}, {}, {3, 1}, {}, {}, {3, 3}}
-            };
-
-            int jumpX = jumpTable[y][x][0];
-            int jumpY = jumpTable[y][x][1];
+            int jumpX = JUMP_TABLE[y][x][0];
+            int jumpY = JUMP_TABLE[y][x][1];
 
             int[][] offsetTable = {{0, -jumpY}, {-jumpX, 0}, {jumpX, 0}, {0, jumpY}};
 
