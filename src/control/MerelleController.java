@@ -185,7 +185,7 @@ public class MerelleController extends Controller {
 //        NEW
         GridLook look = (GridLook) this.getElementLook(gameStage.getBoard());
         Coord2D center = look.getRootPaneLocationForCellCenter(row, col);
-        GameAction move = new MoveAction(model, pawn, "merelleboard", row, col, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 10);
+        GameAction move = new MoveAction(model, pawn, "merelleboard", row, col, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 15);
         actions.addSingleAction(move);
         ActionPlayer play = new ActionPlayer(model, this, actions);
         play.start();

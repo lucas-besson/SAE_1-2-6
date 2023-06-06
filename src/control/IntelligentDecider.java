@@ -54,18 +54,22 @@ public class IntelligentDecider extends MerelleDecider {
 //        NEW
         GridLook look = (GridLook) control.getElementLook(board);
         Coord2D center = look.getRootPaneLocationForCellCenter(destPoint.y, destPoint.x);
-        MoveAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 10);
+        MoveAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 15);
         actions.addSingleAction(move);
 
         if (needToRemoveAPawn) {
             grid[destPoint.x][destPoint.y] = model.getIdPlayer();
-            for(int col = 0; col < grid.length; col++) {
-                for(int row = 0; row < grid[col].length; row++) {
-                    System.out.print(grid[row][col] + ", ");
-                }
-                System.out.println();
-            }
+            printGrid();
             actions.addSingleAction(removePawnAction(grid));
+        }
+    }
+
+    private void printGrid() {
+        for(int col = 0; col < grid.length; col++) {
+            for(int row = 0; row < grid[col].length; row++) {
+                System.out.print(grid[row][col] + ", ");
+            }
+            System.out.println();
         }
     }
 
@@ -90,7 +94,7 @@ public class IntelligentDecider extends MerelleDecider {
 
                 GridLook look = (GridLook) control.getElementLook(board);
                 Coord2D center = look.getRootPaneLocationForCellCenter(destPoint.y, destPoint.x);
-                MoveAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 10);
+                MoveAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 15);
 
                 gridCopy[positionsToMove.x][positionsToMove.y] = gridCopy[point.x][point.y];
                 gridCopy[point.x][point.y] = 2;
@@ -104,18 +108,25 @@ public class IntelligentDecider extends MerelleDecider {
                 }
             }
         }
-
+//        System.out.println(pawnToMove);
         if (bestScore == 0 || pawnToMove == null) {
             initGridTable();
-
+//            System.out.println("IF");
             List<Point> playerPawnList = getPlayerPawnList(model.getIdPlayer(), grid);
+
+            printGrid();
+
+//            System.out.println(playerPawnList);
 
             playerPawnList.removeIf(pawn -> computeValidCells(pawn).isEmpty());
 
+//            System.out.println(playerPawnList);
+
             if (!playerPawnList.isEmpty()) {
                 List<Point> destinations;
-
+//                System.out.println("IF 2");
                 do {
+//                    System.out.println("Do While");
                     Point toMove = playerPawnList.get(rand.nextInt(playerPawnList.size()));
                     pawnToMove = (Pawn) model.getGrid("merelleboard").getFirstElement(toMove.y, toMove.x);
 
@@ -126,7 +137,7 @@ public class IntelligentDecider extends MerelleDecider {
 //                NEW
                 GridLook look = (GridLook) control.getElementLook(board);
                 Coord2D center = look.getRootPaneLocationForCellCenter(destPoint.y, destPoint.x);
-                bestMove = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 10);
+                bestMove = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 15);
             }
         }
 
