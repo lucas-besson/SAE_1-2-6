@@ -49,11 +49,8 @@ public class BasicDeciderUnitTest {
         playablePawns.add(point1);
         playablePawns.add(point2);
         playablePawns.add(point3);
-        GameStageModel gameStageModel = Mockito.mock(GameStageModel.class);
-
 
         gameElement = Mockito.mock(GameElement.class);
-
 
         MerellePawnPot aiPot2 = Mockito.mock(MerellePawnPot.class);
 
