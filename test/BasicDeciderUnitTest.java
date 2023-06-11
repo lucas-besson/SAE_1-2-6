@@ -1,7 +1,10 @@
 import boardifier.control.Controller;
+import boardifier.model.GameElement;
+import boardifier.model.GameStageModel;
 import boardifier.model.Model;
 import control.BasicDecider;
 import model.MerelleBoard;
+import model.MerellePawnPot;
 import model.MerelleStageModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.awt.*;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class BasicDeciderUnitTest {
@@ -21,6 +24,7 @@ public class BasicDeciderUnitTest {
     MerelleStageModel merelleStageModel;
     MerelleBoard merelleBoard;
     Random randomMock;
+    GameElement gameElement;
 
     @BeforeEach
     public void initEach() {
@@ -33,14 +37,30 @@ public class BasicDeciderUnitTest {
         Mockito.when(model.getGrid(anyString())).thenReturn(merelleBoard);
 
         basicDeciderTest = new BasicDecider(model, controller);
+
     }
 
     @Test
     public void testPlacePawn() {
-        java.util.List<Point> playablePawns = Arrays.asList(new Point(1,1), new Point(1,2), new Point(1,3));
-        Point selectedPawn = playablePawns.get(randomMock.nextInt(playablePawns.size()));
+        ArrayList<Point> playablePawns = new ArrayList<>();
+        Point point1 = new Point(1,1);
+        Point point2 = new Point(1,2);
+        Point point3 = new Point(1,3);
+        playablePawns.add(point1);
+        playablePawns.add(point2);
+        playablePawns.add(point3);
+        GameStageModel gameStageModel = Mockito.mock(GameStageModel.class);
 
-        assertEquals(playablePawns.get(0), selectedPawn);
+
+        gameElement = Mockito.mock(GameElement.class);
+
+
+        MerellePawnPot aiPot2 = Mockito.mock(MerellePawnPot.class);
+
+        basicDeciderTest.setaIpot(aiPot2);
+
+        basicDeciderTest.placePawn();
+
     }
 
     @Test

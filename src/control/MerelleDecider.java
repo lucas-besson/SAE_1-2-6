@@ -17,6 +17,11 @@ public abstract class MerelleDecider extends Decider {
 
     MerelleStageModel stage;
     MerelleBoard board;
+
+    public void setaIpot(MerellePawnPot aIpot) {
+        this.aIpot = aIpot;
+    }
+
     MerellePawnPot aIpot;
 
     ActionList actions = new ActionList(true);
