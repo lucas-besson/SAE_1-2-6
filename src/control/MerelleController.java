@@ -12,6 +12,8 @@ import boardifier.model.animation.AnimationTypes;
 import boardifier.view.GridLook;
 import boardifier.view.View;
 import model.*;
+import view.MerelleBoardLook;
+import view.MerelleStageView;
 import view.MerelleView;
 
 import java.io.BufferedReader;
@@ -50,6 +52,7 @@ public class MerelleController extends Controller {
         }
         // get the new player
         p = model.getCurrentPlayer();
+        ((MerelleBoardLook) view.getGameStageView().getElementLook(stageModel.getBoard())).setMillCell(model.getIdPlayer());
 
 
         if (p.getType() == Player.COMPUTER) {

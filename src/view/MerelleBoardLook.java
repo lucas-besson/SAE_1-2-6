@@ -12,7 +12,9 @@ import model.MerelleBoard;
 import java.io.IOException;
 
 public class MerelleBoardLook extends GridLook {
-    Image millIMG = Images.loadImage("assets\\images\\mill.png");
+    private final Rectangle millCell;
+    Image redMillIMG = Images.loadImage("assets\\images\\RedMill.png");
+    Image blueMillIMG = Images.loadImage("assets\\images\\BlueMill.png");
 
     // the array of rectangle composing the grid
     private final Shape[][] cells;
@@ -70,9 +72,9 @@ public class MerelleBoardLook extends GridLook {
             cells[cell[1]][cell[0]] = circle;
             addShape(cells[cell[1]][cell[0]]);
         }
-        rectangle = new Rectangle(borderWidth + 3 * cellWidth, borderWidth + 3 * cellHeight, cellWidth, cellHeight);
-        rectangle.setFill(new ImagePattern(millIMG));
-        cells[3][3] = rectangle;
+        millCell = new Rectangle(borderWidth + 3 * cellWidth, borderWidth + 3 * cellHeight, cellWidth, cellHeight);
+        millCell.setFill(new ImagePattern(blueMillIMG));
+        cells[3][3] = millCell;
         addShape(cells[3][3]);
     }
 
@@ -98,5 +100,10 @@ public class MerelleBoardLook extends GridLook {
         Rectangle rectangle = new Rectangle(x, y, width, height);
         rectangle.setFill(linesColor);
         return rectangle;
+    }
+
+    public void setMillCell(int playerID) {
+        if (playerID == 0) millCell.setFill(new ImagePattern(blueMillIMG));
+        else millCell.setFill(new ImagePattern(redMillIMG));
     }
 }
