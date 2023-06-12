@@ -65,8 +65,13 @@ public class MerelleController extends Controller {
 
     @Override
     public void startGame() throws GameException {
+        // Let the previous winner restart the next game.
+        int previousWinner = model.getIdWinner();
         super.startGame();
-        // Make sure the AI will make their first move by calling nextPlayer method without changing the player order.
+        if (previousWinner != -1) model.setIdPlayer(previousWinner);
+
+        // Make sure the AI will make their first move by calling nextPlayer method.
+        // To avoid perturbing the player order, we set the next player once, as nextPlayer() will also do it once -> 1 + 1 % 2 = 0
         model.setNextPlayer();
         nextPlayer();
     }
