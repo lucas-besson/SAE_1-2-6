@@ -42,8 +42,10 @@ public class MerelleControllerAction extends ControllerAction implements EventHa
         // set event handler on the MenuStart item
         merelleView.getMenuStart().setOnAction(e -> {
             try {
-                GameMode result = ((MerelleView) view).gameModeView().showAndStart();
+                GameMode result = ((MerelleView) view).gameModeView();
                 if (result == null) return;
+                // if the result is usable, it will clear the actual game and start another.
+                ((MerelleView) view).selectedGameMode = result; // We keep track of the selected game mode
                 model.getPlayers().clear();
                 switch (result.type) {
                     case GameMode.PvP -> {

@@ -2,13 +2,11 @@ package control;
 
 import boardifier.control.Controller;
 import boardifier.control.ControllerKey;
-import boardifier.control.Decider;
 import boardifier.model.Model;
 import boardifier.view.View;
 import javafx.event.*;
 import javafx.scene.input.*;
 import model.GameMode;
-import view.GameModeView;
 import view.MerelleView;
 
 /**
@@ -26,7 +24,7 @@ public class MerelleControllerKey extends ControllerKey implements EventHandler<
 
 //        FIXME les inputs du clavier sont ignorer lorsque les IA joue...
 
-        GameMode selectedGameMode = ((MerelleView) view).gameModeView().selectedGameMode;
+        GameMode selectedGameMode = ((MerelleView) view).selectedGameMode;
 
         System.out.println(event.getCode() + " ; " + event.getCode().equals(KeyCode.SPACE));
 
