@@ -3,10 +3,14 @@ package view;
 import boardifier.model.Model;
 import boardifier.view.RootPane;
 import boardifier.view.View;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
+import model.GameMode;
 
 public class MerelleView extends View {
 
@@ -14,16 +18,31 @@ public class MerelleView extends View {
     private MenuItem menuIntro;
     private MenuItem menuQuit;
     private MillAlert millAlert;
-    private GameModeView gameModeView;
+    private ChoiceDialog<GameMode> gameModeView;
+    private ObservableList<GameMode> gameModesList;
+    public GameMode selectedGameMode;
 
     public MerelleView(Model model, Stage stage, RootPane rootPane) {
         super(model, stage, rootPane);
         millAlert = new MillAlert(this.getStage());
-        gameModeView = new GameModeView(this.getStage());
     }
 
-    public GameModeView gameModeView() {
-        return gameModeView;
+    public GameMode gameModeView() {
+        gameModesList = FXCollections.observableArrayList();
+        gameModesList.addAll(
+                new GameMode("Player vs Player", GameMode.PvP, "Player1", "Player2"),
+                new GameMode("Player vs Basic AI", GameMode.PvAI, "Player1", "computer2"),
+                new GameMode("Player vs Intelligent AI", GameMode.PvAI, "Player1", "computer1"),
+                new GameMode("Intelligent AI vs Basic AI", GameMode.AIvAI, "computer1", "computer2")
+        );
+        gameModeView = new ChoiceDialog<>(gameModesList.get(0), gameModesList);
+        gameModeView.setTitle("GameMode Selection");
+        gameModeView.setHeaderText(null);
+        gameModeView.setContentText("Chose a GameMode: ");
+        gameModeView.initOwner(stage);
+        // if the game mode was previously selected, use it to set the default value for quick restart
+        if (selectedGameMode != null) gameModeView.setSelectedItem(selectedGameMode);
+        return gameModeView.showAndWait().orElse(null);
     }
 
     public MillAlert millAlert() {
