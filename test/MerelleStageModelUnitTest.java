@@ -15,7 +15,7 @@ public class MerelleStageModelUnitTest {
     public void testisEndStage() {
         MerelleBoard merelleBoard = Mockito.mock(MerelleBoard.class);
         Model model = Mockito.mock(Model.class);
-        MerelleStageModel merelleStageModel = new MerelleStageModel("test",model);
+        MerelleStageModel merelleStageModel = new MerelleStageModel("test", model);
         MerellePawnPot merellePawnPot = Mockito.mock(MerellePawnPot.class);
         //Mockito.when(model).thenReturn(merelleStageModel);
         Mockito.when(model.getGameStage()).thenReturn(merelleStageModel);
@@ -25,31 +25,30 @@ public class MerelleStageModelUnitTest {
 
         //Premier if :
         Mockito.when(model.getIdPlayer()).thenReturn(3);
-        Mockito.when(merelleBoard.availableMoves(Mockito.anyInt(),Mockito.anyInt())).thenReturn(0);
+        Mockito.when(merelleBoard.availableMoves(Mockito.anyInt(), Mockito.anyInt())).thenReturn(0);
         merelleStageModel.isEndStage();
-        Mockito.verify(model,Mockito.times(2)).getIdPlayer();
+        Mockito.verify(model, Mockito.times(2)).getIdPlayer();
+        Mockito.verify(model).setIdWinner(3);
         // Troisème IF :
-        Mockito.when(merelleBoard.availableMoves(Mockito.anyInt(),Mockito.anyInt())).thenReturn(2);
-        merelleStageModel.removedFromGrid(new Pawn(1,1,merelleStageModel), merelleBoard,0,0);
-        merelleStageModel.removedFromGrid(new Pawn(1,1,merelleStageModel), merelleBoard,0,0);
-        merelleStageModel.removedFromGrid(new Pawn(1,1,merelleStageModel), merelleBoard,0,0);
-        merelleStageModel.removedFromGrid(new Pawn(1,1,merelleStageModel), merelleBoard,0,0);
-        merelleStageModel.removedFromGrid(new Pawn(1,1,merelleStageModel), merelleBoard,0,0);
-        merelleStageModel.removedFromGrid(new Pawn(1,1,merelleStageModel), merelleBoard,0,0);
-        merelleStageModel.removedFromGrid(new Pawn(1,1,merelleStageModel), merelleBoard,0,0);
-        merelleStageModel.isEndStage();
+        Mockito.when(merelleBoard.availableMoves(Mockito.anyInt(), Mockito.anyInt())).thenReturn(2);
+        merelleStageModel.removedFromGrid(new Pawn(1, 1, merelleStageModel), merelleBoard, 0, 0);
+        merelleStageModel.removedFromGrid(new Pawn(1, 1, merelleStageModel), merelleBoard, 0, 0);
+        merelleStageModel.removedFromGrid(new Pawn(1, 1, merelleStageModel), merelleBoard, 0, 0);
+        merelleStageModel.removedFromGrid(new Pawn(1, 1, merelleStageModel), merelleBoard, 0, 0);
+        merelleStageModel.removedFromGrid(new Pawn(1, 1, merelleStageModel), merelleBoard, 0, 0);
+        merelleStageModel.removedFromGrid(new Pawn(1, 1, merelleStageModel), merelleBoard, 0, 0);
+        merelleStageModel.removedFromGrid(new Pawn(1, 1, merelleStageModel), merelleBoard, 0, 0);
         Mockito.verify(model).setIdWinner(0);
 
         // Deuxieme IF :
-        Mockito.when(merelleBoard.availableMoves(Mockito.anyInt(),Mockito.anyInt())).thenReturn(2);
-        merelleStageModel.removedFromGrid(new Pawn(1,0,merelleStageModel), merelleBoard,0,0);
-        merelleStageModel.removedFromGrid(new Pawn(1,0,merelleStageModel), merelleBoard,0,0);
-        merelleStageModel.removedFromGrid(new Pawn(1,0,merelleStageModel), merelleBoard,0,0);
-        merelleStageModel.removedFromGrid(new Pawn(1,0,merelleStageModel), merelleBoard,0,0);
-        merelleStageModel.removedFromGrid(new Pawn(1,0,merelleStageModel), merelleBoard,0,0);
-        merelleStageModel.removedFromGrid(new Pawn(1,0,merelleStageModel), merelleBoard,0,0);
-        merelleStageModel.removedFromGrid(new Pawn(1,0,merelleStageModel), merelleBoard,0,0);
-        merelleStageModel.isEndStage();
+        Mockito.when(merelleBoard.availableMoves(Mockito.anyInt(), Mockito.anyInt())).thenReturn(2);
+        merelleStageModel.removedFromGrid(new Pawn(1, 0, merelleStageModel), merelleBoard, 0, 0);
+        merelleStageModel.removedFromGrid(new Pawn(1, 0, merelleStageModel), merelleBoard, 0, 0);
+        merelleStageModel.removedFromGrid(new Pawn(1, 0, merelleStageModel), merelleBoard, 0, 0);
+        merelleStageModel.removedFromGrid(new Pawn(1, 0, merelleStageModel), merelleBoard, 0, 0);
+        merelleStageModel.removedFromGrid(new Pawn(1, 0, merelleStageModel), merelleBoard, 0, 0);
+        merelleStageModel.removedFromGrid(new Pawn(1, 0, merelleStageModel), merelleBoard, 0, 0);
+        merelleStageModel.removedFromGrid(new Pawn(1, 0, merelleStageModel), merelleBoard, 0, 0);
         Mockito.verify(model).setIdWinner(1);
 
     }
