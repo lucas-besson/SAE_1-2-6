@@ -37,7 +37,6 @@ public class MerelleController extends Controller {
      * If the last move made by the player created a new mill, the player is asked to remove an opposing pawn.
      */
     public void nextPlayer() {
-//        TODO : Faire en sorte que les IA commence à jouer dès le début, sans devoir attendre un premier mouvement
 
 
         MerelleStageModel stageModel = (MerelleStageModel) model.getGameStage();
@@ -120,7 +119,6 @@ public class MerelleController extends Controller {
         // the action is possible and will be processed
         ActionList actions = new ActionList(true);
 
-//        NEW
         GridLook look = (GridLook) this.getElementLook(gameStage.getBoard());
         Coord2D center = look.getRootPaneLocationForCellCenter(row, col);
         GameAction move = new MoveAction(model, pawn, "merelleboard", row, col, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 15);
