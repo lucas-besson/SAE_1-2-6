@@ -3,10 +3,7 @@ package control;
 import boardifier.control.ActionPlayer;
 import boardifier.control.Controller;
 import boardifier.control.Decider;
-import boardifier.model.Coord2D;
-import boardifier.model.GridElement;
-import boardifier.model.Model;
-import boardifier.model.Player;
+import boardifier.model.*;
 import boardifier.model.action.ActionList;
 import boardifier.model.action.GameAction;
 import boardifier.model.action.MoveAction;
@@ -37,7 +34,6 @@ public class MerelleController extends Controller {
      * If the last move made by the player created a new mill, the player is asked to remove an opposing pawn.
      */
     public void nextPlayer() {
-//        TODO : Faire en sorte que les IA commence à jouer dès le début, sans devoir attendre un premier mouvement
 
 
         MerelleStageModel stageModel = (MerelleStageModel) model.getGameStage();
@@ -65,6 +61,14 @@ public class MerelleController extends Controller {
             ActionPlayer play = new ActionPlayer(model, this, decider, null);
             play.start();
         }
+    }
+
+    @Override
+    public void startGame() throws GameException {
+        super.startGame();
+        // Make sure the AI will make their first move by calling nextPlayer method without changing the player order.
+        model.setNextPlayer();
+        nextPlayer();
     }
 
     public boolean AccessAnalyseAndPlay(String line) {
@@ -120,7 +124,6 @@ public class MerelleController extends Controller {
         // the action is possible and will be processed
         ActionList actions = new ActionList(true);
 
-//        NEW
         GridLook look = (GridLook) this.getElementLook(gameStage.getBoard());
         Coord2D center = look.getRootPaneLocationForCellCenter(row, col);
         GameAction move = new MoveAction(model, pawn, "merelleboard", row, col, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 15);
