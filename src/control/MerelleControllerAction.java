@@ -60,9 +60,6 @@ public class MerelleControllerAction extends ControllerAction implements EventHa
                     }
                 }
                 control.startGame();
-                // Make sure the AI will make their first move by calling nextPlayer method without changing the player order.
-                model.setNextPlayer();
-                control.nextPlayer();
             } catch (GameException err) {
                 System.err.println(err.getMessage());
                 System.exit(1);
