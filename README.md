@@ -1,7 +1,7 @@
 # Nine Men's Morris Game - SAE 1.2.6
 ## Links
-[GitHub repository](https://github.com/lucas-besson/SAE_1-2-6/)
-[SAE Subject and instructions](https://cours-info.iut-bm.univ-fcomte.fr/index.php/menu-cours-s2/mmi1bobj-menu-2)
+ - [GitHub repository](https://github.com/lucas-besson/SAE_1-2-6/)
+ - [SAE Subject and instructions](https://cours-info.iut-bm.univ-fcomte.fr/index.php/menu-cours-s2/mmi1bobj-menu-2)
 ## Presentation
 Nine Men's Morris, also known as Merelle in French, is a timeless board game that has been enjoyed by people across the world for centuries. It is a two-player game that involves strategic placement and movement of pieces on a grid with the goal of leaving the opponent with fewer than three pieces, or blocking their moves so they cannot make any more.
 The game is played on a grid with twenty-four points, also known as intersections, which are connected by lines forming a total of sixteen lines. Each player has nine pieces, usually in the form of discs or stones, and the game is played in three phases: placement, movement, and flying (alternative mode, not implemented). In the placement phase, players take turns placing their pieces on any empty point on the board until all the pieces have been placed. The objective is to form a mill, which is a row of three pieces along one of the lines. When a player forms a mill, they can remove one of their opponent's pieces from the board if the piece is not part of a mill. In the movement phase, players take turns moving one of their pieces to an adjacent point along one of the lines. The objective is to form new mills or to prevent the opponent from forming one by blocking their moves.
