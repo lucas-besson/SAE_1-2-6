@@ -102,7 +102,6 @@ public class MerelleStageModel extends GameStageModel {
                 return;
             }
             Pawn pawn = (Pawn) selected.get(0);
-            // Previously : board.setValidCells(pawn.getNumber());
             board.setValidCells(pawn, this.getStatus());
         });
         onPutInGrid((element, gridDest, rowDest, colDest) -> {
@@ -156,15 +155,6 @@ public class MerelleStageModel extends GameStageModel {
             model.stopGame();
         }
         return model.isEndStage();
-    }
-
-    public TextElement getPlayerName() {
-        return playerName;
-    }
-
-    public void setPlayerName(TextElement playerName) {
-        this.playerName = playerName;
-        addElement(playerName);
     }
 
     @Override

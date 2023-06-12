@@ -151,7 +151,6 @@ public class MerelleBoard extends GridElement {
         else {
             int x = pawn.getCol(); //-1
             int y = pawn.getRow(); //-1
-            System.out.println(x + " " + y);
             int jumpX = JUMP_TABLE[y][x][0];
             int jumpY = JUMP_TABLE[y][x][1];
 

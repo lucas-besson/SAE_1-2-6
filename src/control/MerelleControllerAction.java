@@ -2,13 +2,13 @@ package control;
 
 import boardifier.control.Controller;
 import boardifier.control.ControllerAction;
-import boardifier.model.*;
+import boardifier.model.GameException;
+import boardifier.model.Model;
 import boardifier.view.View;
-import javafx.event.*;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import model.GameMode;
 import view.MerelleView;
-
-import java.util.Optional;
 
 /**
  * A basic action controller that only manages menu actions

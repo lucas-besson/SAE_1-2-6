@@ -5,7 +5,6 @@ import boardifier.model.GameElement;
 import boardifier.model.GameStageModel;
 import boardifier.model.animation.AnimationStep;
 import boardifier.view.GridGeometry;
-import view.MerelleStageView;
 
 public class Pawn extends GameElement {
 
@@ -52,18 +51,13 @@ public class Pawn extends GameElement {
     }
 
     public int getCol() {
-        // Each cell is 5 units wide, the x being stored at the center
-        // Return the pawn column starting from 1
-//        return (int)(x + MerelleStageView.BOARD_CELL_WIDTH / 2.0) / MerelleStageView.BOARD_CELL_WIDTH;
         return this.col;
     }
 
     public int getRow() {
-        // Each cell is 2 units tall, the y being stored at the center
-        // Return the pawn row starting from 1
-//        return (int)(y + MerelleStageView.BOARD_CELL_HEIGHT / 2.0) / MerelleStageView.BOARD_CELL_HEIGHT;
         return this.row;
     }
+
     public void update(double width, double height, GridGeometry gridGeometry) {
 
         // if must be animated, move the pawn
@@ -72,8 +66,7 @@ public class Pawn extends GameElement {
             AnimationStep step = animation.next();
             if (step != null) {
                 setLocation(step.getInt(0), step.getInt(1));
-            }
-            else {
+            } else {
                 animation = null;
             }
         }

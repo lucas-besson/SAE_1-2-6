@@ -4,8 +4,9 @@ import boardifier.control.Controller;
 import boardifier.control.ControllerKey;
 import boardifier.model.Model;
 import boardifier.view.View;
-import javafx.event.*;
-import javafx.scene.input.*;
+import javafx.event.EventHandler;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import model.GameMode;
 import view.MerelleView;
 

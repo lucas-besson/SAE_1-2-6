@@ -1,9 +1,7 @@
 package model;
 
-import boardifier.model.GameElement;
 import boardifier.model.GameStageModel;
 import boardifier.model.StageElementsFactory;
-import boardifier.model.TextElement;
 
 public class MerelleStageFactory extends StageElementsFactory {
     private final MerelleStageModel stageModel;

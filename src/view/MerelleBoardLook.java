@@ -2,14 +2,14 @@ package view;
 
 import boardifier.model.GameElement;
 import boardifier.view.GridLook;
-import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
+import javafx.scene.shape.StrokeType;
 import model.MerelleBoard;
-
-import java.io.IOException;
 
 public class MerelleBoardLook extends GridLook {
     private final Rectangle millCell;

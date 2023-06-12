@@ -2,14 +2,10 @@ package control;
 
 import boardifier.control.Controller;
 import boardifier.model.Coord2D;
-import boardifier.model.GameStageModel;
 import boardifier.model.Model;
-import boardifier.model.action.GameAction;
 import boardifier.model.action.MoveAction;
 import boardifier.model.animation.AnimationTypes;
-import boardifier.view.GameStageView;
 import boardifier.view.GridLook;
-import model.MerelleGameStatus;
 import model.Pawn;
 
 import java.awt.*;
