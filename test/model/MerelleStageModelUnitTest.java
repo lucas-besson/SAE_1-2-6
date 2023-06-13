@@ -1,3 +1,5 @@
+package model;
+
 import boardifier.model.Model;
 import boardifier.model.Player;
 import model.MerelleBoard;

@@ -1,3 +1,5 @@
+package model;
+
 import boardifier.model.GameStageModel;
 import model.MerellePawnPot;
 import model.Pawn;

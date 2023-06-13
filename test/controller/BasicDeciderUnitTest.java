@@ -1,3 +1,5 @@
+package controller;
+
 import boardifier.control.Controller;
 import boardifier.model.Model;
 import control.BasicDecider;

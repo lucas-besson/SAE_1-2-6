@@ -1,3 +1,5 @@
+package controller;
+
 import boardifier.model.Model;
 import boardifier.view.View;
 import control.MerelleController;
