@@ -61,8 +61,9 @@ public class IntelligentDecider extends MerelleDecider {
     }
 
     private void printGrid() {
-        for(int col = 0; col < grid.length; col++) {
-            for(int row = 0; row < grid[col].length; row++) {
+        System.out.println();
+        for (int col = 0; col < grid.length; col++) {
+            for (int row = 0; row < grid[col].length; row++) {
                 System.out.print(grid[row][col] + ", ");
             }
             System.out.println();
@@ -70,13 +71,13 @@ public class IntelligentDecider extends MerelleDecider {
     }
 
     @Override
-    protected void movePawn() {
+    public void movePawn() {
         int playerColor = model.getIdPlayer();
         int bestScore = Integer.MIN_VALUE;
         MoveAction bestMove = null;
 
         initGridTable();
-
+        printGrid();
         for (Point point : getPlayerPawnList(playerColor, grid)) {
             for (Point positionsToMove : computeValidCells(point)) {
                 // Faire la copie de la grid
@@ -85,7 +86,7 @@ public class IntelligentDecider extends MerelleDecider {
 
                 // Make the move
                 pawnToMove = (Pawn) model.getGrid("merelleboard").getFirstElement(point.y, point.x);
-                destPoint = new Point(positionsToMove.x,positionsToMove.y);
+                destPoint = new Point(positionsToMove.x, positionsToMove.y);
 //                NEW
 
                 GridLook look = (GridLook) control.getElementLook(board);
@@ -110,7 +111,6 @@ public class IntelligentDecider extends MerelleDecider {
 //            System.out.println("IF");
             List<Point> playerPawnList = getPlayerPawnList(model.getIdPlayer(), grid);
 
-            printGrid();
 
 //            System.out.println(playerPawnList);
 
@@ -148,6 +148,7 @@ public class IntelligentDecider extends MerelleDecider {
             actions.addSingleAction(removePawnAction(secondGrid));
 
         grid = secondGrid;
+        printGrid();
     }
 
     int minimax(int[][] previousGrid, int[][] actualGrid, boolean isMaximizing, int depth) {
