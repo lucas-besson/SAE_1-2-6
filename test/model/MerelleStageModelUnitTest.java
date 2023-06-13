@@ -106,4 +106,38 @@ public class MerelleStageModelUnitTest {
         merelleStageModel.removedFromGrid(pawn, merelleBoard, 2, 3);
         assertEquals(MerellePawnPot.PAWNS_IN_POT - 1, merelleStageModel.getRedPawnsToPlay());
     }
+
+    @Test
+    public void testSetPawnsAndPots() {
+        Pawn[] blackPawns = {
+                new Pawn(1,0,merelleStageModel),
+                new Pawn(2,0,merelleStageModel),
+                new Pawn(3,0,merelleStageModel),
+                new Pawn(4,0,merelleStageModel)
+
+        };
+        Pawn[] redPawns = {
+                new Pawn(1,0,merelleStageModel),
+                new Pawn(2,0,merelleStageModel),
+                new Pawn(3,0,merelleStageModel),
+                new Pawn(4,0,merelleStageModel)
+
+        };
+        merelleStageModel.setBlackPawns(blackPawns);
+        for (Pawn pawn : merelleStageModel.getBlackPawns()) {
+            assertTrue(merelleStageModel.getElements().contains(pawn));
+        }
+        merelleStageModel.setRedPawns(redPawns);
+        for (Pawn pawn : merelleStageModel.getRedPawns()) {
+            assertTrue(merelleStageModel.getElements().contains(pawn));
+        }
+        MerellePawnPot blackPot = new MerellePawnPot(1,4,merelleStageModel);
+        for (Pawn pawn : blackPawns) blackPot.putElement(pawn,pawn.getNumber(),0);
+        MerellePawnPot redPot = new MerellePawnPot(1,4,merelleStageModel);
+        for (Pawn pawn : redPawns) redPot.putElement(pawn,pawn.getNumber(),0);
+        merelleStageModel.setBlackPot(blackPot);
+        for (Pawn pawn : blackPawns) assertTrue(merelleStageModel.getBlackPot().contains(pawn));
+        merelleStageModel.setRedPot(redPot);
+        for (Pawn pawn : redPawns) assertTrue(merelleStageModel.getRedPot().contains(pawn));
+    }
 }
