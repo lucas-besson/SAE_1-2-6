@@ -11,10 +11,17 @@ import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeType;
 import model.MerelleBoard;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class MerelleBoardLook extends GridLook {
     private final Rectangle millCell;
-    Image redMillIMG = Images.loadImage("assets\\images\\RedMill.png");
-    Image blueMillIMG = Images.loadImage("assets\\images\\BlueMill.png");
+
+    Path redMillIMGPath = Paths.get(".").resolve("assets").resolve("images").resolve("RedMill.png");
+    Path blueMillIMGPath = Paths.get(".").resolve("assets").resolve("images").resolve("BlueMill.png");
+
+    Image redMillIMG = Images.loadImage(redMillIMGPath.toString());
+    Image blueMillIMG = Images.loadImage(blueMillIMGPath.toString());
 
     // the array of rectangle composing the grid
     private final Shape[][] cells;
