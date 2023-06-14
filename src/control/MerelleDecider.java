@@ -358,8 +358,8 @@ public abstract class MerelleDecider extends Decider {
 
     public static void printGrid(int[][] grid) {
         System.out.println();
-        for (int col = 0; col < grid.length; col++) {
-            for (int row = 0; row < grid[col].length; row++) {
+        for (int row = 0; row < grid.length; row++) {
+            for (int col = 0; col < grid[row].length; col++) {
                 System.out.print(grid[row][col] + ", ");
             }
             System.out.println();
