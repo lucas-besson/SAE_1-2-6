@@ -140,7 +140,6 @@ public class IntelligentDecider extends MerelleDecider {
         actions.addSingleAction(bestMove);
 
         grid[pawnToMove.getCol()][pawnToMove.getRow()] = 2;
-        assert bestMove != null;
         secondGrid[bestMove.getColDest()][bestMove.getRowDest()] = playerColor;
 
         // If new mill

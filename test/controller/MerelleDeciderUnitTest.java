@@ -28,7 +28,7 @@ public class MerelleDeciderUnitTest {
     private MerelleDecider merelleDeciderTest;
 
     @BeforeEach
-    void initEach(){
+    void initEach() {
         controller = Mockito.mock(Controller.class);
         model = Mockito.mock(Model.class);
         merelleStageModel = Mockito.mock(MerelleStageModel.class);
@@ -36,7 +36,7 @@ public class MerelleDeciderUnitTest {
         Mockito.when(model.getGameStage()).thenReturn(merelleStageModel);
         Mockito.when(model.getGrid(anyString())).thenReturn(merelleBoard);
         merelleDeciderTest = new MerelleDecider(model, controller) {
-            public int test=1;
+            public int test = 1;
 
             public int getTest() {
                 return test;
@@ -49,15 +49,18 @@ public class MerelleDeciderUnitTest {
 
             @Override
             public void placePawn() {
-                test=2;
+                test = 2;
             }
+
             @Override
             protected void movePawn() {
-                test=3;
+                test = 3;
             }
+
             public List<Point> getFreePoints(int[][] actualGrid) {
                 return super.getFreePoints(actualGrid);
             }
+
             @Override
             public Point removePawn(int[][] actualGrid) {
                 return null;
@@ -72,6 +75,7 @@ public class MerelleDeciderUnitTest {
             public List<Point> computeValidCells(Point point) {
                 return super.computeValidCells(point);
             }
+
             @Override
             public boolean isNewMill(int[][] previousGrid, int[][] actualGrid, int playerColor) {
                 return super.isNewMill(previousGrid, actualGrid, playerColor);
@@ -81,6 +85,7 @@ public class MerelleDeciderUnitTest {
             public int millsCount(int x, int y, int[][] plateau) {
                 return super.millsCount(x, y, plateau);
             }
+
             @Override
             public boolean hasMill(int col, int row, int[][] grid, int playerId) {
                 return super.hasMill(col, row, grid, playerId);
@@ -89,6 +94,7 @@ public class MerelleDeciderUnitTest {
 
         };
     }
+
     @Test
     void testGetFreePoints() {
         int[][] grid = {
@@ -101,7 +107,7 @@ public class MerelleDeciderUnitTest {
                 {0, 0, 0, 0, 0, 0, 0}
         };
 
-        Assertions.assertEquals(merelleDeciderTest.getFreePoints(grid).size(),3);
+        Assertions.assertEquals(merelleDeciderTest.getFreePoints(grid).size(), 3);
     }
 
     @Test
@@ -112,21 +118,21 @@ public class MerelleDeciderUnitTest {
         List<GameElement> gameElements = Mockito.mock(List.class);
 
         Mockito.when(merelleStageModel.getStatus()).thenReturn(1);
-        Mockito.when(aIPot.getFirstElement(Mockito.anyInt(),Mockito.anyInt())).thenReturn(gameElement);
-        Mockito.when(gridElement.getElements(Mockito.anyInt(),Mockito.anyInt())).thenReturn( gameElements);
+        Mockito.when(aIPot.getFirstElement(Mockito.anyInt(), Mockito.anyInt())).thenReturn(gameElement);
+        Mockito.when(gridElement.getElements(Mockito.anyInt(), Mockito.anyInt())).thenReturn(gameElements);
         merelleDeciderTest.decide();
         Assertions.assertEquals(2, merelleDeciderTest.getTest());
 
 
         Mockito.when(merelleStageModel.getStatus()).thenReturn(2);
-        Mockito.when(aIPot.getFirstElement(Mockito.anyInt(),Mockito.anyInt())).thenReturn(gameElement);
-        Mockito.when(gridElement.getElements(Mockito.anyInt(),Mockito.anyInt())).thenReturn( gameElements);
+        Mockito.when(aIPot.getFirstElement(Mockito.anyInt(), Mockito.anyInt())).thenReturn(gameElement);
+        Mockito.when(gridElement.getElements(Mockito.anyInt(), Mockito.anyInt())).thenReturn(gameElements);
         merelleDeciderTest.decide();
         Assertions.assertEquals(3, merelleDeciderTest.getTest());
     }
 
     @Test
-    void testcomputeValidCells(){
+    void testcomputeValidCells() {
         int[][] grid = {
                 {0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0},
@@ -137,59 +143,66 @@ public class MerelleDeciderUnitTest {
                 {0, 0, 0, 0, 0, 0, 0}
         };
         Point point = Mockito.mock(Point.class);
-        point.x=2;
-        point.y=2;
+        point.x = 2;
+        point.y = 2;
         merelleDeciderTest.setGrid(grid);
-        Assertions.assertEquals(new ArrayList<>(),merelleDeciderTest.computeValidCells(point));
+        Assertions.assertEquals(new ArrayList<>(), merelleDeciderTest.computeValidCells(point));
 
-        point.x=5;
-        point.y=5;
-        Assertions.assertEquals(2,merelleDeciderTest.computeValidCells(point).size());
+        point.x = 5;
+        point.y = 5;
+        Assertions.assertEquals(2, merelleDeciderTest.computeValidCells(point).size());
     }
 
     @Test
-    void testisNewMill(){
-        int[][] previousGrid = {
-                {0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 2, 0, 0, 0, 0},
-                {0, 0, 2, 0, 0, 0, 0},
-                {0, 0, 2, 0, 0, 0, 0},
-                {0, 0, 0, 2, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0}
+    void testIsNewMillTrue(){
+        // Test avec un nouveau moulin créé
+        int[][] grid = {
+                {0, 2, 2, 0, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 0},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2}
         };
-
-        int[][] actualGrid = {
-                {0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 2, 0, 0, 0, 0},
-                {0, 0, 2, 0, 0, 0, 0},
-                {0, 0, 2, 0, 0, 0, 0},
-                {0, 0, 0, 2, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0}
+        int[][] grid2 = {
+                {0, 2, 2, 0, 2, 2, 0},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2}
         };
-        // Test d'une grille sans changement
-
-        Assertions.assertFalse(merelleDeciderTest.isNewMill(previousGrid,actualGrid,1));
-
-
-        // Test d'une grille avec un nouveau moulin
-        actualGrid[2][4]=1;
-        actualGrid[3][4]=1;
-        actualGrid[4][4]=1;
-        Assertions.assertTrue(merelleDeciderTest.isNewMill(previousGrid,actualGrid,1));
-
-
-        actualGrid[2][4]=1;
-        actualGrid[3][4]=1;
-        actualGrid[4][4]=2;
-        // Test d'une grille avec un moulin à été supprier
-        Assertions.assertFalse(merelleDeciderTest.isNewMill(previousGrid,actualGrid,1));
-
+        Assertions.assertTrue(merelleDeciderTest.isNewMill(grid, grid2, 0));
     }
 
     @Test
-    void testmillsCount(){
+    void testIsNewMillFalse(){
+        // Test sans un nouveau moulin créé
+        int[][] grid = {
+                {0, 2, 2, 0, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 0},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2}
+        };
+        int[][] grid2 = {
+                {0, 2, 2, 0, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 0, 2},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2}
+        };
+        Assertions.assertFalse(merelleDeciderTest.isNewMill(grid, grid2, 0));
+    }
+
+    @Test
+    void testmillsCount() {
         int[][] grid = {
                 {1, 2, 2, 1, 2, 2, 2},
                 {2, 2, 2, 2, 2, 2, 2},
@@ -199,13 +212,14 @@ public class MerelleDeciderUnitTest {
                 {2, 2, 2, 2, 2, 2, 2},
                 {2, 2, 2, 2, 2, 2, 2}
         };
-        Assertions.assertEquals(2,merelleDeciderTest.millsCount(0,6,grid));
-        grid[6][6]=1;
-        Assertions.assertEquals(2,merelleDeciderTest.millsCount(0,6,grid));
+        Assertions.assertEquals(2, merelleDeciderTest.millsCount(0, 6, grid));
+        grid[6][6] = 1;
+        Assertions.assertEquals(2, merelleDeciderTest.millsCount(0, 6, grid));
 
     }
+
     @Test
-    void testhasMill(){
+    void testhasMill() {
         int[][] grid = {
                 {1, 2, 2, 1, 2, 2, 2},
                 {2, 2, 2, 2, 2, 2, 2},
@@ -215,8 +229,8 @@ public class MerelleDeciderUnitTest {
                 {2, 2, 2, 2, 2, 2, 2},
                 {2, 2, 2, 2, 2, 2, 2}
         };
-        Assertions.assertTrue(merelleDeciderTest.hasMill(0,6,grid,1));
-        Assertions.assertFalse(merelleDeciderTest.hasMill(3,6,grid,1));
+        Assertions.assertTrue(merelleDeciderTest.hasMill(0, 6, grid, 1));
+        Assertions.assertFalse(merelleDeciderTest.hasMill(3, 6, grid, 1));
     }
 
 }
