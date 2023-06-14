@@ -355,5 +355,15 @@ public abstract class MerelleDecider extends Decider {
     public static void decreaseAnimationSpeed() {
         animationSpeed *= 0.8;
     }
+
+    public static void printGrid(int[][] grid) {
+        System.out.println();
+        for (int col = 0; col < grid.length; col++) {
+            for (int row = 0; row < grid[col].length; row++) {
+                System.out.print(grid[row][col] + ", ");
+            }
+            System.out.println();
+        }
+    }
 }
 

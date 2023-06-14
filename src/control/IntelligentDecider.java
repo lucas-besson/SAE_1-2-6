@@ -50,24 +50,18 @@ public class IntelligentDecider extends MerelleDecider {
 //        NEW
         GridLook look = (GridLook) control.getElementLook(board);
         Coord2D center = look.getRootPaneLocationForCellCenter(destPoint.y, destPoint.x);
-        MoveAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), MerelleDecider.animationSpeed);
+        MoveAction move = new MoveAction(model, pawnToMove, "merelleboard",
+                                         destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP,
+                                         center.getX(), center.getY(), MerelleDecider.animationSpeed);
         actions.addSingleAction(move);
 
         if (needToRemoveAPawn) {
             grid[destPoint.x][destPoint.y] = model.getIdPlayer();
-            printGrid();
+            printGrid(this.grid);
             actions.addSingleAction(removePawnAction(grid));
         }
-    }
 
-    private void printGrid() {
-        System.out.println();
-        for (int col = 0; col < grid.length; col++) {
-            for (int row = 0; row < grid[col].length; row++) {
-                System.out.print(grid[row][col] + ", ");
-            }
-            System.out.println();
-        }
+        printGrid(this.grid);
     }
 
     @Override
@@ -77,7 +71,7 @@ public class IntelligentDecider extends MerelleDecider {
         MoveAction bestMove = null;
 
         initGridTable();
-        printGrid();
+        printGrid(this.grid);
         for (Point point : getPlayerPawnList(playerColor, grid)) {
             for (Point positionsToMove : computeValidCells(point)) {
                 // Faire la copie de la grid
@@ -91,7 +85,9 @@ public class IntelligentDecider extends MerelleDecider {
 
                 GridLook look = (GridLook) control.getElementLook(board);
                 Coord2D center = look.getRootPaneLocationForCellCenter(destPoint.y, destPoint.x);
-                MoveAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), MerelleDecider.animationSpeed);
+                MoveAction move = new MoveAction(model, pawnToMove, "merelleboard",
+                                                 destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP,
+                                                 center.getX(), center.getY(), MerelleDecider.animationSpeed);
 
                 gridCopy[positionsToMove.x][positionsToMove.y] = gridCopy[point.x][point.y];
                 gridCopy[point.x][point.y] = 2;
@@ -133,7 +129,9 @@ public class IntelligentDecider extends MerelleDecider {
 //                NEW
                 GridLook look = (GridLook) control.getElementLook(board);
                 Coord2D center = look.getRootPaneLocationForCellCenter(destPoint.y, destPoint.x);
-                bestMove = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), MerelleDecider.animationSpeed);
+                bestMove = new MoveAction(model, pawnToMove, "merelleboard",
+                                          destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP,
+                                          center.getX(), center.getY(), MerelleDecider.animationSpeed);
             }
         }
 
@@ -148,10 +146,10 @@ public class IntelligentDecider extends MerelleDecider {
             actions.addSingleAction(removePawnAction(secondGrid));
 
         grid = secondGrid;
-        printGrid();
+        printGrid(this.grid);
     }
 
-    int minimax(int[][] previousGrid, int[][] actualGrid, boolean isMaximizing, int depth) {
+    public int minimax(int[][] previousGrid, int[][] actualGrid, boolean isMaximizing, int depth) {
         int result = checkWinner(actualGrid);
         if (result == model.getIdPlayer()) return 1;
         else if (result == (model.getIdPlayer() + 1) % 2) return -1;
