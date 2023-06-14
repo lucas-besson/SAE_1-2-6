@@ -71,12 +71,12 @@ public class IntelligentDeciderUnitTest {
          */
 
         int[][] grid = {
-                {1, 2, 2, 1, 2, 2, 0},
-                {2, 1, 2, 1, 2, 1, 2},
-                {2, 2, 1, 1, 1, 2, 2},
-                {1, 1, 1, 2, 0, 0, 2},
-                {2, 2, 1, 1, 1, 2, 2},
-                {2, 1, 2, 1, 2, 1, 2},
+                {2, 2, 2, 2, 2, 2, 0},
+                {2, 1, 2, 2, 2, 2, 2},
+                {2, 2, 2, 2, 2, 2, 2},
+                {1, 2, 2, 2, 0, 0, 2},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 1, 2, 2, 2, 1, 2},
                 {0, 2, 2, 2, 2, 2, 2}
         };
 
@@ -91,11 +91,14 @@ public class IntelligentDeciderUnitTest {
         intelligentDecider.movePawn();
         var lastGrid = intelligentDecider.getGrid();
 
+        MerelleDecider.printGrid(lastGrid);
+
         grid[3][6] = 0;
         grid[6][6] = 2;
 
-        Assertions.assertArrayEquals(grid, lastGrid);
-        verify(intelligentDecider, times(1)).minimax(any(int[][].class), any(int[][].class), anyBoolean(), anyInt());
+        Assertions.assertTrue(lastGrid[6][3] == 0);
+        verify(intelligentDecider, times(1)).movePawn();
+        verify(intelligentDecider, times(8)).minimax(any(int[][].class), any(int[][].class), anyBoolean(), anyInt());
     }
 
     @Test
@@ -128,7 +131,37 @@ public class IntelligentDeciderUnitTest {
         intelligentDecider.decide();
 
         var lastGrid = intelligentDecider.getGrid();
-        MerelleDecider.printGrid(lastGrid);
+
         Assertions.assertFalse(Arrays.deepEquals(grid, lastGrid));
+
+        verify(intelligentDecider, times(1)).placePawn();
+        verify(intelligentDecider, times(0)).movePawn();
+    }
+
+    @Test
+    public void testMinimax() throws Exception {
+
+        int[][] previousGrid = {
+                {1, 2, 2, 1, 2, 2, 1},
+                {2, 1, 2, 1, 2, 1, 2},
+                {2, 2, 1, 1, 1, 2, 2},
+                {1, 1, 1, 2, 1, 1, 1},
+                {2, 2, 1, 1, 1, 2, 2},
+                {2, 1, 2, 1, 2, 1, 2},
+                {1, 2, 2, 0, 2, 2, 2}
+        };
+
+        int[][] actualGrid = {
+                {1, 2, 2, 1, 2, 2, 1},
+                {2, 1, 2, 1, 2, 1, 2},
+                {2, 2, 1, 1, 1, 2, 2},
+                {1, 1, 1, 2, 1, 1, 1},
+                {2, 2, 1, 1, 1, 2, 2},
+                {2, 1, 2, 1, 2, 1, 2},
+                {1, 2, 2, 2, 2, 2, 0}
+        };
+
+        int score = intelligentDecider.minimax(previousGrid, actualGrid, true, 0);
+        Assertions.assertTrue(score > 0);
     }
 }

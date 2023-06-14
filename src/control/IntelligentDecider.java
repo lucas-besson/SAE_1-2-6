@@ -146,6 +146,8 @@ public class IntelligentDecider extends MerelleDecider {
         // If new mill
         if (isNewMill(grid, secondGrid, playerColor))
             actions.addSingleAction(removePawnAction(secondGrid));
+
+        grid = secondGrid;
     }
 
     public int minimax(int[][] previousGrid, int[][] actualGrid, boolean isMaximizing, int depth) {
