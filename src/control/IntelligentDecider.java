@@ -104,21 +104,32 @@ public class IntelligentDecider extends MerelleDecider {
                 }
             }
         }
+//        System.out.println(pawnToMove);
         if (bestScore == 0 || pawnToMove == null) {
             initGridTable();
+//            System.out.println("IF");
             List<Point> playerPawnList = getPlayerPawnList(model.getIdPlayer(), grid);
+
+
+//            System.out.println(playerPawnList);
 
             playerPawnList.removeIf(pawn -> computeValidCells(pawn).isEmpty());
 
+//            System.out.println(playerPawnList);
+
             if (!playerPawnList.isEmpty()) {
                 List<Point> destinations;
-                Point toMove = playerPawnList.get(rand.nextInt(playerPawnList.size()));
-                pawnToMove = (Pawn) model.getGrid("merelleboard").getFirstElement(toMove.y, toMove.x);
+//                System.out.println("IF 2");
+                do {
+//                    System.out.println("Do While");
+                    Point toMove = playerPawnList.get(rand.nextInt(playerPawnList.size()));
+                    pawnToMove = (Pawn) model.getGrid("merelleboard").getFirstElement(toMove.y, toMove.x);
 
-                destinations = computeValidCells(toMove);
+                    destinations = computeValidCells(toMove);
 
-                destPoint = destinations.get(rand.nextInt(destinations.size()));
-                //                NEW
+                    destPoint = destinations.get(rand.nextInt(destinations.size()));
+                } while (destinations.isEmpty());
+//                NEW
                 GridLook look = (GridLook) control.getElementLook(board);
                 Coord2D center = look.getRootPaneLocationForCellCenter(destPoint.y, destPoint.x);
                 bestMove = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), MerelleDecider.animationSpeed);
@@ -127,7 +138,9 @@ public class IntelligentDecider extends MerelleDecider {
 
         // Make the move
         actions.addSingleAction(bestMove);
+
         grid[pawnToMove.getCol()][pawnToMove.getRow()] = 2;
+        assert bestMove != null;
         secondGrid[bestMove.getColDest()][bestMove.getRowDest()] = playerColor;
 
         // If new mill
