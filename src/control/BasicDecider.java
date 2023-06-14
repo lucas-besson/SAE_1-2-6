@@ -48,6 +48,7 @@ public class BasicDecider extends MerelleDecider {
         Coord2D center = look.getRootPaneLocationForCellCenter(destPoint.y, destPoint.x);
         GameAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), MerelleDecider.animationSpeed);
         actions.addSingleAction(move);
+        grid[destPoint.y][destPoint.x] = pawnToMove.getColor();
         if (needToRemoveAPawn) actions.addSingleAction(removePawnAction(grid));
     }
 

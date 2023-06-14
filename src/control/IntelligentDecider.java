@@ -52,10 +52,9 @@ public class IntelligentDecider extends MerelleDecider {
         Coord2D center = look.getRootPaneLocationForCellCenter(destPoint.y, destPoint.x);
         MoveAction move = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), MerelleDecider.animationSpeed);
         actions.addSingleAction(move);
+        grid[destPoint.x][destPoint.y] = model.getIdPlayer();
 
         if (needToRemoveAPawn) {
-            grid[destPoint.x][destPoint.y] = model.getIdPlayer();
-            printGrid();
             actions.addSingleAction(removePawnAction(grid));
         }
     }
@@ -77,7 +76,7 @@ public class IntelligentDecider extends MerelleDecider {
         MoveAction bestMove = null;
 
         initGridTable();
-        printGrid();
+
         for (Point point : getPlayerPawnList(playerColor, grid)) {
             for (Point positionsToMove : computeValidCells(point)) {
                 // Faire la copie de la grid
@@ -105,32 +104,21 @@ public class IntelligentDecider extends MerelleDecider {
                 }
             }
         }
-//        System.out.println(pawnToMove);
         if (bestScore == 0 || pawnToMove == null) {
             initGridTable();
-//            System.out.println("IF");
             List<Point> playerPawnList = getPlayerPawnList(model.getIdPlayer(), grid);
-
-
-//            System.out.println(playerPawnList);
 
             playerPawnList.removeIf(pawn -> computeValidCells(pawn).isEmpty());
 
-//            System.out.println(playerPawnList);
-
             if (!playerPawnList.isEmpty()) {
                 List<Point> destinations;
-//                System.out.println("IF 2");
-                do {
-//                    System.out.println("Do While");
-                    Point toMove = playerPawnList.get(rand.nextInt(playerPawnList.size()));
-                    pawnToMove = (Pawn) model.getGrid("merelleboard").getFirstElement(toMove.y, toMove.x);
+                Point toMove = playerPawnList.get(rand.nextInt(playerPawnList.size()));
+                pawnToMove = (Pawn) model.getGrid("merelleboard").getFirstElement(toMove.y, toMove.x);
 
-                    destinations = computeValidCells(toMove);
+                destinations = computeValidCells(toMove);
 
-                    destPoint = destinations.get(rand.nextInt(destinations.size()));
-                } while (destinations.isEmpty());
-//                NEW
+                destPoint = destinations.get(rand.nextInt(destinations.size()));
+                //                NEW
                 GridLook look = (GridLook) control.getElementLook(board);
                 Coord2D center = look.getRootPaneLocationForCellCenter(destPoint.y, destPoint.x);
                 bestMove = new MoveAction(model, pawnToMove, "merelleboard", destPoint.y, destPoint.x, AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), MerelleDecider.animationSpeed);
@@ -139,16 +127,12 @@ public class IntelligentDecider extends MerelleDecider {
 
         // Make the move
         actions.addSingleAction(bestMove);
-
         grid[pawnToMove.getCol()][pawnToMove.getRow()] = 2;
-        assert bestMove != null;
         secondGrid[bestMove.getColDest()][bestMove.getRowDest()] = playerColor;
 
+        // If new mill
         if (isNewMill(grid, secondGrid, playerColor))
             actions.addSingleAction(removePawnAction(secondGrid));
-
-        grid = secondGrid;
-        printGrid();
     }
 
     int minimax(int[][] previousGrid, int[][] actualGrid, boolean isMaximizing, int depth) {
