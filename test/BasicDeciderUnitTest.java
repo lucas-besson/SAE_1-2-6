@@ -2,6 +2,7 @@ import boardifier.control.Controller;
 import boardifier.model.GameElement;
 import boardifier.model.GameStageModel;
 import boardifier.model.Model;
+import boardifier.model.action.MoveAction;
 import control.BasicDecider;
 import model.MerelleBoard;
 import model.MerellePawnPot;
@@ -15,6 +16,7 @@ import static org.mockito.Mockito.*;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class BasicDeciderUnitTest {
@@ -52,11 +54,14 @@ public class BasicDeciderUnitTest {
 
         gameElement = Mockito.mock(GameElement.class);
 
-        MerellePawnPot aiPot2 = Mockito.mock(MerellePawnPot.class);
+        MerellePawnPot aiPot = Mockito.mock(MerellePawnPot.class);
+        basicDeciderTest.setaIpot(aiPot);
 
-        basicDeciderTest.setaIpot(aiPot2);
-
+        var oldGrid = basicDeciderTest.getGrid();
         basicDeciderTest.placePawn();
+        var newGrid = basicDeciderTest.getGrid();
+
+        assertFalse(Arrays.deepEquals(oldGrid, newGrid));
 
     }
 
