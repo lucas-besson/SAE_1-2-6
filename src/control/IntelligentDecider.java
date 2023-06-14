@@ -148,7 +148,7 @@ public class IntelligentDecider extends MerelleDecider {
             actions.addSingleAction(removePawnAction(secondGrid));
     }
 
-    int minimax(int[][] previousGrid, int[][] actualGrid, boolean isMaximizing, int depth) {
+    public int minimax(int[][] previousGrid, int[][] actualGrid, boolean isMaximizing, int depth) {
         int result = checkWinner(actualGrid);
         if (result == model.getIdPlayer()) return 1;
         else if (result == (model.getIdPlayer() + 1) % 2) return -1;
