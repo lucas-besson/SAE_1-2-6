@@ -8,13 +8,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class MerelleStageFactoryUnitTest {
+class MerelleStageFactoryUnitTest {
 
     private MerelleStageFactory merelleStageFactory;
     private MerelleStageModel merelleStageModel;
 
     @BeforeEach
-    public void beforEach() {
+    void beforEach() {
 //        Model model = new Model();
 //        merelleStageModel = new MerelleStageModel("Test", model);
         merelleStageModel = mock(MerelleStageModel.class);
@@ -22,7 +22,7 @@ public class MerelleStageFactoryUnitTest {
     }
 
     @Test
-    public void testSetup() {
+    void testSetup() {
         final ArgumentCaptor<Pawn[]> captorPawns = ArgumentCaptor.forClass(Pawn[].class);
         final ArgumentCaptor<MerellePawnPot> captorPot = ArgumentCaptor.forClass(MerellePawnPot.class);
         merelleStageFactory.setup();

@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
-public class MerellePawnPotUnitTest {
+class MerellePawnPotUnitTest {
     @Test
-    public void testIsEmpty(){
+    void testIsEmpty(){
         GameStageModel gameStage = Mockito.mock(GameStageModel.class);
         MerellePawnPot merellePawnPot = new MerellePawnPot(0,0,gameStage);
 

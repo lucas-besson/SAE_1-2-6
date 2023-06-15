@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
-public class MerelleStageModelUnitTest {
+class MerelleStageModelUnitTest {
 
     private MerelleBoard merelleBoard;
     private Model model;
@@ -25,7 +25,7 @@ public class MerelleStageModelUnitTest {
     private MerellePawnPot merellePawnPot;
 
     @BeforeEach
-    public void beforeEach() {
+    void beforeEach() {
         merelleBoard = mock(MerelleBoard.class);
         model = mock(Model.class);
         merelleStageModel = new MerelleStageModel("test", model);
@@ -36,7 +36,7 @@ public class MerelleStageModelUnitTest {
     }
 
     @Test
-    public void testisEndStage() {
+    void testisEndStage() {
 
 
         //Premier if :
@@ -69,7 +69,7 @@ public class MerelleStageModelUnitTest {
     }
 
     @Test
-    public void testCallBacks() {
+    void testCallBacks() {
         Pawn pawn = mock(Pawn.class);
 
         // onSelectionChange :
@@ -108,7 +108,7 @@ public class MerelleStageModelUnitTest {
     }
 
     @Test
-    public void testSetPawnsAndPots() {
+    void testSetPawnsAndPots() {
         Pawn[] blackPawns = {
                 new Pawn(1,0,merelleStageModel),
                 new Pawn(2,0,merelleStageModel),

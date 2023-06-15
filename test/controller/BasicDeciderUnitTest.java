@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-public class BasicDeciderUnitTest {
+class BasicDeciderUnitTest {
     BasicDecider basicDeciderTest;
     Model model;
     Controller controller;
@@ -36,7 +36,7 @@ public class BasicDeciderUnitTest {
     GameElement gameElement;
     MerellePawnPot aiPot;
     @BeforeEach
-    public void initEach() {
+    void initEach() {
         model = mock(Model.class);
         controller = mock(Controller.class);
         view = mock(View.class);
@@ -63,7 +63,7 @@ public class BasicDeciderUnitTest {
         when(gridLook.getRootPaneLocationForCellCenter(anyInt(),anyInt())).thenReturn(coord2D);
     }
     @Test
-    public void testPlacePawn() {
+    void testPlacePawn() {
 
         int[][] oldGrid = {
                 {1, 2, 2, 1, 2, 2, 2},
@@ -97,7 +97,7 @@ public class BasicDeciderUnitTest {
     }
 
     @Test
-    public void testMovePawn() {
+    void testMovePawn() {
         int[][] oldGrid = {
                 {1, 2, 2, 1, 2, 2, 0},
                 {2, 1, 2, 1, 2, 1, 2},
@@ -131,7 +131,7 @@ public class BasicDeciderUnitTest {
     }
 
     @Test
-    public void testRemovePawn() {
+    void testRemovePawn() {
         int[][] oldGrid = {
                 {1, 2, 2, 1, 2, 2, 0},
                 {2, 1, 2, 1, 2, 1, 2},
