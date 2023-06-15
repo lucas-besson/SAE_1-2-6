@@ -1,6 +1,7 @@
 package view;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 public class MillAlert {
@@ -10,10 +11,11 @@ public class MillAlert {
         alert.setTitle("Mill Alert");
         alert.setHeaderText("You just formed a new Mill !!");
         alert.initOwner(stage);
-        alert.setContentText(
-                "You just formed a new mill and have to remove an opponent pawn by clicking on it. " +
-                "The game will not continue unless you remove an opponent pawn."
+        alert.getDialogPane().setContent(
+                new Label("You just formed a new mill and have to remove an opponent pawn by clicking on it. " +
+                "\nThe game will not continue unless you remove an opponent pawn.")
         );
+        alert.setAlertType(Alert.AlertType.INFORMATION);
     }
     public void show(){
         alert.showAndWait();
