@@ -19,7 +19,7 @@ public class MerelleRootPane extends RootPane {
     @Override
     public void createDefaultGroup() {
         width = 1080;
-        height = 720;
+        height = 450;
         Rectangle frame = new Rectangle(width, height, Color.LIGHTGREY);
         Text text = new Text("Playing to Nine Men's Morris\n\n" + HelpStage.HelpText);
         text.setFont(new Font(15));
