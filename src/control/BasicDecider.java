@@ -93,7 +93,7 @@ public class BasicDecider extends MerelleDecider {
      * @return Point
      */
     @Override
-    protected Point removePawn(int[][] grid) {
+    public Point removePawn(int[][] grid) {
         List<Point> playerPawnList = getPlayerPawnList((model.getIdPlayer() + 1) % 2, grid);
         return playerPawnList.get(rand.nextInt(playerPawnList.size()));
     }

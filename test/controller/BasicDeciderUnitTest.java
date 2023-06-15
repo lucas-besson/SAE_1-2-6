@@ -22,6 +22,7 @@ import static org.mockito.Mockito.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class BasicDeciderUnitTest {
@@ -97,11 +98,60 @@ public class BasicDeciderUnitTest {
 
     @Test
     public void testMovePawn() {
-        // FIXME: we lost it D:
+        int[][] oldGrid = {
+                {1, 2, 2, 1, 2, 2, 0},
+                {2, 1, 2, 1, 2, 1, 2},
+                {2, 2, 1, 1, 1, 2, 2},
+                {1, 1, 1, 2, 0, 0, 2},
+                {2, 2, 1, 1, 1, 2, 2},
+                {2, 1, 2, 1, 2, 1, 2},
+                {0, 2, 2, 2, 2, 2, 2}
+        };
+        for (int row = 0; row < oldGrid.length; row++) {
+            for (int col = 0; col < oldGrid.length; col++) {
+                merelleBoard.putElement(new Pawn(1, oldGrid[row][col], merelleStageModel), row, col);
+            }
+        }
+        MerelleDecider.printGrid(oldGrid);
+
+        model.setIdPlayer(Pawn.PAWN_BLACK);
+
+        basicDeciderTest.movePawn();
+
+        var newGrid = basicDeciderTest.getGrid();
+        MerelleDecider.printGrid(newGrid);
+
+        oldGrid[3][6] = 0;
+        oldGrid[6][6] = 2;
+
+        assertFalse(Arrays.deepEquals(oldGrid, newGrid));
+        verify(basicDeciderTest, times(1)).movePawn();
+        verify(basicDeciderTest, times(0)).placePawn();
+
     }
 
     @Test
     public void testRemovePawn() {
-        // TODO
+        int[][] oldGrid = {
+                {1, 2, 2, 1, 2, 2, 0},
+                {2, 1, 2, 1, 2, 1, 2},
+                {2, 2, 1, 1, 1, 2, 2},
+                {1, 1, 1, 2, 0, 0, 2},
+                {2, 2, 1, 1, 1, 2, 2},
+                {2, 1, 2, 1, 2, 1, 2},
+                {0, 2, 2, 2, 2, 2, 2}
+        };
+        for (int row = 0; row < oldGrid.length; row++) {
+            for (int col = 0; col < oldGrid.length; col++) {
+                merelleBoard.putElement(new Pawn(1, oldGrid[row][col], merelleStageModel), row, col);
+            }
+        }
+
+        basicDeciderTest.removePawn(oldGrid);
+
+        var newGrid = basicDeciderTest.getGrid();
+
+        assertFalse(Arrays.deepEquals(oldGrid, newGrid));
+        verify(basicDeciderTest, times(1)).removePawn(oldGrid);
     }
 }
