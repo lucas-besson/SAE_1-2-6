@@ -15,8 +15,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class MerelleBoardLook extends GridLook {
-    static final int linkThickness = 5;
-    static final int cellRadius = 24;
+    static final int LINK_THICKNESS = 5;
+    static final int CELL_RADIUS = 24;
     private final Rectangle millCell;
     // the array of rectangle composing the grid
     private final Shape[][] cells;
@@ -40,35 +40,35 @@ public class MerelleBoardLook extends GridLook {
             for (int n : linesSize) {
                 addShape(newLine(
                         borderWidth + cellWidth / 2.0 + (n % 3) * cellWidth,
-                        borderWidth + cellHeight / 2.0 - linkThickness / 2.0 + cellHeight * (n % 3) + i * n * cellHeight,
+                        borderWidth + cellHeight / 2.0 - LINK_THICKNESS / 2.0 + cellHeight * (n % 3) + i * n * cellHeight,
                         n * cellWidth,
-                        linkThickness
+                        LINK_THICKNESS
                 ));
                 addShape(newLine(
-                        borderWidth + cellWidth / 2.0 - linkThickness / 2.0 + cellWidth * (n % 3) + i * n * cellWidth,
+                        borderWidth + cellWidth / 2.0 - LINK_THICKNESS / 2.0 + cellWidth * (n % 3) + i * n * cellWidth,
                         borderWidth + cellHeight / 2.0 + (n % 3) * cellHeight,
-                        linkThickness,
+                        LINK_THICKNESS,
                         n * cellWidth
                 ));
             }
             addShape(newLine(
-                    borderWidth + cellWidth / 2.0 - linkThickness / 2.0 + cellWidth * 3,
+                    borderWidth + cellWidth / 2.0 - LINK_THICKNESS / 2.0 + cellWidth * 3,
                     borderWidth + cellHeight / 2.0 + i * 4 * cellHeight,
-                    linkThickness,
+                    LINK_THICKNESS,
                     2 * cellWidth
             ));
             addShape(newLine(
                     borderWidth + cellWidth / 2.0 + i * 4 * cellWidth,
-                    borderWidth + cellHeight / 2.0 - linkThickness / 2.0 + cellHeight * 3,
+                    borderWidth + cellHeight / 2.0 - LINK_THICKNESS / 2.0 + cellHeight * 3,
                     2 * cellWidth,
-                    linkThickness
+                    LINK_THICKNESS
             ));
         }
 
 
         // Create the circle cells.
         for (int[] cell : MerelleBoard.ACTIVECELLS) {
-            circle = new Circle(cellRadius);
+            circle = new Circle(CELL_RADIUS);
             circle.setCenterX(borderWidth + cell[0] * cellWidth + cellWidth / 2.0);
             circle.setCenterY(borderWidth + cell[1] * cellHeight + cellHeight / 2.0);
             circle.setFill(Color.BLACK);

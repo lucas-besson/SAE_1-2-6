@@ -39,6 +39,9 @@ public class PawnLook extends ElementLook {
         }
     }
 
+    /**
+     * This abstract method is empty because there is no need to change the look of the pawns in our application.
+     */
     @Override
     public void onChange() {
     }

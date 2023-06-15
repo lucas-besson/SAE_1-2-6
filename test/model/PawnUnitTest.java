@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class PawnUnitTest {
+class PawnUnitTest {
 
     private Pawn pawn;
     private GridGeometry gridGeometry;
@@ -21,14 +21,14 @@ public class PawnUnitTest {
     private MerelleStageModel merelleStageModel;
 
     @BeforeEach
-    public void beforeEach() {
+    void beforeEach() {
         merelleStageModel = new MerelleStageModel("test", new Model());
         pawn = new Pawn(1, 2, merelleStageModel);
         gridGeometry = mock(GridGeometry.class);
     }
 
     @Test
-    public void testUpdate() {
+    void testUpdate() {
         Animation animation = mock(LinearMoveAnimation.class);
         AnimationStep animationStep = mock(AnimationStep.class);
         when(animation.next()).thenReturn(null, animationStep);
@@ -47,20 +47,20 @@ public class PawnUnitTest {
         pawn.setAnimation(animation);
         pawn.getAnimation().start();
         pawn.update(1, 2, gridGeometry);
-        assertEquals(pawn.getX(), 0);
-        assertEquals(pawn.getY(), 1);
+        assertEquals(0, pawn.getX());
+        assertEquals(1, pawn.getY());
         assertNotNull(pawn.getAnimation());
     }
 
     @Test
-    public void testGettersAndSetters() {
-        assertEquals(pawn.getNumber(), 1);
-        assertEquals(pawn.getColor(), 2);
+    void testGettersAndSetters() {
+        assertEquals(1, pawn.getNumber());
+        assertEquals(2, pawn.getColor());
         assertFalse(pawn.isInAMill());
 
         MerelleBoard merelleBoard = new MerelleBoard(0, 0, merelleStageModel);
         merelleBoard.putElement(pawn, 3, 4);
-        assertEquals(pawn.getRow(), 3);
-        assertEquals(pawn.getCol(), 4);
+        assertEquals(3, pawn.getRow());
+        assertEquals(4, pawn.getCol());
     }
 }

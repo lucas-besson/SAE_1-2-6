@@ -29,6 +29,5 @@ public class MerelleStageView extends GameStageView {
             addLook(new PawnLook(35, model.getBlackPawns()[i]));
             addLook(new PawnLook(35, model.getRedPawns()[i]));
         }
-//        addLook(new TextLook(24, "0x000000", model.getPlayerName()));
     }
 }

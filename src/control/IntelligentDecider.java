@@ -193,26 +193,26 @@ public class IntelligentDecider extends MerelleDecider {
             int row = pion.y;
             int nbMoulins = millsCount(col, row, grid);
 
-            if (nbMoulins > 0) {
+            if (nbMoulins <= 0) continue;
 
-                if (!canMakeMill(col, row, grid)) {
-                    return new Point(col, row);
-                } else {
+            if (!canMakeMill(col, row, grid)) {
+                return new Point(col, row);
+            } else {
 
-                    if (nbMoulins == 2) {
-                        if (meilleurPion == null || millsCount(meilleurPion.x, meilleurPion.y, grid) < 2) {
-                            meilleurPion = new Point(col, row);
-                        }
+                if (nbMoulins == 2) {
+                    if (meilleurPion == null || millsCount(meilleurPion.x, meilleurPion.y, grid) < 2) {
+                        meilleurPion = new Point(col, row);
+                    }
 
-                    } else if (nbMoulins == 1) {
+                } else if (nbMoulins == 1) {
 
-                        int nbMoulinsMeilleurPion = millsCount(meilleurPion.x, meilleurPion.y, grid);
-                        if (meilleurPion == null || nbMoulinsMeilleurPion == 0 || nbMoulinsMeilleurPion == joueur) {
-                            meilleurPion = new Point(col, row);
-                        }
+                    int nbMoulinsMeilleurPion = millsCount(meilleurPion.x, meilleurPion.y, grid);
+                    if (nbMoulinsMeilleurPion == 0 || nbMoulinsMeilleurPion == joueur) {
+                        meilleurPion = new Point(col, row);
                     }
                 }
             }
+
         }
 
         if (grid[meilleurPion.x][meilleurPion.y] == joueur) {

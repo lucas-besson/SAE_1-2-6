@@ -19,10 +19,8 @@ public class MerelleView extends View {
     private MenuItem menuStart;
     private MenuItem menuIntro;
     private MenuItem menuQuit;
-    private ChoiceDialog<GameMode> gameModeView;
-    private ObservableList<GameMode> gameModesList;
-    private HelpStage helpRules;
-    private HelpStage helpCredits;
+    private final HelpStage helpRules;
+    private final HelpStage helpCredits;
 
     public MerelleView(Model model, Stage stage, RootPane rootPane) {
         super(model, stage, rootPane);
@@ -32,6 +30,8 @@ public class MerelleView extends View {
     }
 
     public GameMode gameModeView() {
+        ObservableList<GameMode> gameModesList;
+        ChoiceDialog<GameMode> gameModeView;
         gameModesList = FXCollections.observableArrayList();
         gameModesList.addAll(
                 new GameMode("Player vs Player", GameMode.PVP, "Player1", "Player2"),
@@ -56,7 +56,6 @@ public class MerelleView extends View {
     @Override
     protected void createMenuBar() {
         menuBar = new MenuBar();
-        menuBar.setUseSystemMenuBar(true);
 
         Menu menu1 = new Menu("Game");
         menuStart = new MenuItem("New game");

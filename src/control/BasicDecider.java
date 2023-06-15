@@ -56,7 +56,7 @@ public class BasicDecider extends MerelleDecider {
      * Dans la phase de déplacements des pions, analyse et déplace un pion du jeu
      */
     @Override
-    protected void movePawn() {
+    public void movePawn() {
         initGridTable();
 
         List<Point> playerPawnList = getPlayerPawnList(model.getIdPlayer(), grid);
@@ -93,7 +93,7 @@ public class BasicDecider extends MerelleDecider {
      * @return Point
      */
     @Override
-    protected Point removePawn(int[][] grid) {
+    public Point removePawn(int[][] grid) {
         List<Point> playerPawnList = getPlayerPawnList((model.getIdPlayer() + 1) % 2, grid);
         return playerPawnList.get(rand.nextInt(playerPawnList.size()));
     }

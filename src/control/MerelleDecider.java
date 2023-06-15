@@ -179,7 +179,7 @@ public abstract class MerelleDecider extends Decider {
      * @param grid        2D int table
      * @return List of Point
      */
-    List<Point> getPlayerPawnList(int playerColor, int[][] grid) {
+    public List<Point> getPlayerPawnList(int playerColor, int[][] grid) {
         List<Point> playerPawnList = new ArrayList<>();
         for (int[] activePoint : MerelleBoard.ACTIVECELLS) {
             if (grid[activePoint[0]][activePoint[1]] == playerColor)
