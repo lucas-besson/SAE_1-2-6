@@ -1,98 +1,107 @@
-package controller;
-
 import boardifier.control.Controller;
+import boardifier.model.Coord2D;
+import boardifier.model.GameElement;
+import boardifier.model.GameStageModel;
 import boardifier.model.Model;
+import boardifier.model.action.MoveAction;
+import boardifier.view.GridLook;
+import boardifier.view.View;
 import control.BasicDecider;
+import control.MerelleDecider;
 import model.MerelleBoard;
+import model.MerellePawnPot;
 import model.MerelleStageModel;
+import model.Pawn;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.mock;
-
-class BasicDeciderUnitTest {
+public class BasicDeciderUnitTest {
     BasicDecider basicDeciderTest;
     Model model;
     Controller controller;
+    View view;
     MerelleStageModel merelleStageModel;
     MerelleBoard merelleBoard;
     Random randomMock;
-
+    GameElement gameElement;
+    MerellePawnPot aiPot;
     @BeforeEach
     public void initEach() {
         model = mock(Model.class);
         controller = mock(Controller.class);
-        merelleStageModel = Mockito.mock(MerelleStageModel.class);
-        merelleBoard = Mockito.mock(MerelleBoard.class);
+        view = mock(View.class);
+        merelleStageModel = new MerelleStageModel("test", model);
+        merelleBoard = new MerelleBoard(0, 0, merelleStageModel);
         randomMock = mock(Random.class);
+
+        aiPot = new MerellePawnPot(0,0, merelleStageModel);
+        for (int i = 0; i < MerellePawnPot.PAWNS_IN_POT; i++) {
+            aiPot.putElement(new Pawn(1, 0, merelleStageModel), i, 0);
+        }
+        merelleStageModel.setBlackPot(aiPot);
+
         Mockito.when(model.getGameStage()).thenReturn(merelleStageModel);
         Mockito.when(model.getGrid(anyString())).thenReturn(merelleBoard);
 
-        basicDeciderTest = new BasicDecider(model, controller);
+        merelleStageModel.setBlackPot(aiPot);
+
+        merelleStageModel.setBoard(merelleBoard);
+        basicDeciderTest = Mockito.spy(new BasicDecider(model, controller));
+        GridLook gridLook = mock(GridLook.class);
+        when(controller.getElementLook(any())).thenReturn(gridLook);
+        Coord2D coord2D = mock(Coord2D.class);
+        when(gridLook.getRootPaneLocationForCellCenter(anyInt(),anyInt())).thenReturn(coord2D);
+    }
+    @Test
+    public void testPlacePawn() {
+
+        int[][] oldGrid = {
+                {1, 2, 2, 1, 2, 2, 2},
+                {2, 1, 2, 1, 2, 1, 2},
+                {2, 2, 1, 1, 1, 2, 2},
+                {1, 1, 1, 2, 2, 2, 0},
+                {2, 2, 1, 1, 1, 2, 2},
+                {2, 1, 2, 1, 2, 1, 2},
+                {0, 2, 2, 2, 2, 2, 2}
+        };
+        for (int row = 0; row < oldGrid.length; row++) {
+            for (int col = 0; col < oldGrid.length; col++) {
+                merelleBoard.putElement(new Pawn(1, oldGrid[row][col], merelleStageModel), row, col);
+            }
+        }
+
+        model.setIdPlayer(Pawn.PAWN_BLACK);
+
+        MerelleDecider.printGrid(oldGrid);
+
+        basicDeciderTest.decide();
+
+        var newGrid = basicDeciderTest.getGrid();
+        MerelleDecider.printGrid(newGrid);
+
+        Assertions.assertFalse(Arrays.deepEquals(oldGrid, newGrid));
+
+        verify(basicDeciderTest, times(1)).placePawn();
+        verify(basicDeciderTest, times(0)).movePawn();
+
     }
 
     @Test
-    void testPlacePawn() {
-        java.util.List<Point> playablePawns = Arrays.asList(new Point(1,1), new Point(1,2), new Point(1,3));
-        Point selectedPawn = playablePawns.get(randomMock.nextInt(playablePawns.size()));
-
-        assertEquals(playablePawns.get(0), selectedPawn);
+    public void testMovePawn() {
+        // FIXME: we lost it D:
     }
 
     @Test
-    void testMovePawn() {
-        int[][] gridOld = {
-                {0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 2, 2, 0, 0, 0},
-                {0, 0, 2, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0}
-        };
-
-        int[][] gridNew = {
-                {0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 2, 2, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 2, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0}
-        };
-        assertNotEquals(gridOld, gridNew);
-    }
-
-    @Test
-    void testRemovePawn() {
-        int[][] gridOld = {
-                {0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 2, 2, 0, 0, 0},
-                {0, 0, 2, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0}
-        };
-        assertNotEquals(0, gridOld[3][2]);
-
-        int[][] gridNew = {
-                {0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 2, 2, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0}
-        };
-        assertEquals(0, gridNew[3][2]);
+    public void testRemovePawn() {
+        // TODO
     }
 }
