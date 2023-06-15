@@ -3,12 +3,11 @@ package model;
 import boardifier.model.GameStageModel;
 import boardifier.model.Model;
 import boardifier.model.StageElementsFactory;
-import boardifier.model.TextElement;
 
 public class MerelleStageModel extends GameStageModel {
-    public final static int STATE_SELECTPAWN = 1; // the player must select a pawn
-    public final static int STATE_SELECTDEST = 2; // the player must select a destination
-    public final static int STATE_SELECTMILL = 3; // the player must select a opponent pawn to be removed
+    public static final int STATE_SELECTPAWN = 1; // the player must select a pawn
+    public static final int STATE_SELECTDEST = 2; // the player must select a destination
+    public static final int STATE_SELECTMILL = 3; // the player must select a opponent pawn to be removed
     private MerelleBoard board;
     private MerellePawnPot blackPot;
     private MerellePawnPot redPot;
@@ -16,7 +15,6 @@ public class MerelleStageModel extends GameStageModel {
     private Pawn[] redPawns;
     private int blackPawnsToPlay;
     private int redPawnsToPlay;
-    private TextElement playerName;
 
     public MerelleStageModel(String name, Model model) {
         super(name, model);
@@ -97,7 +95,7 @@ public class MerelleStageModel extends GameStageModel {
     private void setupCallbacks() {
         onSelectionChange(() -> {
             // get the selected pawn if any
-            if (selected.size() == 0) {
+            if (selected.isEmpty()) {
                 board.resetReachableCells(false);
                 return;
             }
@@ -107,8 +105,6 @@ public class MerelleStageModel extends GameStageModel {
         onPutInGrid((element, gridDest, rowDest, colDest) -> {
             Pawn p = ((Pawn) element);
             p.setInAMill(false);
-//            LOG :
-//            System.out.println("x : " + colDest + ", y : " + rowDest);
             p.setCol(colDest);
             p.setRow(rowDest);
 
@@ -116,8 +112,6 @@ public class MerelleStageModel extends GameStageModel {
         onMoveInGrid((element, gridDest, rowDest, colDest) -> {
             Pawn p = ((Pawn) element);
             p.setInAMill(false);
-//            LOG :
-//            System.out.println("x : " + colDest + ", y : " + rowDest);
             p.setCol(colDest);
             p.setRow(rowDest);
 

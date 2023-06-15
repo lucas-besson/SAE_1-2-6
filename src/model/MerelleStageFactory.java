@@ -14,9 +14,6 @@ public class MerelleStageFactory extends StageElementsFactory {
     @Override
     public void setup() {
 
-//         TODO creat constant for X position
-
-
         // create the board
         stageModel.setBoard(new MerelleBoard(190, 10, stageModel));
         //create the pots
@@ -42,12 +39,5 @@ public class MerelleStageFactory extends StageElementsFactory {
         stageModel.setBlackPot(blackPot);
         stageModel.setRedPawns(redPawns);
         stageModel.setRedPot(redPot);
-
-
-        // create the text
-//        TextElement text = new TextElement(stageModel.getCurrentPlayerName(), stageModel);
-//        text.setLocation(10,30);
-//        text.setLocationType(GameElement.LOCATION_TOPLEFT);
-//        stageModel.setPlayerName(text);
     }
 }

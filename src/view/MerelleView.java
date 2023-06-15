@@ -34,10 +34,10 @@ public class MerelleView extends View {
     public GameMode gameModeView() {
         gameModesList = FXCollections.observableArrayList();
         gameModesList.addAll(
-                new GameMode("Player vs Player", GameMode.PvP, "Player1", "Player2"),
-                new GameMode("Player vs Basic AI", GameMode.PvAI, "Player1", "computer2"),
-                new GameMode("Player vs Intelligent AI", GameMode.PvAI, "Player1", "computer1"),
-                new GameMode("Intelligent AI vs Basic AI", GameMode.AIvAI, "computer1", "computer2")
+                new GameMode("Player vs Player", GameMode.PVP, "Player1", "Player2"),
+                new GameMode("Player vs Basic AI", GameMode.PVAI, "Player1", "computer2"),
+                new GameMode("Player vs Intelligent AI", GameMode.PVAI, "Player1", "computer1"),
+                new GameMode("Intelligent AI vs Basic AI", GameMode.AIVAI, "computer1", "computer2")
         );
         gameModeView = new ChoiceDialog<>(gameModesList.get(0), gameModesList);
         gameModeView.setTitle("GameMode Selection");

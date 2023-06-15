@@ -60,12 +60,13 @@ public class HelpStage extends Stage {
         mainPane = new FlowPane();
         mainPane.getChildren().add(text);
         mainPane.setAlignment(Pos.CENTER);
+
+        this.setResizable(false);
     }
 
     public void display() {
 
         this.setScene(new Scene(mainPane, 800, 500));
-
         super.show();
     }
 
