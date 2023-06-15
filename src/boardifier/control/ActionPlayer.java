@@ -33,6 +33,7 @@ public class ActionPlayer extends Thread {
         this.preActions = null;
     }
 
+    @Override
     public void run() {
         // first disable event capture
         model.setCaptureEvents(false);
@@ -52,9 +53,7 @@ public class ActionPlayer extends Thread {
         // now check if the next player must play, but only if not at the end of the stage/game
         // NB: the ned of the stage/game may have been detected by playing the actions
         if ((!model.isEndStage()) && (!model.isEndGame()) && (actions.mustDoNextPlayer())) {
-            Platform.runLater(() -> {
-                control.nextPlayer();
-            });
+            Platform.runLater(() -> control.nextPlayer());
         }
     }
 

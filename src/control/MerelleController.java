@@ -26,6 +26,7 @@ public class MerelleController extends Controller {
      * Otherwise, the current player is asked to input their move through the console.
      * If the last move made by the player created a new mill, the player is asked to remove an opposing pawn.
      */
+    @Override
     public void nextPlayer() {
 
 
@@ -48,7 +49,6 @@ public class MerelleController extends Controller {
 
 
         if (p.getType() == Player.COMPUTER) {
-//            System.out.println(p.getName() + " PLAYS");
             Decider decider;
             if (p.getName().equals("computer") || p.getName().equals("computer1"))
                 decider = new IntelligentDecider(model, this);

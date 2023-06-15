@@ -114,13 +114,6 @@ public abstract class MerelleDecider extends Decider {
      */
     void initGridTable() {
         grid = new int[MerelleBoard.GRIDNBCOLS][MerelleBoard.GRIDNBROWS];
-//        for (int[] activePoint : MerelleBoard.ACTIVECELLS) {
-//            if (model.getGrid("merelleboard").getElements(activePoint[1], activePoint[0]).isEmpty())
-//                grid[activePoint[1]][activePoint[0]] = 2;
-//            else {
-//                grid[activePoint[1]][activePoint[0]] = ((Pawn) model.getGrid("merelleboard").getElements(activePoint[1], activePoint[0]).get(0)).getColor();
-//            }
-//        }
         for (int col = 0; col < grid.length; col++) {
             for (int row = 0; row < grid[col].length; row++) {
                 if (model.getGrid("merelleboard").getElements(row, col).isEmpty())
@@ -213,11 +206,8 @@ public abstract class MerelleDecider extends Decider {
             int y3 = mill[2][1];
 
             // Vérifier si les 3 positions du mill sont occupées par le joueur actuel
-            if (actualGrid[x1][y1] == actualGrid[x2][y2] && actualGrid[x2][y2] == actualGrid[x3][y3] && actualGrid[x1][y1] == playerColor) {
-
-                // Vérifier si le joueur n'occupait pas les 3 positions du mill avant
-                if (previousGrid[x1][y1] != actualGrid[x1][y1] || previousGrid[x2][y2] != actualGrid[x2][y2] || previousGrid[x3][y3] != actualGrid[x3][y3])
-                    return true;
+            if (actualGrid[x1][y1] == actualGrid[x2][y2] && actualGrid[x2][y2] == actualGrid[x3][y3] && actualGrid[x1][y1] == playerColor && (previousGrid[x1][y1] != actualGrid[x1][y1] || previousGrid[x2][y2] != actualGrid[x2][y2] || previousGrid[x3][y3] != actualGrid[x3][y3]))
+                    {return true;
             }
         }
         return false;
@@ -274,15 +264,13 @@ public abstract class MerelleDecider extends Decider {
             moulins++;
         }
         // Vérifie les moulins diagonaux
-        if ((x == 0 && y == 0) || (x == 1 && y == 1) || (x == 2 && y == 2)) {
-            if (plateau[(x + 1) % 3][(y + 1) % 3] == joueur && plateau[(x + 2) % 3][(y + 2) % 3] == joueur) {
+        if ((x == 0 && y == 0) || (x == 1 && y == 1) || (x == 2 && y == 2) && (plateau[(x + 1) % 3][(y + 1) % 3] == joueur && plateau[(x + 2) % 3][(y + 2) % 3] == joueur)) {
                 moulins++;
-            }
+
         }
-        if ((x == 0 && y == 2) || (x == 1 && y == 1) || (x == 2 && y == 0)) {
-            if (plateau[(x + 1) % 3][(y + 2) % 3] == joueur && plateau[(x + 2) % 3][(y + 1) % 3] == joueur) {
+        if ((x == 0 && y == 2) || (x == 1 && y == 1) || (x == 2 && y == 0) && (plateau[(x + 1) % 3][(y + 2) % 3] == joueur && plateau[(x + 2) % 3][(y + 1) % 3] == joueur)) {
                 moulins++;
-            }
+
         }
         return moulins;
     }
@@ -307,8 +295,6 @@ public abstract class MerelleDecider extends Decider {
      */
     List<Point> getUncompletedMillsForPlayer(int playerColor, int[][] grid) {
         List<Point> emptyCellsForMill = new ArrayList<>();
-
-//        if (model.getIdPlayer() == 1) return emptyCellsForMill;
 
         // Pour chaque case vide
         for (Point caseVide : getFreePoints(grid)) {

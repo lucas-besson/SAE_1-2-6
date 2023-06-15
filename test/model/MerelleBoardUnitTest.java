@@ -12,27 +12,19 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-public class MerelleBoardUnitTest {
+class MerelleBoardUnitTest {
 
+    private final boolean[][] wantedReachableCells = new boolean[][]{{false, false, false, false, false, false, false}, {false, false, false, false, false, false, false}, {false, false, false, false, false, false, false}, {false, false, false, false, false, false, false}, {false, false, false, false, false, false, false}, {false, false, false, false, false, false, false}, {false, false, false, false, false, false, false}};
     private MerelleBoard board;
-    private final boolean[][] wantedReachableCells = new boolean[][]{
-            {false, false, false, false, false, false, false},
-            {false, false, false, false, false, false, false},
-            {false, false, false, false, false, false, false},
-            {false, false, false, false, false, false, false},
-            {false, false, false, false, false, false, false},
-            {false, false, false, false, false, false, false},
-            {false, false, false, false, false, false, false}
-    };
 
     @BeforeEach
-    public void initEach() {
+    void initEach() {
         GameStageModel gameStage = mock(GameStageModel.class);
         board = new MerelleBoard(0, 0, gameStage);
     }
 
     @Test
-    public void testisActiveCell() {
+    void testisActiveCell() {
         assertTrue(MerelleBoard.isActiveCell(0, 0));
         assertFalse(MerelleBoard.isActiveCell(0, 4));
         assertFalse(MerelleBoard.isActiveCell(7, 7));
@@ -40,12 +32,12 @@ public class MerelleBoardUnitTest {
 
 
     @Test
-    public void testgetPawnABF() {
+    void testgetPawnABF() {
         assertNull(board.getPawn(1, 1));
     }
 
     @Test
-    public void testgetPawnABCF() {
+    void testgetPawnABCF() {
         Pawn pawn = mock(Pawn.class);
         board.putElement(pawn, 0, 0);
         when(pawn.getColor()).thenReturn(1);
@@ -54,7 +46,7 @@ public class MerelleBoardUnitTest {
     }
 
     @Test
-    public void testgetPawnABCDF() {
+    void testgetPawnABCDF() {
         Pawn pawn = mock(Pawn.class);
         board.putElement(pawn, 0, 0);
         when(pawn.getColor()).thenReturn(1);
@@ -64,7 +56,7 @@ public class MerelleBoardUnitTest {
 
 
     @Test
-    public void testgetPawnABCDE() {
+    void testgetPawnABCDE() {
         Pawn pawn = mock(Pawn.class);
         board.putElement(pawn, 0, 0);
         when(pawn.getColor()).thenReturn(3);
@@ -73,7 +65,7 @@ public class MerelleBoardUnitTest {
     }
 
     @Test
-    public void testMillsChecker() {
+    void testMillsChecker() {
         Pawn p1 = mock(Pawn.class);
         Pawn p2 = mock(Pawn.class);
         Pawn p3 = mock(Pawn.class);
@@ -128,7 +120,7 @@ public class MerelleBoardUnitTest {
     }
 
     @Test
-    public void testavailableMoves() {
+    void testavailableMoves() {
 
         // No pawn is in the grid
         assertEquals(24, board.availableMoves(0, 1));
@@ -181,7 +173,7 @@ public class MerelleBoardUnitTest {
     }
 
     @Test
-    public void testSetValidCells() {
+    void testSetValidCells() {
         Pawn pawn = mock(Pawn.class);
         resetReachableCellsTable(wantedReachableCells, true);
         board.setValidCells(pawn, 1);
@@ -189,7 +181,7 @@ public class MerelleBoardUnitTest {
     }
 
     @Test
-    public void testSetValidMillCells() {
+    void testSetValidMillCells() {
 
         board.setValidMillCells(1);
         assertArrayEquals(wantedReachableCells, board.getReachableCells());
