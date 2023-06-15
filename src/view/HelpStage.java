@@ -19,12 +19,16 @@ public class HelpStage extends Stage {
             "\n" +
             "Duis elementum purus dapibus turpis pellentesque euismod. Proin molestie nisi nec nunc laoreet blandit. In consectetur mauris elementum, bibendum enim sed, dapibus lacus. Curabitur rhoncus leo a varius vestibulum. Duis sed justo ornare nunc rhoncus volutpat eu nec lorem. Vestibulum vitae facilisis dolor. Ut lacinia felis ac metus malesuada congue scelerisque vel nisl. Mauris rutrum nisi eget lobortis cursus. Mauris rutrum turpis urna, nec imperdiet felis euismod at. Suspendisse quis aliquet justo. Sed mattis augue id cursus semper. ";
 
-    static final String Credits = "Développé avec amour par:\n" +
+    static final String Credits = "Developed with heart by :\n" +
             "   Lucas BESSON\n" +
             "   Nathan BOSCHI\n" +
             "   Robin HALM\n" +
             "   Mathys NOURRY\n" +
-            "   Tom SIOUAN";
+            "   Tom SIOUAN\n" +
+            "\nEn utilisant :\n" +
+            "   - Language JAVA\n" +
+            "   - Framework JavaFX\n" +
+            "   - Framework Boardifier";
 
     public HelpStage(TypeOfHelp type){
         if (type == TypeOfHelp.HOW_TO_PLAY) initWidgets(HelpText);
