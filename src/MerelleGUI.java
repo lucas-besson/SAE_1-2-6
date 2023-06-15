@@ -3,8 +3,11 @@ import boardifier.model.Model;
 import control.MerelleController;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import view.Images;
 import view.MerelleRootPane;
 import view.MerelleView;
+
+import java.nio.file.Paths;
 
 public class MerelleGUI extends Application {
     private static int mode;
@@ -32,6 +35,7 @@ public class MerelleGUI extends Application {
         MerelleController control = new MerelleController(model, merelleView);
         control.setFirstStageName("merelle");
         stage.setTitle("Nine Men's Morris");
+        stage.getIcons().add(Images.loadImage(Paths.get(".").resolve("assets").resolve("images").resolve("favicon.png").toString()));
         stage.show();
     }
 }

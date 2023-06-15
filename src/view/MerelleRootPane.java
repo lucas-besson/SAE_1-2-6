@@ -9,19 +9,18 @@ import javafx.scene.text.TextAlignment;
 
 public class MerelleRootPane extends RootPane {
 
-    private int width;
-    private int height;
-
     public MerelleRootPane() {
         super();
     }
 
     @Override
     public void createDefaultGroup() {
+        int height;
+        int width;
         width = 1080;
         height = 450;
         Rectangle frame = new Rectangle(width, height, Color.LIGHTGREY);
-        Text text = new Text("Playing to Nine Men's Morris\n\n" + HelpStage.HelpText);
+        Text text = new Text("Playing to Nine Men's Morris\n\n" + HelpStage.RULES);
         text.setFont(new Font(15));
         text.setFill(Color.BLACK);
         text.setX(20);

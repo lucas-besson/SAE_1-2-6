@@ -30,7 +30,7 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
         super(model, view, control);
     }
 
-    //    FIXME : adapt this method to the Merelle
+    @Override
     public void handle(MouseEvent event) {
         // if mouse event capture is disabled in the model, just return
         if (!model.isCaptureMouseEvent()) return;
@@ -41,11 +41,6 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
         List<GameElement> list = control.elementsAt(click);
         // for debug, uncomment next instructions to display x,y and elements at that postion
 
-//        System.out.println("click in "+event.getSceneX()+","+event.getSceneY());
-//        for(GameElement element : list) {
-//            System.out.println(element);
-//        }
-
         MerelleStageModel stageModel = (MerelleStageModel) model.getGameStage();
         MerellePawnPot pot = ((model.getIdPlayer() == 0) ? stageModel.getBlackPot() : stageModel.getRedPot());
         MerelleBoard board = stageModel.getBoard();
@@ -55,12 +50,11 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
                 if (element.getType() == ElementTypes.getType("pawn")) {
                     Pawn pawn = (Pawn) element;
                     // check if color of the pawn corresponds to the current player id
-                    if (pawn.getColor() == model.getIdPlayer()) {
-                        if ((stageModel.getStatus() == MerelleGameStatus.PLACING && pot.contains(pawn)) || stageModel.getStatus() == MerelleGameStatus.MOVING) {
-                            element.toggleSelected();
-                            stageModel.setState(MerelleStageModel.STATE_SELECTDEST);
-                            return; // do not allow another element to be selected
-                        }
+                    if (pawn.getColor() == model.getIdPlayer() && ((stageModel.getStatus() == MerelleGameStatus.PLACING && pot.contains(pawn)) || stageModel.getStatus() == MerelleGameStatus.MOVING)) {
+                        element.toggleSelected();
+                        stageModel.setState(MerelleStageModel.STATE_SELECTDEST);
+                        return; // do not allow another element to be selected
+
                     }
                 }
             }
@@ -85,17 +79,7 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
 
             Pawn pawn = (Pawn) model.getSelected().get(0);
             GridLook lookBoard = (GridLook) control.getElementLook(board);
-            int[] from;
             int[] dest = lookBoard.getCellFromSceneLocation(click);
-
-            // LOG :
-//            if (stageModel.getStatus() == MerelleGameStatus.PLACING) {
-//                from = pot.getElementCell(pawn);
-//                System.out.println("try to move pawn from pot " + from[0] + "," + from[1] + " to board " + dest[0] + "," + dest[1]);
-//            } else if (stageModel.getStatus() == MerelleGameStatus.MOVING) {
-//                from = board.getElementCell(pawn);
-//                System.out.println("try to move pawn from board " + from[0] + "," + from[1] + " to board " + dest[0] + "," + dest[1]);
-//            }
 
 
             board.setValidCells(pawn, ((MerelleStageModel) model.getGameStage()).getStatus());
@@ -107,7 +91,6 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
                 ActionList actions = new ActionList(true);
                 // determine the destination point in the root pane
                 Coord2D center = lookBoard.getRootPaneLocationForCellCenter(dest[0], dest[1]);
-                System.out.println(pawn.getX() + " " + pawn.getY() + " " + center.getX() + " " + center.getY());
                 // create an action with a linear move animation, with 10 pixel/frame
                 GameAction move = new MoveAction(model, pawn, "merelleboard", dest[0], dest[1], AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 15);
                 // add the action to the action list.

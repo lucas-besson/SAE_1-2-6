@@ -10,9 +10,10 @@ import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public class HelpStage extends Stage {
-    static final String HelpText = """
+    static final String RULES = """
             Nine Men's Morris is an ancient strategy board game that dates back to the Roman Empire and was popular throughout Europe during the Middle Ages. The game is played on a grid consisting of three concentric squares connected by lines. Here are the rules:
             
             \t1.\t\tThe game starts with an empty board. Each player has nine pieces, distinguished by color, such as red and black.
@@ -25,7 +26,7 @@ public class HelpStage extends Stage {
             Strategic thinking in Nine Men's Morris revolves around creating mills while simultaneously blocking your opponent's moves and preventing them from forming mills. The ability to anticipate and disrupt your opponent's plans is crucial for success in this game.
             It's up to you!""";
 
-    static final String Credits = """
+    static final String CREDITS = """
             Developed with ❤ by :
             \tLucas BESSON
             \tNathan BOSCHI
@@ -39,14 +40,16 @@ public class HelpStage extends Stage {
             \t- Boardifier Framework
                
             Our github repository : [https://github.com/lucas-besson/SAE_1-2-6]""";
-    private FlowPane mainPane;
 
-    public HelpStage(TypeOfHelp type) {
-        if (type == TypeOfHelp.HOW_TO_PLAY) initWidgets(HelpText);
-        else if (type == TypeOfHelp.CREDITS) initWidgets(Credits);
+
+    public HelpStage(TypeOfHelp type, Window owner) {
+        this.initOwner(owner);
+        if (type == TypeOfHelp.RULES) initWidgets(RULES);
+        else if (type == TypeOfHelp.CREDITS) initWidgets(CREDITS);
     }
 
     public void initWidgets(String textToPrint) {
+        FlowPane mainPane;
         Text text = new Text(textToPrint);
 
         text.setFont(new Font(15));
@@ -58,16 +61,18 @@ public class HelpStage extends Stage {
         mainPane = new FlowPane();
         mainPane.getChildren().add(text);
         mainPane.setAlignment(Pos.CENTER);
+
+        this.setResizable(false);
+
+        this.setScene(new Scene(mainPane, 800, 500));
     }
 
     public void display() {
-
-        this.setScene(new Scene(mainPane, 800, 500));
 
         super.show();
     }
 
     public enum TypeOfHelp {
-        HOW_TO_PLAY, CREDITS;
+        RULES, CREDITS;
     }
 }

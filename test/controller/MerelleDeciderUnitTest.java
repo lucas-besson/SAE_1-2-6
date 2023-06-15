@@ -20,7 +20,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyString;
 
-public class MerelleDeciderUnitTest {
+class MerelleDeciderUnitTest {
     private Model model;
     private Controller controller;
     private MerelleStageModel merelleStageModel;
@@ -107,7 +107,7 @@ public class MerelleDeciderUnitTest {
                 {0, 0, 0, 0, 0, 0, 0}
         };
 
-        Assertions.assertEquals(merelleDeciderTest.getFreePoints(grid).size(), 3);
+        Assertions.assertEquals(3, merelleDeciderTest.getFreePoints(grid).size());
     }
 
     @Test

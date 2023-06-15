@@ -13,7 +13,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class MerelleControllerUnitTest {
+class MerelleControllerUnitTest {
 
     // stageLoop methode based on boardifier method and Merelle methode that have already been tested.
     /*
@@ -36,7 +36,7 @@ public class MerelleControllerUnitTest {
 
     // TO FINISH
     @Test
-    public void testnextPlayer() {
+    void testnextPlayer() {
 
 //        V1
 //        Player player = Mockito.mock(Player.class);

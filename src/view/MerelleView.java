@@ -14,26 +14,30 @@ import model.GameMode;
 
 public class MerelleView extends View {
 
+    private final MillAlert millAlert;
     public GameMode selectedGameMode;
     private MenuItem menuStart;
     private MenuItem menuIntro;
     private MenuItem menuQuit;
-    private final MillAlert millAlert;
-    private ChoiceDialog<GameMode> gameModeView;
-    private ObservableList<GameMode> gameModesList;
+    private final HelpStage helpRules;
+    private final HelpStage helpCredits;
 
     public MerelleView(Model model, Stage stage, RootPane rootPane) {
         super(model, stage, rootPane);
         millAlert = new MillAlert(this.getStage());
+        helpRules = new HelpStage(HelpStage.TypeOfHelp.RULES, this.getStage());
+        helpCredits = new HelpStage(HelpStage.TypeOfHelp.CREDITS, this.getStage());
     }
 
     public GameMode gameModeView() {
+        ObservableList<GameMode> gameModesList;
+        ChoiceDialog<GameMode> gameModeView;
         gameModesList = FXCollections.observableArrayList();
         gameModesList.addAll(
-                new GameMode("Player vs Player", GameMode.PvP, "Player1", "Player2"),
-                new GameMode("Player vs Basic AI", GameMode.PvAI, "Player1", "computer2"),
-                new GameMode("Player vs Intelligent AI", GameMode.PvAI, "Player1", "computer1"),
-                new GameMode("Intelligent AI vs Basic AI", GameMode.AIvAI, "computer1", "computer2")
+                new GameMode("Player vs Player", GameMode.PVP, "Player1", "Player2"),
+                new GameMode("Player vs Basic AI", GameMode.PVAI, "Player1", "computer2"),
+                new GameMode("Player vs Intelligent AI", GameMode.PVAI, "Player1", "computer1"),
+                new GameMode("Intelligent AI vs Basic AI", GameMode.AIVAI, "computer1", "computer2")
         );
         gameModeView = new ChoiceDialog<>(gameModesList.get(0), gameModesList);
         gameModeView.setTitle("GameMode Selection");
@@ -52,6 +56,7 @@ public class MerelleView extends View {
     @Override
     protected void createMenuBar() {
         menuBar = new MenuBar();
+
         Menu menu1 = new Menu("Game");
         menuStart = new MenuItem("New game");
         menuIntro = new MenuItem("Intro");
@@ -64,18 +69,18 @@ public class MerelleView extends View {
         Menu menu2 = new Menu("Help");
         MenuItem helpStageOpenMenu = new MenuItem("How to play ?");
         helpStageOpenMenu.setOnAction(event -> {
-            HelpStage help = new HelpStage(HelpStage.TypeOfHelp.HOW_TO_PLAY);
-            help.display();
+            assert helpRules != null;
+            if (helpRules.isShowing()) helpRules.requestFocus();
+            else helpRules.display();
         });
         MenuItem creditsStageOpenMenu = new MenuItem("Credits");
         creditsStageOpenMenu.setOnAction(event -> {
-            HelpStage help = new HelpStage(HelpStage.TypeOfHelp.CREDITS);
-            help.display();
+            assert helpCredits != null;
+            if (helpCredits.isShowing()) helpCredits.requestFocus();
+            else helpCredits.display();
         });
         menu2.getItems().addAll(helpStageOpenMenu, creditsStageOpenMenu);
         menuBar.getMenus().add(menu2);
-
-        menuBar.useSystemMenuBarProperty();
     }
 
     public MenuItem getMenuStart() {
