@@ -6,7 +6,7 @@ import javafx.stage.Stage;
 import view.MerelleRootPane;
 import view.MerelleView;
 
-public class MerelleConsole extends Application {
+public class MerelleGUI extends Application {
     private static int mode;
 
     public static void main(String[] args) {
