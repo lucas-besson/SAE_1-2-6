@@ -196,8 +196,8 @@ public class MerelleBoard extends GridElement {
      */
     public boolean millsChecker(int color) {
 
-        int pawnInMill
-        newPawnInMill;
+        int pawnInMill;
+        int newPawnInMill;
 
         for (int[][] mill : MILLS) {
             newPawnInMill = 0;
