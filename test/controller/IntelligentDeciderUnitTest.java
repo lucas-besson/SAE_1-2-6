@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.awt.*;
 import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -56,6 +57,8 @@ class IntelligentDeciderUnitTest {
         when(merelleController.getElementLook(any())).thenReturn(gridLook);
         Coord2D coord2D = mock(Coord2D.class);
         when(gridLook.getRootPaneLocationForCellCenter(anyInt(),anyInt())).thenReturn(coord2D);
+
+        model.setIdPlayer(Pawn.PAWN_BLACK);
     }
 
     @Test
@@ -81,17 +84,15 @@ class IntelligentDeciderUnitTest {
             }
         }
 
-        model.setIdPlayer(Pawn.PAWN_BLACK);
-
         intelligentDecider.movePawn();
         var lastGrid = intelligentDecider.getGrid();
 
-        MerelleDecider.printGrid(lastGrid);
+        //MerelleDecider.printGrid(lastGrid);
 
         grid[3][6] = 0;
         grid[6][6] = 2;
 
-        Assertions.assertTrue(lastGrid[6][3] == 0);
+        Assertions.assertEquals(lastGrid[6][3], 0);
         verify(intelligentDecider, times(1)).movePawn();
         verify(intelligentDecider, times(8)).minimax(any(int[][].class), any(int[][].class), anyBoolean(), anyInt());
     }
@@ -114,8 +115,6 @@ class IntelligentDeciderUnitTest {
                 merelleBoard.putElement(new Pawn(1, grid[row][col], merelleStageModel), row, col);
             }
         }
-
-        model.setIdPlayer(Pawn.PAWN_BLACK);
 
         // Call placePawn() method indirectly.
         /* The player is defined just above as
@@ -158,5 +157,27 @@ class IntelligentDeciderUnitTest {
 
         int score = intelligentDecider.minimax(previousGrid, actualGrid, true, 0);
         Assertions.assertTrue(score > 0);
+    }
+
+    @Test
+    public void testRemovePawn() throws Exception {
+
+        int[][] previousGgrid = {
+                {1, 2, 2, 1, 2, 2, 1},
+                {2, 0, 2, 0, 2, 1, 2},
+                {2, 2, 2, 1, 1, 2, 2},
+                {1, 0, 2, 2, 2, 1, 2},
+                {2, 2, 2, 2, 2, 2, 2},
+                {2, 0, 2, 2, 2, 2, 2},
+                {1, 2, 2, 2, 2, 2, 2}
+        };
+
+        Point point = intelligentDecider.removePawn(previousGgrid);
+
+        System.out.println(point.x);
+        System.out.println(point.y);
+
+        Assertions.assertTrue(point.x == 0);
+        Assertions.assertTrue(point.y == 0);
     }
 }
