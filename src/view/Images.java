@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-class Images {
+public class Images {
     public static Image loadImage(String relPath) {
 
         Path path = Paths.get("..");
