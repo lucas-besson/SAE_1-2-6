@@ -15,12 +15,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class MerelleBoardLook extends GridLook {
-    final int linkThickness = 5;
-    final int cellRadius = 24;
+    static final int linkThickness = 5;
+    static final int cellRadius = 24;
     private final Rectangle millCell;
     // the array of rectangle composing the grid
     private final Shape[][] cells;
-    private final Color linesColor = Color.BLACK;
+    private static final Color linesColor = Color.BLACK;
     Path redMillIMGPath = Paths.get(".").resolve("assets").resolve("images").resolve("RedMill.png");
     Path blueMillIMGPath = Paths.get(".").resolve("assets").resolve("images").resolve("BlueMill.png");
     Image redMillIMG = Images.loadImage(redMillIMGPath.toString());
@@ -32,7 +32,6 @@ public class MerelleBoardLook extends GridLook {
         // then, cells have a size of (size-20)/3
         super(size, size, (size - 20) / MerelleBoard.GRIDNBROWS, (size - 20) / MerelleBoard.GRIDNBCOLS, 10, Color.LIGHTSLATEGREY.toString(), element);
         cells = new Shape[MerelleBoard.GRIDNBROWS][MerelleBoard.GRIDNBCOLS];
-        Rectangle rectangle;
         Circle circle;
 
         // Create the background lines.

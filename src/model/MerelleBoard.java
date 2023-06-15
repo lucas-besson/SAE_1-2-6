@@ -198,6 +198,7 @@ public class MerelleBoard extends GridElement {
 
         int pawnInMill;
         int newPawnInMill;
+
         for (int[][] mill : MILLS) {
             newPawnInMill = 0;
             pawnInMill = 0;
