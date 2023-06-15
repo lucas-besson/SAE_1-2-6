@@ -48,15 +48,15 @@ public class MerelleControllerAction extends ControllerAction implements EventHa
                 ((MerelleView) view).selectedGameMode = result; // We keep track of the selected game mode
                 model.getPlayers().clear();
                 switch (result.type) {
-                    case GameMode.PvP -> {
+                    case GameMode.PVP -> {
                         model.addHumanPlayer(result.player1);
                         model.addHumanPlayer(result.player2);
                     }
-                    case GameMode.PvAI -> {
+                    case GameMode.PVAI -> {
                         model.addHumanPlayer(result.player1);
                         model.addComputerPlayer(result.player2);
                     }
-                    case GameMode.AIvAI -> {
+                    case GameMode.AIVAI -> {
                         model.addComputerPlayer(result.player1);
                         model.addComputerPlayer(result.player2);
                     }

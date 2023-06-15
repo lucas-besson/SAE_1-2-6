@@ -1,9 +1,9 @@
 package model;
 
 public class GameMode {
-    public static final int PvP = 1;
-    public static final int PvAI = 2;
-    public static final int AIvAI = 3;
+    public static final int PVP = 1;
+    public static final int PVAI = 2;
+    public static final int AIVAI = 3;
     public String name;
     public String player1;
     public String player2;
