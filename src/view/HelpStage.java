@@ -40,7 +40,7 @@ public class HelpStage extends Stage {
             \t- Boardifier Framework
                
             Our github repository : [https://github.com/lucas-besson/SAE_1-2-6]""";
-    private FlowPane mainPane;
+
 
     public HelpStage(TypeOfHelp type, Window owner) {
         this.initOwner(owner);
@@ -49,6 +49,7 @@ public class HelpStage extends Stage {
     }
 
     public void initWidgets(String textToPrint) {
+        FlowPane mainPane;
         Text text = new Text(textToPrint);
 
         text.setFont(new Font(15));
@@ -62,11 +63,12 @@ public class HelpStage extends Stage {
         mainPane.setAlignment(Pos.CENTER);
 
         this.setResizable(false);
+
+        this.setScene(new Scene(mainPane, 800, 500));
     }
 
     public void display() {
 
-        this.setScene(new Scene(mainPane, 800, 500));
         super.show();
     }
 
