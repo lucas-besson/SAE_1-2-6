@@ -14,11 +14,11 @@ import model.GameMode;
 
 public class MerelleView extends View {
 
+    private final MillAlert millAlert;
     public GameMode selectedGameMode;
     private MenuItem menuStart;
     private MenuItem menuIntro;
     private MenuItem menuQuit;
-    private final MillAlert millAlert;
     private ChoiceDialog<GameMode> gameModeView;
     private ObservableList<GameMode> gameModesList;
     private HelpStage helpRules;
@@ -56,6 +56,8 @@ public class MerelleView extends View {
     @Override
     protected void createMenuBar() {
         menuBar = new MenuBar();
+        menuBar.setUseSystemMenuBar(true);
+
         Menu menu1 = new Menu("Game");
         menuStart = new MenuItem("New game");
         menuIntro = new MenuItem("Intro");
@@ -80,8 +82,6 @@ public class MerelleView extends View {
         });
         menu2.getItems().addAll(helpStageOpenMenu, creditsStageOpenMenu);
         menuBar.getMenus().add(menu2);
-
-        menuBar.useSystemMenuBarProperty().set(true);
     }
 
     public MenuItem getMenuStart() {
