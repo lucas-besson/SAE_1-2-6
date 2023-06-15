@@ -2,12 +2,9 @@ package boardifier.view;
 
 import boardifier.model.GameElement;
 import javafx.scene.Group;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 
 import java.util.Collections;
 
@@ -41,6 +38,7 @@ public class RootPane extends Pane {
         // adding default ones
         group.getChildren().addAll(frame);
     }
+
     /**
      * Initialize the content of the group.
      * It takes the elements of the model, which are initialized when starting a game stage.
@@ -73,6 +71,7 @@ public class RootPane extends Pane {
         if (gameStageView == null) return null;
         return gameStageView.getElementLook(element);
     }
+
     public void update() {
         if (gameStageView == null) return;
         gameStageView.update();

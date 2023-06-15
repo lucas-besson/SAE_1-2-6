@@ -17,8 +17,7 @@ public class CyclicFaceAnimation extends FaceAnimation {
         this.randomSequence = randomSequence;
         if (randomSequence) {
             type = AnimationTypes.getType("look/random");
-        }
-        else {
+        } else {
             type = AnimationTypes.getType("look/sequence");
         }
         this.nbCycles = nbCycles;
@@ -28,20 +27,20 @@ public class CyclicFaceAnimation extends FaceAnimation {
     public CyclicFaceAnimation(Model model, int nbFaces, int nbCycles, int waitTime, boolean randomSequence) {
         this(model, null, nbCycles, waitTime, randomSequence);
         List<Integer> indexes = new ArrayList<>();
-        for(int i=0;i<nbFaces;i++) indexes.add(i);
+        for (int i = 0; i < nbFaces; i++) indexes.add(i);
         faceIndexes = indexes;
     }
 
     public void computeSteps() {
         List<Integer> num = new ArrayList<>();
-        for(int i=0;i<faceIndexes.size();i++) num.add(faceIndexes.get(i));
-        for(int i=0;i<nbCycles;i++) {
+        for (int i = 0; i < faceIndexes.size(); i++) num.add(faceIndexes.get(i));
+        for (int i = 0; i < nbCycles; i++) {
             if (randomSequence) {
                 Collections.shuffle(num);
             }
-            for(int j=0;j<faceIndexes.size();j++) {
+            for (int j = 0; j < faceIndexes.size(); j++) {
                 int val = num.get(j);
-                for(int k=0;k<waitTime/frameGap;k++) {
+                for (int k = 0; k < waitTime / frameGap; k++) {
                     AnimationStep step = new AnimationStep();
                     step.addData(val);
                     steps.add(step);

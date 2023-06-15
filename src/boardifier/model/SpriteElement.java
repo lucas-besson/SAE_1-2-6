@@ -9,34 +9,22 @@ import java.util.List;
 
 /**
  * A basic sprite element.
- *
- *  A Sprite is an element that is moved in x,y directions according to a speed in these both directions.
- *  Since at each frame, update() is called by the ControllerAnimation, the Sprite is continuously moving
- *  in the same direction until xSpeed,ySpeed are changed. At the same time, the sprite aspect can change cyclically
- *  every framesPerFaceChange. Each aspect is called a "face", and different faces of the same sprite can be set of images
- *  or a set of shapes (see SpriteImageLook and SpriteDrawnLook).
- *
- *  The move can be stopped by calling stopMoving() or when an obstacle is encountered. When the sprite is falling,
- *  the default behaviour is to nullify xSpeed.
- *
- *  The sprite may also be animated, which is in this class supersede the process of moving the sprite.
- *
- *  Since the behaviour of a sprite a totally game-dependent, the update() method should be overridden in subclasses to
- *  reflect the desired sprite behavior.
+ * <p>
+ * A Sprite is an element that is moved in x,y directions according to a speed in these both directions.
+ * Since at each frame, update() is called by the ControllerAnimation, the Sprite is continuously moving
+ * in the same direction until xSpeed,ySpeed are changed. At the same time, the sprite aspect can change cyclically
+ * every framesPerFaceChange. Each aspect is called a "face", and different faces of the same sprite can be set of images
+ * or a set of shapes (see SpriteImageLook and SpriteDrawnLook).
+ * <p>
+ * The move can be stopped by calling stopMoving() or when an obstacle is encountered. When the sprite is falling,
+ * the default behaviour is to nullify xSpeed.
+ * <p>
+ * The sprite may also be animated, which is in this class supersede the process of moving the sprite.
+ * <p>
+ * Since the behaviour of a sprite a totally game-dependent, the update() method should be overridden in subclasses to
+ * reflect the desired sprite behavior.
  */
 public class SpriteElement extends GameElement {
-
-    // the number of different faces of this element.
-    protected int nbFaces;
-    /* a list of face indexes to use
-       by default, this list is initialized to 0, 1, ..., nbFaces-1 in order to
-       follow and show in sequence all faces. But it can be set to any other valid
-       sequence of any size.
-     */
-    protected List<Integer> faceIndexes;
-    // the index to select an entry in faceIndexes.
-    // It is not used directly but to determine the index of the current face, i.e. faceIndexes.get(currentIndex)
-    protected int currentIndex;
 
     // the state values
     public final static int SPRITE_STATE_IDLE = 0;
@@ -50,6 +38,17 @@ public class SpriteElement extends GameElement {
     public final static int MOVE_UP = 1;
     public final static int MOVE_LEFT = 2;
     public final static int MOVE_DOWN = 3;
+    // the number of different faces of this element.
+    protected int nbFaces;
+    /* a list of face indexes to use
+       by default, this list is initialized to 0, 1, ..., nbFaces-1 in order to
+       follow and show in sequence all faces. But it can be set to any other valid
+       sequence of any size.
+     */
+    protected List<Integer> faceIndexes;
+    // the index to select an entry in faceIndexes.
+    // It is not used directly but to determine the index of the current face, i.e. faceIndexes.get(currentIndex)
+    protected int currentIndex;
     // the current state
     protected int state;
     // the current x,y speed
@@ -67,7 +66,7 @@ public class SpriteElement extends GameElement {
         currentIndex = 0;
         faceIndexes = new ArrayList<>();
         // by default, use all faces sequentially
-        for (int i=0;i<nbFaces;i++) faceIndexes.add(i);
+        for (int i = 0; i < nbFaces; i++) faceIndexes.add(i);
         // enforce the  fact that the look changed to get the first display of this element.
         // otherwise it won't show until something change its state.
         lookChanged = true;
@@ -105,6 +104,7 @@ public class SpriteElement extends GameElement {
     public int getState() {
         return state;
     }
+
     public void setState(int state) {
         this.state = state;
     }
@@ -116,6 +116,7 @@ public class SpriteElement extends GameElement {
     public double getxSpeed() {
         return xSpeed;
     }
+
     public void setxSpeed(double xSpeed) {
         this.xSpeed = xSpeed;
     }
@@ -123,19 +124,22 @@ public class SpriteElement extends GameElement {
     public double getySpeed() {
         return ySpeed;
     }
+
     public void setySpeed(double ySpeed) {
         this.ySpeed = ySpeed;
     }
 
-    public void stopMoving(){
+    public void stopMoving() {
         state = SPRITE_STATE_IDLE;
         xSpeed = 0;
         ySpeed = 0;
     }
-    public void startMoving(){
+
+    public void startMoving() {
         state = SPRITE_STATE_MOVING;
     }
-    public void startFalling(){
+
+    public void startFalling() {
         state = SPRITE_STATE_FALLING;
         xSpeed = 0;
     }
@@ -155,7 +159,7 @@ public class SpriteElement extends GameElement {
         updateLocation();
 
         // do not update the index if an animation is already running
-        if ((animation == null) && (framesPerFaceChange > 0)){
+        if ((animation == null) && (framesPerFaceChange > 0)) {
             updateIndex();
         }
     }
@@ -169,8 +173,7 @@ public class SpriteElement extends GameElement {
                 } else if (animation.getName().startsWith("look")) {
                     setCurrentIndex(step.getInt(0));
                 }
-            }
-            else {
+            } else {
                 animation = null;
             }
         }

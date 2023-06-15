@@ -24,16 +24,17 @@ public final class AnimationTypes {
     public static final int LOOKSEQUENCE_VALUE = 21;
     public static final String LOOK_RANDOM = "look/random";
     public static final int LOOKRANDOM_VALUE = 22;
-    public static Map<String,Integer> types;
+    public static Map<String, Integer> types;
+
     static {
         types = new HashMap<>();
-        types.put(NONE,NONE_VALUE);
-        types.put(MOVE_TELEPORT,MOVETELEPORT_VALUE);
-        types.put(MOVE_LINEARCST,MOVELINEARCST_VALUE);
-        types.put(MOVE_LINEARPROP,MOVELINEARPROP_VALUE);
+        types.put(NONE, NONE_VALUE);
+        types.put(MOVE_TELEPORT, MOVETELEPORT_VALUE);
+        types.put(MOVE_LINEARCST, MOVELINEARCST_VALUE);
+        types.put(MOVE_LINEARPROP, MOVELINEARPROP_VALUE);
         types.put(LOOK_SEQUENCE, LOOKSIMPLE_VALUE);
         types.put(LOOK_SEQUENCE, LOOKSEQUENCE_VALUE);
-        types.put(LOOK_RANDOM,LOOKRANDOM_VALUE);
+        types.put(LOOK_RANDOM, LOOKRANDOM_VALUE);
     }
 
     private AnimationTypes() {
@@ -43,6 +44,7 @@ public final class AnimationTypes {
         if (types.containsKey(name)) return types.get(name);
         return 0;
     }
+
     public static String getName(int type) {
         String name = types.entrySet().stream()
                 .filter(e -> e.getValue() == type)
@@ -53,10 +55,9 @@ public final class AnimationTypes {
     }
 
     public static void register(String name, int typeNumber) throws IllegalArgumentException {
-        if ((!types.containsKey(name)) && (!types.containsValue(typeNumber)) )  {
+        if ((!types.containsKey(name)) && (!types.containsValue(typeNumber))) {
             types.put(name, typeNumber);
-        }
-        else {
+        } else {
             throw new IllegalArgumentException();
         }
     }
@@ -64,6 +65,7 @@ public final class AnimationTypes {
     public static boolean isValid(int typeNumber) {
         return types.containsValue(typeNumber);
     }
+
     public static boolean isValid(String name) {
         return types.containsKey(name);
     }

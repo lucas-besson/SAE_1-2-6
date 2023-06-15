@@ -8,8 +8,8 @@ import boardifier.view.GridGeometry;
 
 public class Pawn extends GameElement {
 
-    public static int PAWN_BLACK = 0;
-    public static int PAWN_RED = 1;
+    public static final int PAWN_BLACK = 0;
+    public static final int PAWN_RED = 1;
     private final int number;
     private final int color;
     private boolean isInAMill;
@@ -42,22 +42,23 @@ public class Pawn extends GameElement {
         isInAMill = inAMill;
     }
 
-    public void setCol(int col) {
-        this.col = col;
-    }
-
-    public void setRow(int row) {
-        this.row = row;
-    }
-
     public int getCol() {
         return this.col;
+    }
+
+    public void setCol(int col) {
+        this.col = col;
     }
 
     public int getRow() {
         return this.row;
     }
 
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    @Override
     public void update(double width, double height, GridGeometry gridGeometry) {
 
         // if must be animated, move the pawn

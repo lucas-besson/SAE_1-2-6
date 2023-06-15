@@ -1,6 +1,8 @@
 package boardifier.view;
 
-import boardifier.model.*;
+import boardifier.model.GameElement;
+import boardifier.model.GameException;
+import boardifier.model.GameStageModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +29,7 @@ public abstract class GameStageView {
      * The width of the game view in space.
      * If width and height are set to -1, the scene will be resized to the boundaries of all elements in the stage.
      * Otherwise, the scene will have the given dimension, clipping what is outside its boundaries.
-     *
+     * <p>
      * Setting width and height to a particular value should be done if some computations on the element position in space
      * involve to know the boundaries of this space. For example, if a sprite can only follow paths that are defined by a
      * regular mesh within the space (like in pacman), the characteristics of that mesh are determined from width and height.

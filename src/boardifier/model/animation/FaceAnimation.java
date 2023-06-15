@@ -16,7 +16,7 @@ public class FaceAnimation extends Animation {
         super(model, AnimationTypes.getType("look/simple"));
         this.faceIndexes = faceindexes;
         if (waitTime < frameGap) waitTime = frameGap;
-        waitTime = (waitTime/frameGap)*frameGap;
+        waitTime = (waitTime / frameGap) * frameGap;
         this.waitTime = waitTime;
         // WARNING : the dev will have to explicitly call computePoints()
     }
@@ -24,15 +24,15 @@ public class FaceAnimation extends Animation {
     public FaceAnimation(Model model, int nbFaces, int waitTime) {
         this(model, null, waitTime);
         List<Integer> indexes = new ArrayList<>();
-        for(int i=0;i<nbFaces;i++) indexes.add(i);
+        for (int i = 0; i < nbFaces; i++) indexes.add(i);
         faceIndexes = indexes;
 
     }
 
     public void computeSteps() {
-        for(int i = 0; i< faceIndexes.size(); i++) {
+        for (int i = 0; i < faceIndexes.size(); i++) {
             int val = faceIndexes.get(i);
-            for(int j=0;j<waitTime/frameGap;j++) {
+            for (int j = 0; j < waitTime / frameGap; j++) {
                 AnimationStep step = new AnimationStep();
                 step.addData(val);
                 steps.add(step);

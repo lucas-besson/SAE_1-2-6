@@ -19,8 +19,7 @@ public class BackgroundLook extends ElementLook {
         if (type == BACKGROUND_COLOR) {
             frame = new Rectangle(width, height, Color.valueOf(value));
             addShape(frame);
-        }
-        else if (type == BACKGROUND_IMAGE) {
+        } else if (type == BACKGROUND_IMAGE) {
             Image img = new Image(value);
             view = new ImageView();
             view.setFitWidth(width);

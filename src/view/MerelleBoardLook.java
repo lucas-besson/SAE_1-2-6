@@ -15,19 +15,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class MerelleBoardLook extends GridLook {
+    static final int linkThickness = 5;
+    static final int cellRadius = 24;
     private final Rectangle millCell;
-
-    Path redMillIMGPath = Paths.get(".").resolve("assets").resolve("images").resolve("RedMill.png");
-    Path blueMillIMGPath = Paths.get(".").resolve("assets").resolve("images").resolve("BlueMill.png");
-
-    Image redMillIMG = Images.loadImage(redMillIMGPath.toString());
-    Image blueMillIMG = Images.loadImage(blueMillIMGPath.toString());
-
     // the array of rectangle composing the grid
     private final Shape[][] cells;
-    final int linkThickness = 5;
-    final int cellRadius = 24;
-    private final Color linesColor = Color.BLACK;
+    private static final Color linesColor = Color.BLACK;
+    Path redMillIMGPath = Paths.get(".").resolve("assets").resolve("images").resolve("RedMill.png");
+    Path blueMillIMGPath = Paths.get(".").resolve("assets").resolve("images").resolve("BlueMill.png");
+    Image redMillIMG = Images.loadImage(redMillIMGPath.toString());
+    Image blueMillIMG = Images.loadImage(blueMillIMGPath.toString());
 
     public MerelleBoardLook(int size, GameElement element) {
         // NB: To have more liberty in the design, GridLook does not compute the cell size from the dimension of the element parameter.
@@ -35,7 +32,6 @@ public class MerelleBoardLook extends GridLook {
         // then, cells have a size of (size-20)/3
         super(size, size, (size - 20) / MerelleBoard.GRIDNBROWS, (size - 20) / MerelleBoard.GRIDNBCOLS, 10, Color.LIGHTSLATEGREY.toString(), element);
         cells = new Shape[MerelleBoard.GRIDNBROWS][MerelleBoard.GRIDNBCOLS];
-        Rectangle rectangle;
         Circle circle;
 
         // Create the background lines.

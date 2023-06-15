@@ -141,7 +141,7 @@ public class MerelleBoard extends GridElement {
         // First stage of the game : all empty cells are valid
         if (gameStatus == MerelleGameStatus.PLACING) {
             for (int[] cell : ACTIVECELLS) {
-                if (getElements(cell[1], cell[0]).size() == 0) {
+                if (getElements(cell[1], cell[0]).isEmpty()) {
                     lst.add(new Point(cell[0], cell[1]));
                 }
             }
@@ -164,7 +164,7 @@ public class MerelleBoard extends GridElement {
                 if (!isActiveCell(newX, newY)) continue; // Do nothing if the cell is unreachable
 
                 List<GameElement> elements = getElements(newY, newX);
-                if (elements.size() == 0) {
+                if (elements.isEmpty()) {
                     lst.add(new Point(newX, newY));
                 }
             }
@@ -196,7 +196,9 @@ public class MerelleBoard extends GridElement {
      */
     public boolean millsChecker(int color) {
 
-        int pawnInMill, newPawnInMill;
+        int pawnInMill;
+        int newPawnInMill;
+
         for (int[][] mill : MILLS) {
             newPawnInMill = 0;
             pawnInMill = 0;

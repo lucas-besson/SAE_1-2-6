@@ -1,15 +1,12 @@
 package controller;
 
 import boardifier.model.Coord2D;
-import boardifier.model.GridElement;
 import boardifier.model.Model;
 import boardifier.view.GridLook;
-import boardifier.view.RootPane;
 import boardifier.view.View;
 import control.IntelligentDecider;
 import control.MerelleController;
 import control.MerelleDecider;
-import javafx.stage.Stage;
 import model.MerelleBoard;
 import model.MerellePawnPot;
 import model.MerelleStageModel;
@@ -24,10 +21,8 @@ import java.util.Arrays;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-public class IntelligentDeciderUnitTest {
+class IntelligentDeciderUnitTest {
 
     private IntelligentDecider intelligentDecider;
     private Model model;
@@ -38,7 +33,7 @@ public class IntelligentDeciderUnitTest {
     private MerellePawnPot pot;
 
     @BeforeEach
-    public void initEach() {
+    void initEach() {
         model = mock(Model.class);
         merelleStageModel = new MerelleStageModel("test", model);
         merelleBoard = new MerelleBoard(0, 0, merelleStageModel);
@@ -64,7 +59,7 @@ public class IntelligentDeciderUnitTest {
     }
 
     @Test
-    public void testMovePawn() throws Exception {
+    void testMovePawn() throws Exception {
 
         /**
          * Tester le mouvement qu'exécute l'IA dans un cas bien précis.
@@ -102,7 +97,7 @@ public class IntelligentDeciderUnitTest {
     }
 
     @Test
-    public void testPlacePawn() throws Exception {
+    void testPlacePawn() throws Exception {
 
         int[][] grid = {
                 {1, 2, 2, 1, 2, 2, 2},

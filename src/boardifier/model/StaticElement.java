@@ -8,10 +8,13 @@ package boardifier.model;
 
 public abstract class StaticElement extends GameElement {
     public StaticElement(int x, int y, GameStageModel gameStageModel) {
-        super(x,y, gameStageModel, ElementTypes.getType("static"));
+        super(x, y, gameStageModel, ElementTypes.getType("static"));
     }
+
     public StaticElement(int x, int y, GameStageModel gameStageModel, int type) {
-        super(x,y, gameStageModel, type);
+        super(x, y, gameStageModel, type);
     }
-    public void setLocation(int x, int y) {}
+
+    public void setLocation(int x, int y) {
+    }
 }

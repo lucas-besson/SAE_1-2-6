@@ -18,5 +18,6 @@ public class ControllerAction implements EventHandler<ActionEvent> {
     }
 
     // by default, do nothing. Must be overridden in subclasses
-    public void handle(ActionEvent event) {}
+    public void handle(ActionEvent event) {
+    }
 }

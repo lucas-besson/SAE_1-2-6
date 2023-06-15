@@ -1,10 +1,12 @@
 package boardifier.control;
 
 import boardifier.model.*;
-import boardifier.view.*;
+import boardifier.view.ElementLook;
+import boardifier.view.GameStageView;
+import boardifier.view.GridLook;
+import boardifier.view.View;
 import javafx.application.Platform;
 import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.StageStyle;
@@ -25,7 +27,7 @@ public abstract class Controller {
     public Controller(Model model, View view) {
         this.model = model;
         this.view = view;
-        controlAnimation = new ControllerAnimation(model,view, this);
+        controlAnimation = new ControllerAnimation(model, view, this);
         firstStageName = "";
         inUpdate = false;
     }
@@ -48,7 +50,8 @@ public abstract class Controller {
     }
 
     public void startGame() throws GameException {
-        if (firstStageName.isEmpty()) throw new GameException("The name of the first stage have not been set. Abort");
+        if (firstStageName.isEmpty())
+            throw new GameException("The name of the first stage have not been set. Abort");
         System.out.println("START THE GAME");
         startStage(firstStageName);
     }
@@ -67,7 +70,7 @@ public abstract class Controller {
      */
     protected void startStage(String stageName) throws GameException {
         if (model.isStageStarted()) stopGame();
-        System.out.println("START STAGE "+stageName);
+        System.out.println("START STAGE " + stageName);
         // create the model of the stage by using the StageFactory
         GameStageModel gameStageModel = StageFactory.createStageModel(stageName, model);
         // create the elements of the stage by getting the default factory of this stage and giving it to createElements()
@@ -90,7 +93,7 @@ public abstract class Controller {
 
         // create a map of GameElement <-> ElementLook, that helps the controller in its update() method
         mapElementLook = new HashMap<>();
-        for(GameElement element : model.getElements()) {
+        for (GameElement element : model.getElements()) {
             ElementLook look = gameStageView.getElementLook(element);
             mapElementLook.put(element, look);
         }
@@ -115,7 +118,8 @@ public abstract class Controller {
      * next player, and then to take actions if needed. For example, a method of the model can be called to update who is the current player.
      * Then, if it is a computer, a Decider object can be used to determine what to play and then to play it.
      */
-    public void nextPlayer() {};
+    public void nextPlayer() {
+    }
 
     /**
      * Execute actions at the end of the game.
@@ -128,8 +132,7 @@ public abstract class Controller {
         String message = "";
         if (model.getIdWinner() != -1) {
             message = model.getPlayers().get(model.getIdWinner()).getName() + " wins";
-        }
-        else {
+        } else {
             message = "Draw game";
         }
         // disable all events
@@ -176,12 +179,12 @@ public abstract class Controller {
      * This method MUST NOT BE called directly, and is only called by the ControllerAnimation
      * at each frame. It is used to update the model and then the view.
      * It must be noticed that the process of updating follows a fixed scheme :
-     *   - update all game element of the current game stage,
-     *   - update the grid cell of element that are in a grid and that have moved in space, and thus may have changed of cell,
-     *   - update the looks of all elements, calling dedicated methods according the type indicators of change (location, look, selection, ...),
-     *   - reset the change indicators in elements,
-     *   - check if the sage is finished,
-     *   - check if the game is finished.
+     * - update all game element of the current game stage,
+     * - update the grid cell of element that are in a grid and that have moved in space, and thus may have changed of cell,
+     * - update the looks of all elements, calling dedicated methods according the type indicators of change (location, look, selection, ...),
+     * - reset the change indicators in elements,
+     * - check if the sage is finished,
+     * - check if the game is finished.
      */
     public void update() {
         if (inUpdate) {
@@ -190,15 +193,14 @@ public abstract class Controller {
         inUpdate = true;
 
         // update the model of all elements :
-        mapElementLook.forEach((k,v) -> {
+        mapElementLook.forEach((k, v) -> {
             // get the bounds of the look
             Bounds b = v.getGroup().getBoundsInParent();
             // get the geometry of the grid that owns the element, if it exists
             if (k.getGrid() != null) {
                 GridLook look = getElementGridLook(k);
                 k.update(b.getWidth(), b.getHeight(), look.getGeometry());
-            }
-            else {
+            } else {
                 k.update(b.getWidth(), b.getHeight(), null);
             }
             // if the element must be auto-localized in its cell center
@@ -209,18 +211,20 @@ public abstract class Controller {
         // update the looks
         view.update();
         // reset changed indicators
-        mapElementLook.forEach((k,v) -> {
+        mapElementLook.forEach((k, v) -> {
             k.resetChanged();
         });
 
         if (model.isEndStage()) {
             controlAnimation.stopAnimation();
-            Platform.runLater( () -> {
-                stopStage();});
-        }
-        else if (model.isEndGame()) {
+            Platform.runLater(() -> {
+                stopStage();
+            });
+        } else if (model.isEndGame()) {
             controlAnimation.stopAnimation();
-            Platform.runLater( () -> {endGame();});
+            Platform.runLater(() -> {
+                endGame();
+            });
         }
 
         inUpdate = false;
@@ -232,9 +236,9 @@ public abstract class Controller {
 
     /**
      * Get the look of a given element
+     *
      * @param element the element for which the look is asked.
      * @return an ElementLook object that is the look of the element
-     *
      */
     public ElementLook getElementLook(GameElement element) {
         return mapElementLook.get(element);
@@ -242,15 +246,17 @@ public abstract class Controller {
 
     /**
      * Get the look of the grid that owns an element
+     *
      * @param element the element for which the grid llok is asked.
      * @return an ElementLook object that is the look of the grid that owns the element.
      */
     public GridLook getElementGridLook(GameElement element) {
-        return (GridLook) (view.getElementGridLook(element));
+        return view.getElementGridLook(element);
     }
 
     /**
      * Set the location of an element at the center of the cell it is placed.
+     *
      * @param element
      */
     public void setElementLocationToCellCenter(GameElement element) {
@@ -264,12 +270,13 @@ public abstract class Controller {
 
     /**
      * Get all visible and clickable elements that are at a given point in the scene coordinate space.
+     *
      * @param point the coordinate of a point
      * @return A list of game element
      */
     public List<GameElement> elementsAt(Coord2D point) {
         List<GameElement> list = new ArrayList<>();
-        for(GameElement element : model.getElements()) {
+        for (GameElement element : model.getElements()) {
             if ((element.isVisible()) && (element.isClickable())) {
                 ElementLook look = mapElementLook.get(element);
                 if ((look != null) && (look.isPointWithin(point))) {

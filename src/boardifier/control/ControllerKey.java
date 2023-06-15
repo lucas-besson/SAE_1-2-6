@@ -20,5 +20,6 @@ public class ControllerKey implements EventHandler<KeyEvent> {
     }
 
     // by default, do nothing. Must be overridden in subclasses
-    public void handle(KeyEvent event) {}
+    public void handle(KeyEvent event) {
+    }
 }

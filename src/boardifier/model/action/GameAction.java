@@ -1,6 +1,7 @@
 package boardifier.model.action;
 
-import boardifier.model.*;
+import boardifier.model.GameElement;
+import boardifier.model.Model;
 import boardifier.model.animation.Animation;
 import boardifier.model.animation.AnimationCallback;
 import boardifier.model.animation.AnimationTypes;
@@ -20,13 +21,13 @@ public abstract class GameAction {
         this.element = element;
         if (AnimationTypes.isValid(animationName)) {
             this.animationName = animationName;
-        }
-        else {
+        } else {
             this.animationName = "none";
         }
         animationType = AnimationTypes.getType(animationName);
         animation = null;
-        onEndCallback = () -> {};
+        onEndCallback = () -> {
+        };
     }
 
     public GameElement getElement() {
@@ -40,12 +41,14 @@ public abstract class GameAction {
     public Animation getAnimation() {
         return animation;
     }
+
     /**
      * create the animation associated to this action.
      * This method must be overridden in subclasses and called at the end
      * of their constructors
      */
     protected abstract void createAnimation();
+
     /**
      * initialize the animation.
      * Used in the ActionPlayer thread to prepare the animation before it is started
@@ -65,5 +68,6 @@ public abstract class GameAction {
     public void onActionEnd(ActionCallback callback) {
         onEndCallback = callback;
     }
+
     public abstract void execute();
 }

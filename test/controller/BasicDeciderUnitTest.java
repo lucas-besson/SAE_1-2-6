@@ -9,14 +9,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
 import java.awt.*;
 import java.util.Arrays;
 import java.util.Random;
 
-public class BasicDeciderUnitTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.mock;
+
+class BasicDeciderUnitTest {
     BasicDecider basicDeciderTest;
     Model model;
     Controller controller;
@@ -38,7 +40,7 @@ public class BasicDeciderUnitTest {
     }
 
     @Test
-    public void testPlacePawn() {
+    void testPlacePawn() {
         java.util.List<Point> playablePawns = Arrays.asList(new Point(1,1), new Point(1,2), new Point(1,3));
         Point selectedPawn = playablePawns.get(randomMock.nextInt(playablePawns.size()));
 
@@ -46,7 +48,7 @@ public class BasicDeciderUnitTest {
     }
 
     @Test
-    public void testMovePawn() {
+    void testMovePawn() {
         int[][] gridOld = {
                 {0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0},
@@ -70,7 +72,7 @@ public class BasicDeciderUnitTest {
     }
 
     @Test
-    public void testRemovePawn() {
+    void testRemovePawn() {
         int[][] gridOld = {
                 {0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0},
@@ -80,7 +82,7 @@ public class BasicDeciderUnitTest {
                 {0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0}
         };
-        assertNotEquals(gridOld[3][2], 0);
+        assertNotEquals(0, gridOld[3][2]);
 
         int[][] gridNew = {
                 {0, 0, 0, 0, 0, 0, 0},
@@ -91,6 +93,6 @@ public class BasicDeciderUnitTest {
                 {0, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0}
         };
-        assertEquals(gridNew[3][2], 0);
+        assertEquals(0, gridNew[3][2]);
     }
 }

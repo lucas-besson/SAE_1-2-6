@@ -13,13 +13,15 @@ public class StageFactory {
 
     protected static Map<String, String> stageModelNames;
     protected static Map<String, String> stageViewNames;
+
     static {
         stageModelNames = new HashMap<>();
         stageViewNames = new HashMap<>();
     }
 
     public static void registerModelAndView(String stageName, String modelClassName, String viewClassName) {
-        stageModelNames.put(stageName, modelClassName); stageViewNames.put(stageName, viewClassName);
+        stageModelNames.put(stageName, modelClassName);
+        stageViewNames.put(stageName, viewClassName);
     }
 
     public static GameStageModel createStageModel(String stageName, Model model) throws GameException {
@@ -46,9 +48,10 @@ public class StageFactory {
             }
             return stageModel;
         }
-        throw new GameException("Invalid stage name: "+stageName+". Cannot create an instance of StageModel");
+        throw new GameException("Invalid stage name: " + stageName + ". Cannot create an instance of StageModel");
     }
-    public static GameStageView createStageView(String stageName, GameStageModel model) throws GameException{
+
+    public static GameStageView createStageView(String stageName, GameStageModel model) throws GameException {
         if (stageViewNames.containsKey(stageName)) {
             String className = stageViewNames.get(stageName);
             GameStageView stageView = null;
@@ -72,6 +75,6 @@ public class StageFactory {
             }
             return stageView;
         }
-        throw new GameException("Invalid stage name: "+stageName+". Cannot create an instance of StageView");
+        throw new GameException("Invalid stage name: " + stageName + ". Cannot create an instance of StageView");
     }
 }

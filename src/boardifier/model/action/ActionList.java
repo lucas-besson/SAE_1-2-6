@@ -1,13 +1,11 @@
 package boardifier.model.action;
 
-import boardifier.model.GameElement;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class ActionList {
 
-    protected  List<List<GameAction>> actions;
+    protected List<List<GameAction>> actions;
     protected List<GameAction> currentPack;
     protected boolean doNextPlayer; // if true ActionPlayer will trigger a nextPlayer event after all action have been played
 

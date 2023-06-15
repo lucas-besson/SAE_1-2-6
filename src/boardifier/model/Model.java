@@ -5,14 +5,13 @@ import java.util.List;
 
 public class Model {
 
-    protected int state; // the game state
     protected final static int STATE_INIT = 1; // e.g. the intro screen
     protected final static int STATE_PLAY = 2; // when player is playing within a stage
     protected final static int STATE_PAUSED = 3; // when game is paused
     protected final static int STATE_ENDSTAGE = 4; // when current level  has ended
     protected final static int STATE_ENDGAME = 5; // when game has ended
+    protected int state; // the game state
     // and so on
-
     // the following boolean are used to switch on/off capture of events, notably, during animations.
     protected boolean captureMouseEvent;
     protected boolean captureKeyEvent;
@@ -49,7 +48,7 @@ public class Model {
         players = new ArrayList<>();
         idPlayer = 0;
         idWinner = -1;
-        lastClick = new Coord2D(-1,-1);
+        lastClick = new Coord2D(-1, -1);
         gameStageModel = null;
 
         this.frameGap = frameGap;
@@ -68,9 +67,9 @@ public class Model {
         // do not clear players, since it is not initialized in createElements
         idPlayer = 0;
         idWinner = -1;
-        lastClick = new Coord2D(-1,-1);
+        lastClick = new Coord2D(-1, -1);
         gameStageModel = null;
-        for(Player p : players) {
+        for (Player p : players) {
             p.reset();
         }
     }
@@ -78,33 +77,37 @@ public class Model {
     public boolean isCaptureMouseEvent() {
         return captureMouseEvent;
     }
-    public void toggleCaptureMouseEvent() {
-        captureMouseEvent = !captureMouseEvent;
-    }
+
     public void setCaptureMouseEvent(boolean captureMouseEvent) {
         this.captureMouseEvent = captureMouseEvent;
     }
 
+    public void toggleCaptureMouseEvent() {
+        captureMouseEvent = !captureMouseEvent;
+    }
+
     public boolean isCaptureKeyEvent() {
         return captureKeyEvent;
-    }
-    public void toggleCaptureKeyEvent() {
-        captureKeyEvent = !captureKeyEvent;
     }
 
     public void setCaptureKeyEvent(boolean captureKeyEvent) {
         this.captureKeyEvent = captureKeyEvent;
     }
 
+    public void toggleCaptureKeyEvent() {
+        captureKeyEvent = !captureKeyEvent;
+    }
+
     public boolean isCaptureActionEvent() {
         return captureActionEvent;
-    }
-    public void toggleCaptureActionEvent() {
-        captureActionEvent = !captureActionEvent;
     }
 
     public void setCaptureActionEvent(boolean captureActionEvent) {
         this.captureActionEvent = captureActionEvent;
+    }
+
+    public void toggleCaptureActionEvent() {
+        captureActionEvent = !captureActionEvent;
     }
 
     public void toggleCaptureEvents() {
@@ -112,6 +115,7 @@ public class Model {
         toggleCaptureActionEvent();
         toggleCaptureMouseEvent();
     }
+
     public void setCaptureEvents(boolean state) {
         setCaptureMouseEvent(state);
         setCaptureKeyEvent(state);
@@ -121,16 +125,19 @@ public class Model {
     public long getFrameGap() {
         return frameGap;
     }
+
     public void setFrameGap(long frameGap) {
         this.frameGap = frameGap;
     }
+
     public int getFrameGapInMs() {
-        return (int)(frameGap/1000000);
+        return (int) (frameGap / 1000000);
     }
 
     public long getLastFrame() {
         return lastFrame;
     }
+
     public void setLastFrame(long lastFrame) {
         this.lastFrame = lastFrame;
     }
@@ -143,10 +150,11 @@ public class Model {
         this.gameStageModel = gameStageModel;
     }
 
-    public void startGame(GameStageModel gameStageModel)  {
+    public void startGame(GameStageModel gameStageModel) {
         startStage(gameStageModel);
     }
-    public void startStage(GameStageModel gameStageModel)  {
+
+    public void startStage(GameStageModel gameStageModel) {
         reset();
         this.gameStageModel = gameStageModel;
         state = STATE_PLAY;
@@ -156,11 +164,13 @@ public class Model {
     public boolean isStageStarted() {
         return state == STATE_PLAY;
     }
+
     public void pauseGame() {
         state = STATE_PAUSED;
         setCaptureActionEvent(false);
         setCaptureMouseEvent(false);
     }
+
     public void resumeGame() {
         state = STATE_PLAY;
         setCaptureActionEvent(true);
@@ -170,6 +180,7 @@ public class Model {
     public void stopStage() {
         state = STATE_ENDSTAGE;
     }
+
     public boolean isEndStage() {
         return state == STATE_ENDSTAGE;
     }
@@ -178,6 +189,7 @@ public class Model {
     public boolean isEndGame() {
         return state == STATE_ENDGAME;
     }
+
     public void stopGame() {
         state = STATE_ENDGAME;
     }
@@ -185,9 +197,11 @@ public class Model {
     public List<Player> getPlayers() {
         return players;
     }
+
     public void addHumanPlayer(String name) {
         players.add(Player.createHumanPlayer(name));
     }
+
     public void addComputerPlayer(String name) {
         players.add(Player.createComputerPlayer(name));
     }
@@ -195,19 +209,23 @@ public class Model {
     public int getIdPlayer() {
         return idPlayer;
     }
+
     public void setIdPlayer(int idPlayer) {
         this.idPlayer = idPlayer;
     }
+
     public Player getCurrentPlayer() {
         return players.get(idPlayer);
     }
+
     public void setNextPlayer() {
-        idPlayer = (idPlayer+1)%players.size();
+        idPlayer = (idPlayer + 1) % players.size();
     }
 
     public int getIdWinner() {
         return idWinner;
     }
+
     public void setIdWinner(int idWinner) {
         this.idWinner = idWinner;
     }
@@ -215,18 +233,23 @@ public class Model {
     public String getPlayerLastKey(int idPlayer) {
         return players.get(idPlayer).getLastKeyPressed();
     }
+
     public boolean isPlayerKeyPressed(int idPlayer, String name) {
         return players.get(idPlayer).isKeyPressed(name);
     }
+
     public void addPlayerKeyPressed(int idPlayer, String name) {
         players.get(idPlayer).addKeyPressed(name);
     }
+
     public void removePlayerKeyPressed(int idPlayer, String name) {
         players.get(idPlayer).removeKeyPressed(name);
     }
+
     public Coord2D getLastClick() {
         return lastClick;
     }
+
     public void setLastClick(Coord2D lastClick) {
         this.lastClick = lastClick;
     }
@@ -239,21 +262,24 @@ public class Model {
         if (gameStageModel == null) return null;
         return gameStageModel.getElements();
     }
+
     public List<GameElement> elementsByType(int type) {
         if (gameStageModel == null) return null;
         return gameStageModel.elementsByType(type);
     }
+
     public List<GridElement> getGrids() {
         if (gameStageModel == null) return null;
         return gameStageModel.getGrids();
     }
 
     public GridElement getGrid(String name) {
-        for(GridElement grid : getGrids()) {
+        for (GridElement grid : getGrids()) {
             if (grid.name.equals(name)) return grid;
         }
         return null;
     }
+
     public List<GameElement> getSelected() {
         if (gameStageModel == null) return null;
         return gameStageModel.getSelected();

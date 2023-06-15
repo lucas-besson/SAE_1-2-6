@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class GameStageModel {
-    
+
     /**
      * The local state of the stage.
      * This state is different from the global state that is defined in model.
@@ -55,10 +55,14 @@ public abstract class GameStageModel {
            explicitly.
          */
         // define NOP callbacks
-        onSelectionChangeCallback = () -> {};
-        onPutInGridCallback = (element, gridDest, rowDest, colDest) -> {};
-        onMoveInGridCallback = (element, gridDest, rowDest, colDest) -> {};
-        onRemoveFromGridCallback = (element, gridDest, rowDest, colDest) -> {};
+        onSelectionChangeCallback = () -> {
+        };
+        onPutInGridCallback = (element, gridDest, rowDest, colDest) -> {
+        };
+        onMoveInGridCallback = (element, gridDest, rowDest, colDest) -> {
+        };
+        onRemoveFromGridCallback = (element, gridDest, rowDest, colDest) -> {
+        };
     }
 
     public String getName() {
@@ -83,7 +87,9 @@ public abstract class GameStageModel {
         selected.clear();
     }
 
-    public List<GameElement> getElements() { return elements; }
+    public List<GameElement> getElements() {
+        return elements;
+    }
 
     public void addElement(GameElement element) {
 
@@ -93,12 +99,14 @@ public abstract class GameStageModel {
     public List<GridElement> getGrids() {
         return grids;
     }
+
     public GridElement getGrid(String name) {
-        for(GridElement grid : grids) {
+        for (GridElement grid : grids) {
             if (grid.name.equals(name)) return grid;
         }
         return null;
     }
+
     public void addGrid(GridElement grid) {
         grids.add(grid);
         elements.add(grid);
@@ -112,8 +120,7 @@ public abstract class GameStageModel {
     public void setSelected(GameElement element, boolean selected) {
         if (!selected) {
             this.selected.remove(element);
-        }
-        else {
+        } else {
             this.selected.add(element);
         }
         onSelectionChangeCallback.execute();
@@ -125,7 +132,7 @@ public abstract class GameStageModel {
            method setSelected(), that will remove the element from the set selected.
 
          */
-        for(int i=selected.size()-1;i>=0;i--) {
+        for (int i = selected.size() - 1; i >= 0; i--) {
             GameElement element = selected.get(i);
             element.unselect();
         }
@@ -139,6 +146,7 @@ public abstract class GameStageModel {
      * This method is just a wrapper to call the setup() method of a StageElementsFactory.
      * This method MUST NOT BE called directly. It is done by the controller when a stage must
      * be set.
+     *
      * @param elementsFactory
      */
     public void createElements(StageElementsFactory elementsFactory) {
@@ -155,12 +163,15 @@ public abstract class GameStageModel {
     public void onSelectionChange(SelectionCallback callback) {
         onSelectionChangeCallback = callback;
     }
+
     public void onPutInGrid(GridOpCallback callback) {
         onPutInGridCallback = callback;
     }
+
     public void onMoveInGrid(GridOpCallback callback) {
         onMoveInGridCallback = callback;
     }
+
     public void onRemoveFromGrid(GridOpCallback callback) {
         onRemoveFromGridCallback = callback;
     }
@@ -168,16 +179,18 @@ public abstract class GameStageModel {
     public void putInGrid(GameElement element, GridElement gridDest, int rowDest, int colDest) {
         onPutInGridCallback.execute(element, gridDest, rowDest, colDest);
     }
+
     public void movedInGrid(GameElement element, GridElement gridDest, int rowDest, int colDest) {
         onMoveInGridCallback.execute(element, gridDest, rowDest, colDest);
     }
+
     public void removedFromGrid(GameElement element, GridElement grid, int row, int col) {
         onRemoveFromGridCallback.execute(element, grid, row, col);
     }
 
     // by default removing = hide the element and move it outside the current scope of the view
     public void removeElement(GameElement element) {
-        element.setLocation(-10000,-10000);
+        element.setLocation(-10000, -10000);
         element.setVisible(false);
         if (element.getGrid() != null) {
             element.getGrid().removeElement(element);
@@ -191,9 +204,10 @@ public abstract class GameStageModel {
     public String getCurrentPlayerName() {
         return model.getCurrentPlayer().getName();
     }
+
     // get the grid element (if it exists) where is assigned another element
     public GridElement elementGrid(GameElement element) {
-        for(GridElement grid : grids) {
+        for (GridElement grid : grids) {
             if (grid.contains(element)) return grid;
         }
         return null;

@@ -18,7 +18,7 @@ import view.MerelleView;
 public class MerelleControllerAction extends ControllerAction implements EventHandler<ActionEvent> {
 
     // to avoid lots of casts, create an attribute that matches the instance type.
-    private MerelleView merelleView;
+    private final MerelleView merelleView;
 
     public MerelleControllerAction(Model model, View view, Controller control) {
         super(model, view, control);
@@ -48,15 +48,15 @@ public class MerelleControllerAction extends ControllerAction implements EventHa
                 ((MerelleView) view).selectedGameMode = result; // We keep track of the selected game mode
                 model.getPlayers().clear();
                 switch (result.type) {
-                    case GameMode.PvP -> {
+                    case GameMode.PVP -> {
                         model.addHumanPlayer(result.player1);
                         model.addHumanPlayer(result.player2);
                     }
-                    case GameMode.PvAI -> {
+                    case GameMode.PVAI -> {
                         model.addHumanPlayer(result.player1);
                         model.addComputerPlayer(result.player2);
                     }
-                    case GameMode.AIvAI -> {
+                    case GameMode.AIVAI -> {
                         model.addComputerPlayer(result.player1);
                         model.addComputerPlayer(result.player2);
                     }
@@ -88,7 +88,8 @@ public class MerelleControllerAction extends ControllerAction implements EventHa
      */
     public void handle(ActionEvent event) {
 
-        if (!model.isCaptureActionEvent()) return;
+        if (!model.isCaptureActionEvent()) {
+        }
     }
 }
 

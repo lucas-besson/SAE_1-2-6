@@ -59,16 +59,6 @@ public class IntelligentDecider extends MerelleDecider {
         }
     }
 
-    private void printGrid() {
-        System.out.println();
-        for (int col = 0; col < grid.length; col++) {
-            for (int row = 0; row < grid[col].length; row++) {
-                System.out.print(grid[row][col] + ", ");
-            }
-            System.out.println();
-        }
-    }
-
     @Override
     public void movePawn() {
         int playerColor = model.getIdPlayer();
@@ -104,24 +94,15 @@ public class IntelligentDecider extends MerelleDecider {
                 }
             }
         }
-//        System.out.println(pawnToMove);
         if (bestScore == 0 || pawnToMove == null) {
             initGridTable();
-//            System.out.println("IF");
             List<Point> playerPawnList = getPlayerPawnList(model.getIdPlayer(), grid);
-
-
-//            System.out.println(playerPawnList);
 
             playerPawnList.removeIf(pawn -> computeValidCells(pawn).isEmpty());
 
-//            System.out.println(playerPawnList);
-
             if (!playerPawnList.isEmpty()) {
                 List<Point> destinations;
-//                System.out.println("IF 2");
                 do {
-//                    System.out.println("Do While");
                     Point toMove = playerPawnList.get(rand.nextInt(playerPawnList.size()));
                     pawnToMove = (Pawn) model.getGrid("merelleboard").getFirstElement(toMove.y, toMove.x);
 

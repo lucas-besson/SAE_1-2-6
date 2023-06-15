@@ -5,7 +5,7 @@ import boardifier.view.View;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 
-public class ControllerMouse  implements EventHandler<MouseEvent> {
+public class ControllerMouse implements EventHandler<MouseEvent> {
     protected Model model;
     protected View view;
     protected Controller control;
@@ -18,6 +18,7 @@ public class ControllerMouse  implements EventHandler<MouseEvent> {
     }
 
     // by default, do nothing. Must be overridden in subclasses
-    public void handle(MouseEvent event) {}
+    public void handle(MouseEvent event) {
+    }
 
 }

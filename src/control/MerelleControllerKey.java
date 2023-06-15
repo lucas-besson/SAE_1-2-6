@@ -21,21 +21,22 @@ public class MerelleControllerKey extends ControllerKey implements EventHandler<
     }
 
     public void handle(KeyEvent event) {
-        if (!model.isCaptureKeyEvent() || !event.getEventType().equals(KeyEvent.KEY_PRESSED)) return;
+        if (!model.isCaptureKeyEvent() || !event.getEventType().equals(KeyEvent.KEY_PRESSED))
+            return;
 
 //        FIXME les inputs du clavier sont ignorer lorsque les IA joue...
 
         GameMode selectedGameMode = ((MerelleView) view).selectedGameMode;
 
-        System.out.println(event.getCode() + " ; " + event.getCode().equals(KeyCode.SPACE));
+//        System.out.println(event.getCode());
 
-        if (event.getCode().equals(KeyCode.LEFT) && selectedGameMode.type != GameMode.PvP) {
+        if (event.getCode().equals(KeyCode.LEFT) && selectedGameMode.type != GameMode.PVP) {
             MerelleDecider.decreaseAnimationSpeed();
         }
-        if (event.getCode().equals(KeyCode.RIGHT) && selectedGameMode.type != GameMode.PvP) {
+        if (event.getCode().equals(KeyCode.RIGHT) && selectedGameMode.type != GameMode.PVP) {
             MerelleDecider.increaseAnimationSpeed();
         }
-        if (event.getCode().equals(KeyCode.SPACE) && selectedGameMode.type == GameMode.AIvAI) {
+        if (event.getCode().equals(KeyCode.SPACE) && selectedGameMode.type == GameMode.AIVAI) {
             if (model.isStageStarted()) model.pauseGame();
             else model.resumeGame();
         }

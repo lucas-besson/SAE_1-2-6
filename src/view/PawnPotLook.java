@@ -10,7 +10,7 @@ import model.MerellePawnPot;
 public class PawnPotLook extends GridLook {
 
     // the array of rectangle composing the grid
-    private Rectangle[] cells;
+    private final Rectangle[] cells;
 
     public PawnPotLook(int width, int height, GameElement element) {
         super(width, height, (width - 10), (width - 10), 5, "0X000000", element);
