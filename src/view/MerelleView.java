@@ -55,9 +55,7 @@ public class MerelleView extends View {
 
     @Override
     protected void createMenuBar() {
-        super.createMenuBar();
         menuBar = new MenuBar();
-        menuBar.setUseSystemMenuBar(true);
 
         Menu menu1 = new Menu("Game");
         menuStart = new MenuItem("New game");
