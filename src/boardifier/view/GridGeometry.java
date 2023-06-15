@@ -1,17 +1,17 @@
 package boardifier.view;
 
-import boardifier.model.GridElement;
 import boardifier.model.Coord2D;
+import boardifier.model.GridElement;
 
 public class GridGeometry {
 
-    private final GridLook look;
     // constant to defined which point within the cell is required
     public final static int GRIDGEOMETRY_CENTER = 0;
     public final static int GRIDGEOMETRY_TOPLEFT = 1;
     public final static int GRIDGEOMETRY_TOPRIGHT = 2;
     public final static int GRIDGEOMETRY_BOTTOMRIGHT = 3;
     public final static int GRIDGEOMETRY_BOTTOMLEFT = 4;
+    private final GridLook look;
 
     public GridGeometry(GridLook look) {
         this.look = look;
@@ -21,6 +21,7 @@ public class GridGeometry {
     public Coord2D getRootPaneLocationForCellCenter(int row, int col) {
         return getRootPaneLocationForCell(row, col, GRIDGEOMETRY_CENTER);
     }
+
     /*
        It is used to compute the location x,y in the root pane in the scene (cf. View) of the cell
         in row,col. This method just calls the method computeLocationIfMove() and
@@ -38,21 +39,18 @@ public class GridGeometry {
     private Coord2D getLocalLocationForCell(int row, int col, int position) {
         // IMPORTANT : checking if it is possible to put the pawn is not done here
         GridElement grid = (GridElement) look.getElement();
-        if ((row < 0) || (row >= grid.getNbRows()) || (col < 0) || (col >= grid.getNbCols())) return null;
+        if ((row < 0) || (row >= grid.getNbRows()) || (col < 0) || (col >= grid.getNbCols()))
+            return null;
         Coord2D p = null;
         if (position == GRIDGEOMETRY_CENTER) {
             p = new Coord2D((col + 0.5) * look.getCellWidth(), (row + 0.5) * look.getCellHeight());
-        }
-        else if (position == GRIDGEOMETRY_TOPLEFT) {
+        } else if (position == GRIDGEOMETRY_TOPLEFT) {
             p = new Coord2D(col * look.getCellWidth(), row * look.getCellHeight());
-        }
-        else if (position == GRIDGEOMETRY_TOPRIGHT) {
+        } else if (position == GRIDGEOMETRY_TOPRIGHT) {
             p = new Coord2D((col + 1) * look.getCellWidth(), row * look.getCellHeight());
-        }
-        else if (position == GRIDGEOMETRY_BOTTOMRIGHT) {
+        } else if (position == GRIDGEOMETRY_BOTTOMRIGHT) {
             p = new Coord2D((col + 1) * look.getCellWidth(), (row + 1) * look.getCellHeight());
-        }
-        else if (position == GRIDGEOMETRY_BOTTOMLEFT) {
+        } else if (position == GRIDGEOMETRY_BOTTOMLEFT) {
             p = new Coord2D(col * look.getCellWidth(), (row + 1) * look.getCellHeight());
         }
         // must add the border width

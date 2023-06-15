@@ -1,12 +1,8 @@
 package boardifier.control;
 
-import boardifier.model.GameElement;
 import boardifier.model.Model;
 import boardifier.view.View;
 import javafx.animation.AnimationTimer;
-import javafx.application.Platform;
-
-import java.util.List;
 
 public class ControllerAnimation {
 
@@ -20,7 +16,7 @@ public class ControllerAnimation {
         this.view = view;
         this.control = control;
 
-        animator = new AnimationTimer(){
+        animator = new AnimationTimer() {
 
             @Override
             public void handle(long time) {
@@ -29,7 +25,7 @@ public class ControllerAnimation {
                     model.setLastFrame(time);
                 }
                 // if not enough time has passed from the previous call, do nothing
-                else if ((time-model.getLastFrame()) < model.getFrameGap()) {
+                else if ((time - model.getLastFrame()) < model.getFrameGap()) {
                     return;
                 }
                 model.setLastFrame(time);
@@ -41,6 +37,7 @@ public class ControllerAnimation {
     public void startAnimation() {
         animator.start();
     }
+
     public void stopAnimation() {
         animator.stop();
     }

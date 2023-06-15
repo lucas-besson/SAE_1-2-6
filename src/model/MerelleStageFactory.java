@@ -44,7 +44,6 @@ public class MerelleStageFactory extends StageElementsFactory {
         stageModel.setRedPot(redPot);
 
 
-
         // create the text
 //        TextElement text = new TextElement(stageModel.getCurrentPlayerName(), stageModel);
 //        text.setLocation(10,30);

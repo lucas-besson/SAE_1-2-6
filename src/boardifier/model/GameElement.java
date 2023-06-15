@@ -3,9 +3,6 @@ package boardifier.model;
 import boardifier.model.animation.Animation;
 import boardifier.view.GridGeometry;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 /**
  * abstract class that describes an element of the game, in the largest sense.
@@ -21,12 +18,11 @@ import java.util.List;
  */
 public abstract class GameElement {
 
+    public static final int LOCATION_CENTER = 0;
+    public static final int LOCATION_TOPLEFT = 1;
     // coordinates of the element
     protected double x;
     protected double y;
-
-    public static final int LOCATION_CENTER = 0;
-    public static final int LOCATION_TOPLEFT = 1;
     /**
      * define to what point of the bounding box x,y are associated
      * By default, locationType is 0, which corresponds to the bounding box center. Nevertheless,
@@ -410,12 +406,12 @@ public abstract class GameElement {
         return lookChanged;
     }
 
-    public void setAutoLocChanged(boolean autoLocChanged) {
-        this.autoLocChanged = autoLocChanged;
-    }
-
     public boolean isAutoLocChanged() {
         return autoLocChanged;
+    }
+
+    public void setAutoLocChanged(boolean autoLocChanged) {
+        this.autoLocChanged = autoLocChanged;
     }
 
     /* *********************************************

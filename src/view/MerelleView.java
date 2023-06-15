@@ -18,7 +18,7 @@ public class MerelleView extends View {
     private MenuItem menuStart;
     private MenuItem menuIntro;
     private MenuItem menuQuit;
-    private MillAlert millAlert;
+    private final MillAlert millAlert;
     private ChoiceDialog<GameMode> gameModeView;
     private ObservableList<GameMode> gameModesList;
 
@@ -72,7 +72,7 @@ public class MerelleView extends View {
             HelpStage help = new HelpStage(HelpStage.TypeOfHelp.CREDITS);
             help.display();
         });
-        menu2.getItems().addAll(helpStageOpenMenu,creditsStageOpenMenu);
+        menu2.getItems().addAll(helpStageOpenMenu, creditsStageOpenMenu);
         menuBar.getMenus().add(menu2);
 
         menuBar.useSystemMenuBarProperty();

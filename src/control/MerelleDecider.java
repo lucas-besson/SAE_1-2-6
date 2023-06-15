@@ -16,23 +16,39 @@ import java.util.Random;
 public abstract class MerelleDecider extends Decider {
 
     protected static float animationSpeed = 15;
+    public int test;
     MerelleStageModel stage;
     MerelleBoard board;
     MerellePawnPot aIpot;
-
     ActionList actions = new ActionList(true);
     Pawn pawnToMove;
     Point destPoint;
-
     Random rand = new Random();
-
-    public void setGrid(int[][] grid) {
-        this.grid = grid;
-    }
-
     int[][] grid;
     int[][] secondGrid;
-    public int test;
+    public MerelleDecider(Model model, Controller control) {
+        super(model, control);
+        stage = (MerelleStageModel) model.getGameStage();
+        board = stage.getBoard();// get the board
+    }
+
+    public static void increaseAnimationSpeed() {
+        animationSpeed *= 1.2;
+    }
+
+    public static void decreaseAnimationSpeed() {
+        animationSpeed *= 0.8;
+    }
+
+    public static void printGrid(int[][] grid) {
+        System.out.println();
+        for (int row = 0; row < grid.length; row++) {
+            for (int col = 0; col < grid[row].length; col++) {
+                System.out.print(grid[row][col] + ", ");
+            }
+            System.out.println();
+        }
+    }
 
     public int getTest() {
         return test;
@@ -42,10 +58,8 @@ public abstract class MerelleDecider extends Decider {
         return grid;
     }
 
-    public MerelleDecider(Model model, Controller control) {
-        super(model, control);
-        stage = (MerelleStageModel) model.getGameStage();
-        board = stage.getBoard();// get the board
+    public void setGrid(int[][] grid) {
+        this.grid = grid;
     }
 
     /**
@@ -83,7 +97,6 @@ public abstract class MerelleDecider extends Decider {
         return null;
     }
 
-
     /**
      * Dans la phase de placement des pions, analyse et place un pion du pot -- Methode abstraite, à redéfinir.
      */
@@ -95,7 +108,6 @@ public abstract class MerelleDecider extends Decider {
     protected abstract void movePawn();
 
     protected abstract Point removePawn(int[][] actualGrid);
-
 
     /**
      * Actualise la grid avec le statut actuel de MerelleBoard
@@ -182,7 +194,6 @@ public abstract class MerelleDecider extends Decider {
         }
         return playerPawnList;
     }
-
 
     /**
      * Check if a new mill is present between the two grids in parameters, for the player set in parameters
@@ -347,23 +358,6 @@ public abstract class MerelleDecider extends Decider {
             if (millPoint[0] == position[0] && millPoint[1] == position[1]) return true;
         }
         return false;
-    }
-
-    public static void increaseAnimationSpeed() {
-        animationSpeed *= 1.2;
-    }
-    public static void decreaseAnimationSpeed() {
-        animationSpeed *= 0.8;
-    }
-
-    public static void printGrid(int[][] grid) {
-        System.out.println();
-        for (int row = 0; row < grid.length; row++) {
-            for (int col = 0; col < grid[row].length; col++) {
-                System.out.print(grid[row][col] + ", ");
-            }
-            System.out.println();
-        }
     }
 }
 

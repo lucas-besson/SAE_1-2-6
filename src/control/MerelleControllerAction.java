@@ -18,7 +18,7 @@ import view.MerelleView;
 public class MerelleControllerAction extends ControllerAction implements EventHandler<ActionEvent> {
 
     // to avoid lots of casts, create an attribute that matches the instance type.
-    private MerelleView merelleView;
+    private final MerelleView merelleView;
 
     public MerelleControllerAction(Model model, View view, Controller control) {
         super(model, view, control);
@@ -88,7 +88,8 @@ public class MerelleControllerAction extends ControllerAction implements EventHa
      */
     public void handle(ActionEvent event) {
 
-        if (!model.isCaptureActionEvent()) return;
+        if (!model.isCaptureActionEvent()) {
+        }
     }
 }
 

@@ -29,11 +29,11 @@ public class Coord2D {
         this.y = y;
     }
 
-    public Coord2D add (double x, double y) {
-        return new Coord2D(this.x+x, this.y+y);
+    public Coord2D add(double x, double y) {
+        return new Coord2D(this.x + x, this.y + y);
     }
 
-    public Coord2D subtract (double x, double y) {
-        return new Coord2D(this.x-x, this.y-y);
+    public Coord2D subtract(double x, double y) {
+        return new Coord2D(this.x - x, this.y - y);
     }
 }

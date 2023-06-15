@@ -10,8 +10,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-import java.lang.reflect.Type;
-
 public class HelpStage extends Stage {
     static final String HelpText = " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin suscipit neque et elit suscipit convallis vel accumsan odio. Donec et ligula tempus, tincidunt mauris vitae, tincidunt leo. Vivamus bibendum quam in nibh sollicitudin, id viverra tortor cursus. Phasellus semper diam eget tristique rutrum. Donec nec nisi libero. Sed vitae dolor ante. Curabitur congue est ac cursus suscipit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Duis aliquet magna eu bibendum tempus. Praesent sed ornare diam, at blandit lacus. Suspendisse eget tempus orci, sed tincidunt turpis.\n" +
             "\n" +
@@ -29,15 +27,14 @@ public class HelpStage extends Stage {
             "   - Language JAVA\n" +
             "   - Framework JavaFX\n" +
             "   - Framework Boardifier";
+    private FlowPane mainPane;
 
-    public HelpStage(TypeOfHelp type){
+    public HelpStage(TypeOfHelp type) {
         if (type == TypeOfHelp.HOW_TO_PLAY) initWidgets(HelpText);
         else if (type == TypeOfHelp.CREDITS) initWidgets(Credits);
     }
 
-    private FlowPane mainPane;
-
-    public void initWidgets(String textToPrint){
+    public void initWidgets(String textToPrint) {
         Text text = new Text(textToPrint);
 
         text.setFont(new Font(15));
@@ -50,14 +47,14 @@ public class HelpStage extends Stage {
         mainPane.setAlignment(Pos.CENTER);
     }
 
-    public void display(){
+    public void display() {
 
         this.setScene(new Scene(mainPane, 800, 500));
 
         super.show();
     }
 
-    public enum TypeOfHelp{
-        HOW_TO_PLAY, CREDITS;
+    public enum TypeOfHelp {
+        HOW_TO_PLAY, CREDITS
     }
 }

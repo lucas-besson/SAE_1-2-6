@@ -21,7 +21,8 @@ public class MerelleControllerKey extends ControllerKey implements EventHandler<
     }
 
     public void handle(KeyEvent event) {
-        if (!model.isCaptureKeyEvent() || !event.getEventType().equals(KeyEvent.KEY_PRESSED)) return;
+        if (!model.isCaptureKeyEvent() || !event.getEventType().equals(KeyEvent.KEY_PRESSED))
+            return;
 
 //        FIXME les inputs du clavier sont ignorer lorsque les IA joue...
 

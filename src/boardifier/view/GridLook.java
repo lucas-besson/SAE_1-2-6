@@ -14,7 +14,7 @@ public abstract class GridLook extends ElementLook {
     protected int cellHeight;
     protected int borderWidth;
     protected String borderColor;
-    private GridGeometry geometry;
+    private final GridGeometry geometry;
 
     public GridLook(int width, int height, int cellWidth, int cellHeight, int borderWidth, String borderColor, GameElement element) {
         super(element);
@@ -59,6 +59,7 @@ public abstract class GridLook extends ElementLook {
 
     /**
      * Get the row,col of a cell in this grid from a location in the root pane of the scene (cf. View class)
+     *
      * @param x the location in the root pane (this, not including a menubar if it exists)
      * @param y the location in the root pane (this, not including a menubar if it exists)
      * @return the cell row and col in the grid
@@ -70,11 +71,12 @@ public abstract class GridLook extends ElementLook {
          */
         x = x - element.getX();
         y = y - element.getY();
-        return getCellFromLocalLocation(x,y);
+        return getCellFromLocalLocation(x, y);
     }
 
     /**
      * Get the row,col of a cell in this grid from a location in the whole scene.
+     *
      * @param x the location in the scene (including a menubar if it exists)
      * @param y the location in the scene (including a menubar if it exists)
      * @return the cell row and col in the grid
@@ -84,8 +86,10 @@ public abstract class GridLook extends ElementLook {
         Point2D inMyGroup = getGroup().sceneToLocal(x, y);
         return getCellFromLocalLocation(inMyGroup.getX(), inMyGroup.getY());
     }
+
     /**
      * Get the row,col of a cell in this grid from a location in the whole scene.
+     *
      * @param p the location in the scene (including a menubar if it exists)
      * @return the cell row and col in the grid
      */
@@ -101,9 +105,9 @@ public abstract class GridLook extends ElementLook {
     public int[] getCellFromLocalLocation(double x, double y) {
         if ((x < 0) || (x >= width) || (y < 0) || (y >= height)) return null;
         // must remove the border width
-        x = x-borderWidth;
-        y = y-borderWidth;
-        int[] tab = {(int)y / cellHeight, (int)x / cellWidth}; // row first, columns in second
+        x = x - borderWidth;
+        y = y - borderWidth;
+        int[] tab = {(int) y / cellHeight, (int) x / cellWidth}; // row first, columns in second
         return tab;
     }
 
@@ -115,6 +119,7 @@ public abstract class GridLook extends ElementLook {
     public Coord2D getRootPaneLocationForCellCenter(int row, int col) {
         return geometry.getRootPaneLocationForCellCenter(row, col);
     }
+
     public Coord2D getRootPaneLocationForCell(int row, int col, int position) {
         return geometry.getRootPaneLocationForCell(row, col, position);
     }

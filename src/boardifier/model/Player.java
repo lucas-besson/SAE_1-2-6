@@ -15,9 +15,17 @@ public class Player {
     protected List<String> keyPressed;
 
     private Player(int type, String name) {
-         this.type = type;
-         this.name = name;
-         this.keyPressed = new ArrayList<>();
+        this.type = type;
+        this.name = name;
+        this.keyPressed = new ArrayList<>();
+    }
+
+    public static Player createHumanPlayer(String name) {
+        return new Player(HUMAN, name);
+    }
+
+    public static Player createComputerPlayer(String name) {
+        return new Player(COMPUTER, name);
     }
 
     public void reset() {
@@ -27,6 +35,7 @@ public class Player {
     public int getType() {
         return type;
     }
+
     public void setType(int type) {
         this.type = type;
     }
@@ -34,31 +43,28 @@ public class Player {
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
 
     public String getLastKeyPressed() {
         if (keyPressed.isEmpty()) return "";
-        return keyPressed.get(keyPressed.size()-1);
+        return keyPressed.get(keyPressed.size() - 1);
     }
+
     public void addKeyPressed(String lastKey) {
         if (!this.keyPressed.contains(lastKey)) {
             this.keyPressed.add(lastKey);
         }
     }
+
     public void removeKeyPressed(String lastKey) {
         this.keyPressed.remove(lastKey);
     }
+
     public boolean isKeyPressed(String key) {
         return keyPressed.contains(key);
-    }
-
-    public static Player createHumanPlayer(String name) {
-        return new Player(HUMAN, name);
-    }
-    public static Player createComputerPlayer(String name) {
-        return new Player(COMPUTER, name);
     }
 
 }

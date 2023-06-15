@@ -24,7 +24,6 @@ public class View {
     protected RootPane rootPane;
     /**
      * The current game stage view, for which looks are put within the root pane
-     *
      */
     protected GameStageView gameStageView;
     /**
@@ -40,7 +39,7 @@ public class View {
 
     /**
      * The primary stage.
-     *
+     * <p>
      * It is used to resize the stage to the current scene size.
      */
     protected Stage stage;
@@ -75,6 +74,7 @@ public class View {
     public Pane getRootPane() {
         return rootPane;
     }
+
     /**
      * Create the menu bar.
      * By default, a view has no menu bar so this method just set menuBar to null.
@@ -110,13 +110,13 @@ public class View {
 
     /**
      * Setup the whole view, given a pane view and a game stage view
-     *
+     * <p>
      * This method is called to setup the main window content. It is called when the application is launched, and
      * every time there is a need to change the content, for example when the game starts or when there is a change of stage.
      * It mainly consists in searching the PaneView object with the given name, and if found, to call its init() method to
      * add all nodes associated to the current game stage to the pane view group. Finally, this group
      * is added to the root pane.
-     *
+     * <p>
      * It must be notice that calling this method twice with the same pane view name will effectively
      * reset the root pane content, as if the game stage was started again.
      *
@@ -137,15 +137,14 @@ public class View {
         if ((this.gameStageView != null) && (this.gameStageView.getWidth() != -1) && (this.gameStageView.getHeight() != -1)) {
             double h = 0;
             if (menuBar != null) h = menuBar.getHeight();
-            scene = new Scene(vbox, this.gameStageView.getWidth(), h+ this.gameStageView.getHeight());
+            scene = new Scene(vbox, this.gameStageView.getWidth(), h + this.gameStageView.getHeight());
             // set the clipping area of the root pane with the given size of the stage
             // So, if there are shape that overlap with these boundaries, they won't show totally.
             Rectangle r = new Rectangle(this.gameStageView.getWidth(), this.gameStageView.getHeight());
             rootPane.setClip(r);
             stage.setScene(scene);
             stage.sizeToScene();
-        }
-        else {
+        } else {
             scene = new Scene(vbox);
             // WARNING: must set the scene and resize the stage BEFORE defining the clipping.
             // Otherwise, dimensions won't be correct.
@@ -160,7 +159,6 @@ public class View {
 
 
     /**
-     *
      * @return the primary javafx stage
      */
     public Stage getStage() {
@@ -175,9 +173,11 @@ public class View {
     public ElementLook getElementLook(GameElement element) {
         return rootPane.getElementLook(element);
     }
+
     public GridLook getElementGridLook(GameElement element) {
         return (GridLook) rootPane.getElementLook(element.getGrid());
     }
+
     public void update() {
         rootPane.update();
     }

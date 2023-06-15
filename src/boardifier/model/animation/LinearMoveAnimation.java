@@ -18,7 +18,7 @@ public class LinearMoveAnimation extends MoveAnimation {
             } else {
                 this.factor = factor;
             }
-            duration = (int)factor;
+            duration = (int) factor;
         } else if (type == AnimationTypes.getType("move/linearprop")) {
             this.type = type;
             this.factor = factor;
@@ -36,14 +36,14 @@ public class LinearMoveAnimation extends MoveAnimation {
         double y2 = end.getY();
         double height = y1 < y2 ? y2 - y1 : y1 - y2;
         // the length of the segment
-        double length = Math.sqrt(width*width+height*height);
+        double length = Math.sqrt(width * width + height * height);
         int nbPoints;
         if (type == AnimationTypes.getType("move/linearcst")) {
             nbPoints = duration / frameGap;
         } else {
             nbPoints = (int) (length / factor);
             // knowing the number of steps, the whole duration can be computed.
-            duration = nbPoints*frameGap;
+            duration = nbPoints * frameGap;
         }
         double stepX = width / (double) nbPoints;
         double stepY = height / (double) nbPoints;
@@ -68,8 +68,7 @@ public class LinearMoveAnimation extends MoveAnimation {
                     xx += i * stepX;
                 }
                 yy = -orig + slope * xx;
-            }
-            else {
+            } else {
                 if (y1 > y2) {
                     yy -= i * stepY;
                 } else {

@@ -14,12 +14,12 @@ public class DiceElement extends SpriteElement {
         return nbSides;
     }
 
-    public void setCurrentValue(int value) {
-        if ((value <1) || (value > nbSides)) return;
-        setCurrentIndex(value-1);
+    public int getCurrentValue() {
+        return currentIndex + 1;
     }
 
-    public int getCurrentValue() {
-        return currentIndex+1;
+    public void setCurrentValue(int value) {
+        if ((value < 1) || (value > nbSides)) return;
+        setCurrentIndex(value - 1);
     }
 }

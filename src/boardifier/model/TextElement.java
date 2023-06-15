@@ -28,8 +28,7 @@ public class TextElement extends GameElement {
             AnimationStep step = animation.next();
             if (step != null) {
                 setLocation(step.getInt(0), step.getInt(1));
-            }
-            else {
+            } else {
                 animation = null;
             }
         }

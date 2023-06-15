@@ -39,7 +39,7 @@ public class MerelleController extends Controller {
             stageModel.setState(MerelleStageModel.STATE_SELECTMILL);
             ((MerelleView) view).millAlert().show();
         } else {
-            if (((MerelleStageModel)model.getGameStage()).isEndStage()) return;
+            if (((MerelleStageModel) model.getGameStage()).isEndStage()) return;
             model.setNextPlayer();
         }
         // get the new player

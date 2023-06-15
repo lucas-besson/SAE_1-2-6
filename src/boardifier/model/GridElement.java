@@ -210,7 +210,8 @@ public class GridElement extends StaticElement {
      * @return the first element stored or null if there are no elements
      */
     public GameElement getElement(int row, int col, int index) {
-        if ((grid[row][col].size() == 0) || (index < 0) || (index >= grid[row][col].size())) return null;
+        if ((grid[row][col].size() == 0) || (index < 0) || (index >= grid[row][col].size()))
+            return null;
         return grid[row][col].get(index);
     }
 
@@ -222,12 +223,12 @@ public class GridElement extends StaticElement {
      * @return true if there is at least one element, otherwise false
      */
     public boolean isElementAt(int row, int col) {
-        if (grid[row][col].size() > 0) return true;
-        return false;
+        return grid[row][col].size() > 0;
     }
 
     /**
      * determine if there is no element stored in the grid
+     *
      * @return true if there is no element, otherwise false
      */
     public boolean isEmpty() {
@@ -249,8 +250,7 @@ public class GridElement extends StaticElement {
      * @return true if there is no element, otherwise false
      */
     public boolean isEmptyAt(int row, int col) {
-        if (grid[row][col].isEmpty()) return true;
-        return false;
+        return grid[row][col].isEmpty();
     }
 
     // test if element is within this grid

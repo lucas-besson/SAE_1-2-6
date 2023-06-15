@@ -1,6 +1,9 @@
 package boardifier.model.action;
 
-import boardifier.model.*;
+import boardifier.model.Coord2D;
+import boardifier.model.GameElement;
+import boardifier.model.GridElement;
+import boardifier.model.Model;
 import boardifier.model.animation.AnimationTypes;
 import boardifier.model.animation.LinearMoveAnimation;
 import boardifier.model.animation.MoveAnimation;
@@ -49,13 +52,11 @@ public class MoveAction extends GameAction {
         GridElement gridSrc = element.getGrid();
         GridElement gridDest = model.getGrid(this.gridDest);
         if (gridDest == null) return;
-        boolean autoLoc = true;
+        boolean autoLoc = animation == null;
         // NB : if an animation has been created, it should lead the element to its correct location, thus no reason to relocate it at its cell center.
-        if (animation != null) autoLoc = false;
         if (gridSrc == gridDest) {
             gridDest.moveElement(element, rowDest, colDest, autoLoc);
-        }
-        else {
+        } else {
             gridSrc.removeElement(element);
             gridDest.putElement(element, rowDest, colDest, autoLoc);
         }

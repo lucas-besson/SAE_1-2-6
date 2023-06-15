@@ -1,6 +1,9 @@
 package boardifier.model.action;
 
-import boardifier.model.*;
+import boardifier.model.DiceElement;
+import boardifier.model.ElementTypes;
+import boardifier.model.GameElement;
+import boardifier.model.Model;
 import boardifier.model.animation.AnimationTypes;
 import boardifier.model.animation.CyclicFaceAnimation;
 
@@ -9,7 +12,7 @@ import java.util.Random;
 
 public class DrawDiceAction extends GameAction {
 
-    private static Random loto = new Random(Calendar.getInstance().getTimeInMillis());
+    private static final Random loto = new Random(Calendar.getInstance().getTimeInMillis());
     /**
      * The number of cycles of random draw
      * This value multiplied by the number of sides of the dice gives the number of randomly generated values.
@@ -23,6 +26,7 @@ public class DrawDiceAction extends GameAction {
 
     /**
      * constructor to draw a dice without an animation.
+     *
      * @param model
      * @param element
      */
@@ -33,6 +37,7 @@ public class DrawDiceAction extends GameAction {
 
     /**
      * constructor to draw a dice with an animation.
+     *
      * @param model
      * @param element
      * @param nbCycles
@@ -50,8 +55,8 @@ public class DrawDiceAction extends GameAction {
     public void execute() {
         if (element.getType() != ElementTypes.getType("dice")) return;
         if (animation == null) {
-            DiceElement d = (DiceElement)element;
-            d.setCurrentValue(1+loto.nextInt(d.getNbSides()));
+            DiceElement d = (DiceElement) element;
+            d.setCurrentValue(1 + loto.nextInt(d.getNbSides()));
         }
         onEndCallback.execute();
     }
@@ -59,7 +64,7 @@ public class DrawDiceAction extends GameAction {
     protected void createAnimation() {
         animation = null;
         if (element.getType() != ElementTypes.getType("dice")) return;
-        DiceElement d = (DiceElement)element;
+        DiceElement d = (DiceElement) element;
         animation = new CyclicFaceAnimation(model, d.getNbSides(), nbCycles, waitBetweenSides, true);
     }
 }
