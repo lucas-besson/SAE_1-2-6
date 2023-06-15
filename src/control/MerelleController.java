@@ -48,7 +48,7 @@ public class MerelleController extends Controller {
 
 
         if (p.getType() == Player.COMPUTER) {
-            System.out.println(p.getName() + " PLAYS");
+//            System.out.println(p.getName() + " PLAYS");
             Decider decider;
             if (p.getName().equals("computer") || p.getName().equals("computer1"))
                 decider = new IntelligentDecider(model, this);
@@ -64,6 +64,8 @@ public class MerelleController extends Controller {
         int previousWinner = model.getIdWinner();
         super.startGame();
         if (previousWinner != -1) model.setIdPlayer(previousWinner);
+
+        view.getStage().requestFocus();
 
         // Make sure the AI will make their first move by calling nextPlayer method.
         // To avoid perturbing the player order, we set the next player once, as nextPlayer() will also do it once -> 1 + 1 % 2 = 0

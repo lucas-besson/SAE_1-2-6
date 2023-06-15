@@ -21,10 +21,14 @@ public class MerelleView extends View {
     private final MillAlert millAlert;
     private ChoiceDialog<GameMode> gameModeView;
     private ObservableList<GameMode> gameModesList;
+    private HelpStage helpRules;
+    private HelpStage helpCredits;
 
     public MerelleView(Model model, Stage stage, RootPane rootPane) {
         super(model, stage, rootPane);
         millAlert = new MillAlert(this.getStage());
+        helpRules = new HelpStage(HelpStage.TypeOfHelp.RULES, this.getStage());
+        helpCredits = new HelpStage(HelpStage.TypeOfHelp.CREDITS, this.getStage());
     }
 
     public GameMode gameModeView() {
@@ -64,18 +68,20 @@ public class MerelleView extends View {
         Menu menu2 = new Menu("Help");
         MenuItem helpStageOpenMenu = new MenuItem("How to play ?");
         helpStageOpenMenu.setOnAction(event -> {
-            HelpStage help = new HelpStage(HelpStage.TypeOfHelp.HOW_TO_PLAY);
-            help.display();
+            assert helpRules != null;
+            if (helpRules.isShowing()) helpRules.requestFocus();
+            else helpRules.display();
         });
         MenuItem creditsStageOpenMenu = new MenuItem("Credits");
         creditsStageOpenMenu.setOnAction(event -> {
-            HelpStage help = new HelpStage(HelpStage.TypeOfHelp.CREDITS);
-            help.display();
+            assert helpCredits != null;
+            if (helpCredits.isShowing()) helpCredits.requestFocus();
+            else helpCredits.display();
         });
         menu2.getItems().addAll(helpStageOpenMenu, creditsStageOpenMenu);
         menuBar.getMenus().add(menu2);
 
-        menuBar.useSystemMenuBarProperty();
+        menuBar.useSystemMenuBarProperty().set(true);
     }
 
     public MenuItem getMenuStart() {

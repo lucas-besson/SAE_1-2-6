@@ -59,16 +59,6 @@ public class IntelligentDecider extends MerelleDecider {
         }
     }
 
-    private void printGrid() {
-        System.out.println();
-        for (int col = 0; col < grid.length; col++) {
-            for (int row = 0; row < grid[col].length; row++) {
-                System.out.print(grid[row][col] + ", ");
-            }
-            System.out.println();
-        }
-    }
-
     @Override
     public void movePawn() {
         int playerColor = model.getIdPlayer();

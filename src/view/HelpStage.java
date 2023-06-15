@@ -10,6 +10,7 @@ import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public class HelpStage extends Stage {
     static final String HelpText = "Nine Men's Morris is an ancient strategy board game that dates back to the Roman Empire and was popular throughout Europe during the Middle Ages. The game is played on a grid consisting of three concentric squares connected by lines. Here are the rules:\n" +
@@ -35,8 +36,9 @@ public class HelpStage extends Stage {
             "\nOur github repository : [https://github.com/lucas-besson/SAE_1-2-6]";
     private FlowPane mainPane;
 
-    public HelpStage(TypeOfHelp type) {
-        if (type == TypeOfHelp.HOW_TO_PLAY) initWidgets(HelpText);
+    public HelpStage(TypeOfHelp type, Window owner) {
+        this.initOwner(owner);
+        if (type == TypeOfHelp.RULES) initWidgets(HelpText);
         else if (type == TypeOfHelp.CREDITS) initWidgets(Credits);
     }
 
@@ -62,6 +64,6 @@ public class HelpStage extends Stage {
     }
 
     public enum TypeOfHelp {
-        HOW_TO_PLAY, CREDITS;
+        RULES, CREDITS;
     }
 }

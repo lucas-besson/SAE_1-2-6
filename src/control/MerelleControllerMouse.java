@@ -107,7 +107,7 @@ public class MerelleControllerMouse extends ControllerMouse implements EventHand
                 ActionList actions = new ActionList(true);
                 // determine the destination point in the root pane
                 Coord2D center = lookBoard.getRootPaneLocationForCellCenter(dest[0], dest[1]);
-                System.out.println(pawn.getX() + " " + pawn.getY() + " " + center.getX() + " " + center.getY());
+//                System.out.println(pawn.getX() + " " + pawn.getY() + " " + center.getX() + " " + center.getY());
                 // create an action with a linear move animation, with 10 pixel/frame
                 GameAction move = new MoveAction(model, pawn, "merelleboard", dest[0], dest[1], AnimationTypes.MOVE_LINEARPROP, center.getX(), center.getY(), 15);
                 // add the action to the action list.

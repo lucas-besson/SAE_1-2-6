@@ -28,7 +28,7 @@ public class MerelleControllerKey extends ControllerKey implements EventHandler<
 
         GameMode selectedGameMode = ((MerelleView) view).selectedGameMode;
 
-        System.out.println(event.getCode() + " ; " + event.getCode().equals(KeyCode.SPACE));
+//        System.out.println(event.getCode());
 
         if (event.getCode().equals(KeyCode.LEFT) && selectedGameMode.type != GameMode.PvP) {
             MerelleDecider.decreaseAnimationSpeed();
