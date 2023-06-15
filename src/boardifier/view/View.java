@@ -57,7 +57,6 @@ public class View {
 
         // create the menu bar if needed
         createMenuBar();
-        menuBar.setUseSystemMenuBar(true);
         if (menuBar != null) {
             vbox.getChildren().add(menuBar);
         }
